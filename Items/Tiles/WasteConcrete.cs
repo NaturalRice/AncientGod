@@ -20,7 +20,7 @@ namespace AcientGod.Items.Tiles
             int[] DustCandidate = { DustID.Stone, DustID.Copper, DustID.Glass, DustID.Sand };//尝试一下能否随机生成石头，铜矿，玻璃
             DustType = DustCandidate[Main.rand.Next(3)];
             //DustType = ModContent.DustType<Sparkle>();
-
+            HitSound = SoundID.Tink;//石头音效
             AddMapEntry(new Color(89, 102, 186));
         }
         public override bool CanDrop(int i, int j)

@@ -21,7 +21,7 @@ namespace AcientGod.Items.Tiles
 			DustType = DustID.Copper;
             //DustType = ModContent.DustType<Sparkle>();
             AddMapEntry(new Color(237, 193, 104));
-			
+			HitSound = SoundID.Tink;
 		}
         public override bool CanDrop(int i, int j)
         {

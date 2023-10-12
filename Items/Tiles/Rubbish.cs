@@ -19,7 +19,7 @@ namespace AcientGod.Items.Tiles
             int[] DustCandidate = { DustID.Sand, DustID.Dirt, DustID.Mud};//尝试一下能否随机生成Dust粒子
             DustType = DustCandidate[Main.rand.Next(3)];
             //DustType = ModContent.DustType<Sparkle>();
-
+            HitSound = SoundID.Dig;
             AddMapEntry(new Color(89, 102, 186));
         }
         public override bool CanDrop(int i, int j)
