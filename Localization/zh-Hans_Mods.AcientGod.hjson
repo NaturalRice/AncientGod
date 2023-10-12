@@ -45,4 +45,24 @@ Items: {
 			担心它哪一天它塌掉的话。
 			'''
 	}
+
+	MoonDevoration: {
+		DisplayName: 月噬
+		Tooltip: 按理来说是来自天外的稀有力量，但是怎么到处都是？
+	}
+
+	Shadow_Forest: {
+		DisplayName: 影子：森林
+		Tooltip: ""
+	}
+
+	Shadow_Desert: {
+		DisplayName: 影子：沙漠
+		Tooltip: ""
+	}
+
+	Shadow_Jungle: {
+		DisplayName: 影子：丛林
+		Tooltip: ""
+	}
 }
