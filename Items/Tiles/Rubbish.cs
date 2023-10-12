@@ -35,10 +35,9 @@ namespace AcientGod.Items.Tiles
             //地表附近掉种子，其余地方不掉
             int[] LootCandidate = { ModContent.ItemType<Placeables.Rubbish>(), ItemID.Wood, ItemID.DirtBlock, ItemID.TinOre, ItemID.IronOre, ItemID.Glass, 
                 ItemID.GrassSeeds, ItemID.JungleGrassSeeds, ItemID.DaybloomSeeds, ItemID.Acorn};
-            int Height = Main.tile[i, j].TileFrameY;
             int dropItem = 0;
-            int randSeed = Main.rand.Next(LootCandidate.Length);
-            if (Height <= Main.rockLayer && Height >= Main.worldSurface * 0.35)//泥土层以上天空层以下
+            int randSeed = Main.rand.Next(100+i+j)% LootCandidate.Length;
+            if (j <= Main.worldSurface)//地表层以上
             {
                 dropItem = LootCandidate[randSeed];
             }
