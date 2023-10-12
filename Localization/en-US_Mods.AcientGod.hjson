@@ -25,4 +25,24 @@ Items: {
 		DisplayName: Waste Concrete
 		Tooltip: ""
 	}
+
+	MoonDevoration: {
+		DisplayName: Moon Devoration
+		Tooltip: ""
+	}
+
+	Shadow_Forest: {
+		DisplayName: Shadow_ Forest
+		Tooltip: ""
+	}
+
+	Shadow_Desert: {
+		DisplayName: Shadow_ Desert
+		Tooltip: ""
+	}
+
+	Shadow_Jungle: {
+		DisplayName: Shadow_ Jungle
+		Tooltip: ""
+	}
 }
