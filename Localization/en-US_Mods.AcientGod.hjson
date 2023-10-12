@@ -1,0 +1,28 @@
+# This file will automatically update with entries for new content after a build and reload
+
+Items: {
+	SwordOfAG: {
+		DisplayName: Sword Of A G
+		Tooltip: ""
+	}
+
+	Rubble: {
+		DisplayName: Rubble
+		Tooltip: ""
+	}
+
+	WasteMetal: {
+		DisplayName: Waste Metal
+		Tooltip: ""
+	}
+
+	Rubbish: {
+		DisplayName: Rubbish
+		Tooltip: ""
+	}
+
+	WasteConcrete: {
+		DisplayName: Waste Concrete
+		Tooltip: ""
+	}
+}

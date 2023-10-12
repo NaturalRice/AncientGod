@@ -1,0 +1,9 @@
+#忽略编译产物和编译中间产物,以及git配置文件夹
+bin
+bin/*
+.vs
+.vs/*
+obj
+obj/*
+.git
+.git/*
