@@ -65,4 +65,9 @@ Items: {
 		DisplayName: 影子：丛林
 		Tooltip: ""
 	}
+
+	BaseEnclosure: {
+		// DisplayName: Base Enclosure
+		// Tooltip: ""
+	}
 }
