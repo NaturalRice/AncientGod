@@ -67,7 +67,7 @@ Items: {
 	}
 
 	BaseEnclosure: {
-		// DisplayName: Base Enclosure
-		// Tooltip: ""
+		 DisplayName: 太空基地基块
+		 Tooltip: ""
 	}
 }
