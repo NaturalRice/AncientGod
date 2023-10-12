@@ -65,4 +65,10 @@ Items: {
 		DisplayName: 影子：丛林
 		Tooltip: ""
 	}
+
+	BaseEnclosure: {
+		 DisplayName: 太空基地基块
+		 Tooltip: ""
+	}
+
 }

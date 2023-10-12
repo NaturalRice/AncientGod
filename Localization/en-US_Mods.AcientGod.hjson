@@ -45,4 +45,8 @@ Items: {
 		DisplayName: Shadow_ Jungle
 		Tooltip: ""
 	}
+	BaseEnclosure: {
+		DisplayName: Base Enclosure
+		Tooltip: ""
+	}
 }
