@@ -31,6 +31,11 @@ Items: {
 		Tooltip: ""
 	}
 
+	Shadow: {
+		DisplayName: Shadow
+		Tooltip: ""
+	}
+
 	Shadow_Forest: {
 		DisplayName: Shadow_ Forest
 		Tooltip: ""
@@ -45,6 +50,7 @@ Items: {
 		DisplayName: Shadow_ Jungle
 		Tooltip: ""
 	}
+
 	BaseEnclosure: {
 		DisplayName: Base Enclosure
 		Tooltip: ""

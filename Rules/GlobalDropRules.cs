@@ -1,10 +1,10 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using AcientGod.Items.Materials;
+using AncientGod.Items.Materials;
 using Terraria.GameContent.ItemDropRules;
 
-namespace AcientGod.Rules
+namespace AncientGod.Rules
 {
     internal class GlobalDropRules : GlobalNPC
     {

@@ -1,9 +1,9 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using AcientGod.Items.Materials;
+using AncientGod.Items.Materials;
 
-namespace AcientGod.Items.Materials
+namespace AncientGod.Items.Materials
 {
     internal class Shadow_Jungle : ModItem
     {

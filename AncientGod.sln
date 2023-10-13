@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AcientGod", "AcientGod.csproj", "{82B1D588-1027-4843-9AFA-A9C62A02ACC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AncientGod", "AncientGod.csproj", "{82B1D588-1027-4843-9AFA-A9C62A02ACC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

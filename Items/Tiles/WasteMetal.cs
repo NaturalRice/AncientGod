@@ -8,7 +8,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ObjectData;
 
-namespace AcientGod.Items.Tiles
+namespace AncientGod.Items.Tiles
 {
 	public class WasteMetal : ModTile
 	{

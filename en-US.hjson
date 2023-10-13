@@ -1,0 +1,55 @@
+Mods: {
+	AncientGod: {
+		Items: {
+			MoonDevoration: {
+				DisplayName: Moon Devoration
+				Tooltip: ""
+			}
+
+			Shadow: {
+				DisplayName: Shadow
+				Tooltip: ""
+			}
+
+			Shadow_Desert: {
+				DisplayName: Shadow_ Desert
+				Tooltip: ""
+			}
+
+			Shadow_Forest: {
+				DisplayName: Shadow_ Forest
+				Tooltip: ""
+			}
+
+			Shadow_Jungle: {
+				DisplayName: Shadow_ Jungle
+				Tooltip: ""
+			}
+
+			BaseEnclosure: {
+				DisplayName: Base Enclosure
+				Tooltip: ""
+			}
+
+			Rubbish: {
+				DisplayName: Rubbish
+				Tooltip: ""
+			}
+
+			WasteConcrete: {
+				DisplayName: Waste Concrete
+				Tooltip: ""
+			}
+
+			WasteMetal: {
+				DisplayName: Waste Metal
+				Tooltip: ""
+			}
+
+			SwordOfAG: {
+				DisplayName: Sword Of A G
+				Tooltip: ""
+			}
+		}
+	}
+}

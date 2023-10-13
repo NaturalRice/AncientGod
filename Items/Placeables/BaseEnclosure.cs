@@ -1,9 +1,9 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using AcientGod.Items;
+using AncientGod.Items;
 
-namespace AcientGod.Items.Placeables
+namespace AncientGod.Items.Placeables
 {
     internal class BaseEnclosure : ModItem
     {

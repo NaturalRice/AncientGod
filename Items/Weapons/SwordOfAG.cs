@@ -2,11 +2,11 @@ using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AcientGod.Items.Weapons
+namespace AncientGod.Items.Weapons
 {
     public class SwordOfAG : ModItem
     {
-        // The Display Name and Tooltip of this item can be edited in the Localization/en-US_Mods.AcientGod.hjson file.
+        // The Display Name and Tooltip of this item can be edited in the Localization/en-US_Mods.AncientGod.hjson file.
 
         public override void SetDefaults()
         {

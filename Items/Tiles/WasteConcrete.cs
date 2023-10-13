@@ -1,12 +1,12 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using AcientGod.Items;
+using AncientGod.Items;
 using Microsoft.Xna.Framework;
 using Terraria.ObjectData;
 using System.Collections.Generic;
 
-namespace AcientGod.Items.Tiles
+namespace AncientGod.Items.Tiles
 {
     internal class WasteConcrete : ModTile
     {
