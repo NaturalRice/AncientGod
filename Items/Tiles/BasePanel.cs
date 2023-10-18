@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AncientGod.Items.Tiles
 {
-    internal class BaseEnclosure : ModTile
+    internal class BasePanel : ModTile
     {
         public override void SetStaticDefaults()
         {
@@ -35,7 +35,7 @@ namespace AncientGod.Items.Tiles
         public override IEnumerable<Item> GetItemDrops(int i, int j)
         {
             //地表附近掉种子，其余地方不掉
-            int[] LootCandidate = { ModContent.ItemType<Placeables.BaseEnclosure>(), ItemID.Wood, ItemID.DirtBlock, ItemID.TinOre, ItemID.IronOre, ItemID.Glass,
+            int[] LootCandidate = { ModContent.ItemType<Placeables.BasePanel>(), ItemID.Wood, ItemID.DirtBlock, ItemID.TinOre, ItemID.IronOre, ItemID.Glass,
                 ItemID.GrassSeeds, ItemID.JungleGrassSeeds, ItemID.DaybloomSeeds, ItemID.Acorn};
             int Height = Main.tile[i, j].TileFrameY;
             int dropItem = 0;
@@ -64,8 +64,8 @@ namespace AncientGod.Items.Tiles
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Tile tile = Main.tile[i, j];
-            Texture2D texture = ModContent.Request<Texture2D>("AncientGod/Items/Tiles/BaseEnclosure").Value;
-            Texture2D glowTexture = ModContent.Request<Texture2D>("AncientGod/Items/Tiles/BaseEnclosure_Glow").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("AncientGod/Items/Tiles/BasePanel").Value;
+            Texture2D glowTexture = ModContent.Request<Texture2D>("AncientGod/Items/Tiles/BasePanel_Glow").Value;
 
             // If you are using ModTile.SpecialDraw or PostDraw or PreDraw, use this snippet and add zero to all calls to spriteBatch.Draw
             // The reason for this is to accommodate the shift in drawing coordinates that occurs when using the different Lighting mode
@@ -95,5 +95,6 @@ namespace AncientGod.Items.Tiles
             // Return false to stop vanilla draw
             return false;
         }
+
     }
 }

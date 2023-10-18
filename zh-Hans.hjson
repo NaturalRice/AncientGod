@@ -50,6 +50,16 @@ Mods: {
 				// DisplayName: Sword Of A G
 				// Tooltip: ""
 			}
+
+			BasePanel: {
+				// DisplayName: Base Panel
+				// Tooltip: ""
+			}
+
+			AncientGodAnimatedGlowmaskTileItem: {
+				// DisplayName: Ancient God Animated Glowmask Tile Item
+				// Tooltip: ""
+			}
 		}
 	}
 }

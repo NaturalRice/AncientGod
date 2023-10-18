@@ -2,26 +2,18 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using AncientGod.Items;
-using Terraria.DataStructures;
 
-namespace AncientGod.Items.Materials
+namespace AncientGod.Items.Placeables
 {
-    internal class MoonDevoration : ModItem
+    internal class BasePanel : ModItem
     {
         public override void SetDefaults()
         {
             Item.ResearchUnlockCount = 100;
             Item.maxStack = 9999;
+            Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.BasePanel>());
             Item.width = 16;
             Item.height = 16;
-        }
-
-        public override void SetStaticDefaults()
-        {
-            Main.RegisterItemAnimation(Item.type, new DrawAnimationVertical(3, 6));//这里使得贴图具有动画效果
-            //这里使用了 Main.RegisterItemAnimation 方法，指定了物品的类型 (Item.type) 和一个 DrawAnimationVertical 对象。
-            //DrawAnimationVertical 对象定义了动画的帧速率（5）（越低越快）和垂直帧数（9），这会使物品以垂直方向的动画效果播放
-            Item.ResearchUnlockCount = 1;
         }
 
         public override void AddRecipes()//测试用,正常玩时注解掉

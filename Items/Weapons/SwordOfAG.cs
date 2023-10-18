@@ -12,8 +12,8 @@ namespace AncientGod.Items.Weapons
         {
             Item.damage = 50;
             Item.DamageType = DamageClass.Melee;
-            Item.width = 40;
-            Item.height = 40;
+            Item.width = 50;
+            Item.height = 50;
             Item.useTime = 20;
             Item.useAnimation = 20;
             Item.useStyle = 1;
@@ -24,11 +24,11 @@ namespace AncientGod.Items.Weapons
             Item.autoReuse = true;
         }
 
-        public override void AddRecipes()
+        public override void AddRecipes()//测试用,正常玩时注解掉
         {
-            Recipe recipe = CreateRecipe();
-            recipe.AddIngredient(ItemID.DirtBlock, 10);
-            recipe.AddTile(TileID.WorkBenches);
+            Recipe recipe = CreateRecipe();//创建一个配方
+            recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
+            recipe.AddTile(TileID.Campfire);//加入合成站（这里为了有趣我改成了篝火）
             recipe.Register();
         }
     }

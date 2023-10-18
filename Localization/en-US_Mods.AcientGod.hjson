@@ -55,4 +55,18 @@ Items: {
 		DisplayName: Base Enclosure
 		Tooltip: ""
 	}
+
+	BasePanel: {
+		DisplayName: Base Panel
+		Tooltip: ""
+	}
+
+	AncientGodAnimatedGlowmaskTile: {
+		DisplayName: 月噬天塔柱
+		Tooltip:
+			'''
+			大浩劫的投影，真不敢相信你居然把这个玩意搞出来
+			了，但愿你准备好了承受最坏的后果。
+			'''
+	}
 }
