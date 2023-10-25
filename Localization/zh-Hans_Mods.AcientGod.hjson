@@ -11,8 +11,8 @@ Items: {
 	}
 
 	Rubble: {
-		// DisplayName: Rubble
-		// Tooltip: ""
+		DisplayName: Rubble
+		Tooltip: ""
 	}
 
 	WasteMetal: {

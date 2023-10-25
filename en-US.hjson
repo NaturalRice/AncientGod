@@ -60,6 +60,33 @@ Mods: {
 				DisplayName: Ancient God Animated Glowmask Tile Item
 				Tooltip: ""
 			}
+
+			MechaNo1Key: {
+				DisplayName: Mecha No1 Key
+				Tooltip: ""
+			}
+
+			MechaNo1: {
+				DisplayName: Mecha No1
+				Tooltip: ""
+			}
+
+			MechaNo2Key: {
+				DisplayName: Mecha No2 Key
+				Tooltip: ""
+			}
+		}
+
+		Buffs: {
+			MechaNo1Buff: {
+				DisplayName: Mecha No1 Buff
+				Description: Mods.AncientGod.Buffs.MechaNo1Buff.Description
+			}
+
+			MechaNo2Buff: {
+				DisplayName: Mecha No2 Buff
+				Description: Mods.AncientGod.Buffs.MechaNo2Buff.Description
+			}
 		}
 	}
 }

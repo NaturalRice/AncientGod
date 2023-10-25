@@ -52,12 +52,12 @@ Items: {
 	}
 
 	BaseEnclosure: {
-		DisplayName: Base Enclosure
+		DisplayName: 太空基地外墙
 		Tooltip: ""
 	}
 
 	BasePanel: {
-		DisplayName: Base Panel
+		DisplayName: 太空基地镶板
 		Tooltip: ""
 	}
 
