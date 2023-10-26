@@ -57,7 +57,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight
 
             if (!Main.dedServ) // 检查是否在服务器端运行游戏。这段代码块只会在客户端运行时执行
             {
-                Asset<Texture2D> texture = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/MechaNo1");
+                Asset<Texture2D> texture = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/MechaNo1_Back");
                 MountData.backTexture = texture;
                 MountData.textureWidth = texture.Width(); // 设置了坐骑的纹理宽度和高度。这些值通常用于确定坐骑的碰撞区域和渲染
                 MountData.textureHeight = texture.Height();
@@ -83,7 +83,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight
             DrawData data = new DrawData(texture, drawPosition, frame, drawColor * alpha, rotation, drawOrigin, drawScale, effects, 0f);
             playerDrawData.Add(data);
 
-            Texture2D mountTex = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/MechaNo1_Glow").Value;
+            Texture2D mountTex = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/MechaNo1_Back_Glow").Value;
 
             // 创建一个新的 Rectangle 来表示光亮纹理的 frame;若使用与坐骑背部纹理相同的 frame 变量，这会导致只显示后半部分的6帧。为了解决这个问题，
             // 你需要为光亮纹理的 frame 变量设置一个适当的值，以便显示光亮部分的所有帧(此问题目前尚未解决）
