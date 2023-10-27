@@ -1,0 +1,85 @@
+WorldGen.WorldGenTutorialOresPassMessage: Mods.AncientGod.WorldGen.WorldGenTutorialOresPassMessage
+
+Buffs: {
+	MechaNo1Buff: {
+		DisplayName: Mecha No1 Buff
+		Description: Mods.AncientGod.Buffs.MechaNo1Buff.Description
+	}
+
+	MechaNo2Buff: {
+		DisplayName: Mecha No2 Buff
+		Description: Mods.AncientGod.Buffs.MechaNo2Buff.Description
+	}
+}
+
+Items: {
+	MoonDevoration: {
+		DisplayName: Moon Devoration
+		Tooltip: ""
+	}
+
+	Shadow: {
+		DisplayName: Shadow
+		Tooltip: ""
+	}
+
+	Shadow_Desert: {
+		DisplayName: Shadow Desert
+		Tooltip: ""
+	}
+
+	Shadow_Forest: {
+		DisplayName: Shadow Forest
+		Tooltip: ""
+	}
+
+	Shadow_Jungle: {
+		DisplayName: Shadow Jungle
+		Tooltip: ""
+	}
+
+	MechaNo1Key: {
+		DisplayName: Mecha No1 Key
+		Tooltip: ""
+	}
+
+	MechaNo2Key: {
+		DisplayName: Mecha No2 Key
+		Tooltip: ""
+	}
+
+	BaseEnclosure: {
+		DisplayName: Base Enclosure
+		Tooltip: ""
+	}
+
+	BasePanel: {
+		DisplayName: Base Panel
+		Tooltip: ""
+	}
+
+	Rubbish: {
+		DisplayName: Rubbish
+		Tooltip: ""
+	}
+
+	WasteConcrete: {
+		DisplayName: Waste Concrete
+		Tooltip: ""
+	}
+
+	WasteMetal: {
+		DisplayName: Waste Metal
+		Tooltip: ""
+	}
+
+	AncientGodAnimatedGlowmaskTileItem: {
+		DisplayName: Ancient God Animated Glowmask Tile Item
+		Tooltip: ""
+	}
+
+	SwordOfAG: {
+		DisplayName: Sword Of A G
+		Tooltip: ""
+	}
+}
