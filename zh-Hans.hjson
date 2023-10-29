@@ -75,6 +75,11 @@ Mods: {
 				// DisplayName: Mecha No2 Key
 				// Tooltip: ""
 			}
+
+			AncientMechaKey: {
+				// DisplayName: Ancient Mecha Key
+				// Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -87,6 +92,13 @@ Mods: {
 				// DisplayName: Mecha No2 Buff
 				// Description: Mods.AncientGod.Buffs.MechaNo2Buff.Description
 			}
+
+			AncientMechaBuff: {
+				// DisplayName: Ancient Mecha Buff
+				// Description: Mods.AncientGod.Buffs.AncientMechaBuff.Description
+			}
 		}
+
+		// Projectiles.AncientMechaBody.DisplayName: Ancient Mecha Body
 	}
 }
