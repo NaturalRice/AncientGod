@@ -83,3 +83,12 @@ Items: {
 		Tooltip: ""
 	}
 }
+
+NPCs.ExampleCustomAISlimeNPC.DisplayName: Example Custom A I Slime N P C
+
+Biomes: {
+	ExampleSurfaceBiome: {
+		DisplayName: Example Surface Biome
+		TownNPCDialogueName: the Example Surface Biome
+	}
+}
