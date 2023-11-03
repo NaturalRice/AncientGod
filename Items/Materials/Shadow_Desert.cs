@@ -21,6 +21,7 @@ namespace AncientGod.Items.Materials
             new_recipe.AddIngredient(ItemID.Scorpion, 5);
             new_recipe.AddIngredient(ItemID.SandBlock, 20);
             new_recipe.AddIngredient<MoonDevoration>(10);
+            new_recipe.AddIngredient<Shadow>(10);
             new_recipe.AddTile(TileID.WorkBenches);
             new_recipe.Register();
         }

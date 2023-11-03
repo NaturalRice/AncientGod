@@ -22,6 +22,7 @@ namespace AncientGod.Items.Materials
             new_recipe.AddIngredient(ItemID.Acorn, 15);
             new_recipe.AddIngredient(ItemID.GrassSeeds, 1);
             new_recipe.AddIngredient<MoonDevoration>(10);
+            new_recipe.AddIngredient<Shadow>(10);
             new_recipe.AddTile(TileID.WorkBenches);
             new_recipe.Register();
         }
