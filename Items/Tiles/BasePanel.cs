@@ -73,7 +73,7 @@ namespace AncientGod.Items.Tiles
             Vector2 zero = Main.drawToScreen ? Vector2.Zero : new Vector2(Main.offScreenRange);
 
             // Because height of third tile is different we change it
-            int height = tile.TileFrameY % AnimationFrameHeight == 36 ? 18 : 16;
+            int height = tile.TileFrameY % (AnimationFrameHeight+1) == 36 ? 18 : 16;//这一行的AnimationFrameHeight默认是0
 
             // Offset along the Y axis depending on the current frame
             int frameYOffset = Main.tileFrame[Type] * AnimationFrameHeight;
