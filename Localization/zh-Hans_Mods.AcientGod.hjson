@@ -1,0 +1,97 @@
+# This file will automatically update with entries for new content after a build and reload
+
+Items: {
+	SwordOfAG: {
+		DisplayName: 远古之神的剑
+		Tooltip:
+			'''
+			远古之神的剑。
+			不知从何时就开始存在。
+			'''
+	}
+
+	Rubble: {
+		DisplayName: Rubble
+		Tooltip: ""
+	}
+
+	WasteMetal: {
+		DisplayName: 废铜烂铁
+		Tooltip:
+			'''
+			城市废墟中的金属，
+			自灾难降临以来便遍布大陆。
+			“以前老有人说泰拉大陆人口太多、太城市化了，
+			结果现在既没有城市，也没有人了。”
+			'''
+	}
+
+	Rubbish: {
+		DisplayName: 垃圾块
+		Tooltip:
+			'''
+			各种生活垃圾经过垃圾处理厂压缩切割后形成的
+			小方块。做点什么吧，至少证明一下你跟这玩意
+			不是同类。
+			'''
+	}
+
+	WasteConcrete: {
+		DisplayName: 废弃混凝土
+		Tooltip:
+			'''
+			断壁残垣，从中也许能找到一些碎石头，玻璃门
+			窗和家用电线，当然也可以选择住在这，如果不
+			担心它哪一天它塌掉的话。
+			'''
+	}
+
+	MoonDevoration: {
+		DisplayName: 月噬
+		Tooltip: 按理来说是来自天外的稀有力量，但是怎么到处都是？
+	}
+
+	Shadow: {
+		DisplayName: 影子
+		Tooltip:
+			'''
+			这是那些人变异前的记忆，如果他们还配称为人的话。或许
+			可以利用此物重塑那场浩劫之前这个世界的旧景，你应该不
+			会废物到连这个都不会吧？
+			'''
+	}
+
+	Shadow_Forest: {
+		DisplayName: 影子：森林
+		Tooltip: ""
+	}
+
+	Shadow_Desert: {
+		DisplayName: 影子：沙漠
+		Tooltip: ""
+	}
+
+	Shadow_Jungle: {
+		DisplayName: 影子：丛林
+		Tooltip: ""
+	}
+
+	BaseEnclosure: {
+		DisplayName: 太空基地外墙
+		Tooltip: ""
+	}
+
+	BasePanel: {
+		DisplayName: 太空基地镶板
+		Tooltip: ""
+	}
+
+	AncientGodAnimatedGlowmaskTile: {
+		DisplayName: 月噬天塔柱
+		Tooltip:
+			'''
+			大浩劫的投影，真不敢相信你居然把这个玩意搞出来
+			了，但愿你准备好了承受最坏的后果。
+			'''
+	}
+}

@@ -1,0 +1,72 @@
+# This file will automatically update with entries for new content after a build and reload
+
+Items: {
+	SwordOfAG: {
+		DisplayName: Sword Of A G
+		Tooltip: ""
+	}
+
+	Rubble: {
+		DisplayName: Rubble
+		Tooltip: ""
+	}
+
+	WasteMetal: {
+		DisplayName: Waste Metal
+		Tooltip: ""
+	}
+
+	Rubbish: {
+		DisplayName: Rubbish
+		Tooltip: ""
+	}
+
+	WasteConcrete: {
+		DisplayName: Waste Concrete
+		Tooltip: ""
+	}
+
+	MoonDevoration: {
+		DisplayName: Moon Devoration
+		Tooltip: ""
+	}
+
+	Shadow: {
+		DisplayName: Shadow
+		Tooltip: ""
+	}
+
+	Shadow_Forest: {
+		DisplayName: Shadow_ Forest
+		Tooltip: ""
+	}
+
+	Shadow_Desert: {
+		DisplayName: Shadow_ Desert
+		Tooltip: ""
+	}
+
+	Shadow_Jungle: {
+		DisplayName: Shadow_ Jungle
+		Tooltip: ""
+	}
+
+	BaseEnclosure: {
+		DisplayName: 太空基地外墙
+		Tooltip: ""
+	}
+
+	BasePanel: {
+		DisplayName: 太空基地镶板
+		Tooltip: ""
+	}
+
+	AncientGodAnimatedGlowmaskTile: {
+		DisplayName: 月噬天塔柱
+		Tooltip:
+			'''
+			大浩劫的投影，真不敢相信你居然把这个玩意搞出来
+			了，但愿你准备好了承受最坏的后果。
+			'''
+	}
+}
