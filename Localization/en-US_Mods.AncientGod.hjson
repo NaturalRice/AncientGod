@@ -1,4 +1,7 @@
-WorldGen.WorldGenTutorialOresPassMessage: Mods.AncientGod.WorldGen.WorldGenTutorialOresPassMessage
+WorldGen: {
+	WorldGenTutorialOresPassMessage: Mods.AncientGod.WorldGen.WorldGenTutorialOresPassMessage
+	WorldGenTMessage: Mods.AncientGod.WorldGen.WorldGenTMessage
+}
 
 Buffs: {
 	MechaNo1Buff: {
@@ -84,11 +87,19 @@ Items: {
 	}
 }
 
-NPCs.ExampleCustomAISlimeNPC.DisplayName: Example Custom A I Slime N P C
+NPCs: {
+	ExampleCustomAISlimeNPC.DisplayName: Example Custom A I Slime N P C
+	MadGuide.DisplayName: Mad Guide
+}
 
 Biomes: {
 	ExampleSurfaceBiome: {
 		DisplayName: Example Surface Biome
 		TownNPCDialogueName: the Example Surface Biome
+	}
+
+	WasteLand: {
+		DisplayName: Waste Land
+		TownNPCDialogueName: the Waste Land
 	}
 }

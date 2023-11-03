@@ -8,11 +8,11 @@ using AncientGod.Biomes;
 namespace AncientGod.Biomes
 {
 	// Shows setting up two basic biomes. For a more complicated example, please request.
-	public class ExampleSurfaceBiome : ModBiome
+	public class WasteLand : ModBiome
 	{
 		// Select all the scenery
 		//public override ModWaterStyle WaterStyle => ModContent.GetInstance<ExampleWaterStyle>(); // Sets a water style for when inside this biome
-		public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.GetInstance<ExampleSurfaceBackgroundStyle>();
+		public override ModSurfaceBackgroundStyle SurfaceBackgroundStyle => ModContent.GetInstance<WasteLandStyle>();
 		public override CaptureBiome.TileColorStyle TileColorStyle => CaptureBiome.TileColorStyle.Crimson;
 
 		// Select Music

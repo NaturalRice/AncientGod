@@ -1,4 +1,6 @@
-WorldGen.WorldGenTutorialOresPassMessage: Mods.AncientGod.WorldGen.WorldGenTutorialOresPassMessage
+WorldGen: {
+	WorldGenTMessage: 测试世界生成代码
+}
 
 Buffs: {
 	MechaNo1Buff: {
@@ -84,11 +86,13 @@ Items: {
 	}
 }
 
-// NPCs.ExampleCustomAISlimeNPC.DisplayName: Example Custom A I Slime N P C
+NPCs: {
+	MadGuide.DisplayName: 发狂向导
+}
 
 Biomes: {
-	ExampleSurfaceBiome: {
-		// DisplayName: Example Surface Biome
-		// TownNPCDialogueName: the Example Surface Biome
+	WasteLand: {
+		DisplayName: 废墟
+		TownNPCDialogueName: 废墟
 	}
 }

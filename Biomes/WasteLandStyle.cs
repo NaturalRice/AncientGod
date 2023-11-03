@@ -3,7 +3,7 @@ using Terraria.ModLoader;
 
 namespace AncientGod.Biomes
 {
-	public class ExampleSurfaceBackgroundStyle : ModSurfaceBackgroundStyle
+	public class WasteLandStyle : ModSurfaceBackgroundStyle
 	{
         // Use this to keep far Backgrounds like the mountains.
         public override void ModifyFarFades(float[] fades, float transitionSpeed) {
