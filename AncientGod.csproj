@@ -8,6 +8,12 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <AdditionalFiles Remove="Projectiles\Pets\**" />
+    <Compile Remove="Projectiles\Pets\**" />
+    <EmbeddedResource Remove="Projectiles\Pets\**" />
+    <None Remove="Projectiles\Pets\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Remove="Items\Materials\MoonDevorations.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -21,6 +27,5 @@
     <Folder Include="Buffs\Pets\" />
     <Folder Include="Items\Mounts\InfiniteFlight\AncientMecha\" />
     <Folder Include="Projectiles\Mounts\InfiniteFlight\AncientMecha\" />
-    <Folder Include="Projectiles\Pets\" />
   </ItemGroup>
 </Project>

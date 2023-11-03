@@ -22,17 +22,15 @@ namespace AncientGod.Items.Tiles
             //DustType = ModContent.DustType<Sparkle>();
             AddMapEntry(new Color(237, 193, 104));
 			HitSound = SoundID.Tink;
-		}
+            TileObjectData.addTile(Type);
+        }
         public override bool CanDrop(int i, int j)
-        {
-            if (((Main.rand.Next(1919) * i % (j+114)) + 514 )% 100 > 83) {
-				return true;
-			}
-			return false;
+		{ 
+			return true;
         }
         public override IEnumerable<Item> GetItemDrops(int i, int j)
         {
-			int[] Loot = {ItemID.LeadOre, ItemID.CopperOre, ItemID.IronOre, ItemID.TinOre};// 大概率的普通金属矿掉落： 铅 铜 铁 锡
+			int[] Loot = {ItemID.LeadOre, ItemID.CopperOre, ItemID.IronOre, ItemID.TinOre, ModContent.ItemType<Placeables.WasteMetal>()};// 大概率的普通金属矿掉落： 铅 铜 铁 锡
 			int[] preciousLoot = { ItemID.PlatinumOre, ItemID.GoldOre, ItemID.SilverOre};//稀有金属掉落
 			int dropItem = 0;
             int loot = (Main.rand.Next(100) + i + j) % 101; //掉落概率

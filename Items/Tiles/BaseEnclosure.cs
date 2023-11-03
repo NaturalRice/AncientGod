@@ -23,6 +23,7 @@ namespace AncientGod.Items.Tiles
             //DustType = ModContent.DustType<Sparkle>();
 
             AddMapEntry(new Color(89, 102, 186));
+            TileObjectData.addTile(Type);
         }
         public override bool CanDrop(int i, int j)
         {

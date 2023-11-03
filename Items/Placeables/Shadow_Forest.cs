@@ -3,7 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using AncientGod.Items.Materials;
 
-namespace AncientGod.Items.Materials
+namespace AncientGod.Items.Placeables
 {
     internal class Shadow_Forest : ModItem
     {
@@ -11,8 +11,10 @@ namespace AncientGod.Items.Materials
         {
             Item.ResearchUnlockCount = 100;
             Item.maxStack = 9999;
-            Item.width = 100;
-            Item.height = 100;
+            Item.width = 40;
+            Item.height = 40;
+            Item.rare = ItemRarityID.Orange;
+            Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.Shadow_Forest>());
         }
         public override void AddRecipes()
         {
@@ -21,8 +23,8 @@ namespace AncientGod.Items.Materials
             new_recipe.AddIngredient(ItemID.DirtBlock, 20);
             new_recipe.AddIngredient(ItemID.Acorn, 15);
             new_recipe.AddIngredient(ItemID.GrassSeeds, 1);
-            new_recipe.AddIngredient<MoonDevoration>(10);
-            new_recipe.AddIngredient<Shadow>(10);
+            new_recipe.AddIngredient<MoonDevoration>(30);
+            new_recipe.AddIngredient<Shadow>(2);
             new_recipe.AddTile(TileID.WorkBenches);
             new_recipe.Register();
         }
