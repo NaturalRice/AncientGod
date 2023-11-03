@@ -6,9 +6,9 @@ using System.Security.Cryptography.X509Certificates;
 using Terraria;
 using Terraria.ModLoader;
 
-namespace AncientGod.Projectiles.Mounts.InfiniteFlight
+namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
 {
-    public class AncientMechaBody : ModProjectile//此类用于实现AncientMecha的机械臂的行为。
+    internal class EntropySilenceMechaBody : ModProjectile
     {
         bool isInfernumActive;//用于标记Infernum模式是否激活
         Mod infern;//Mod类型的变量，用于引用Infernum模组
@@ -63,12 +63,14 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight
             AncientGodPlayer modPlayer = Owner.GetModPlayer<AncientGodPlayer>();
             if (Owner.dead || !Owner.mount.Active)//此处添加了一个条件用来保证坐骑消失时这些投射物也会消失
                 Projectile.timeLeft = 0;
-            if (!modPlayer.AncientMecha)
+                
+            if (!modPlayer.EntropySilenceMecha)
                 Projectile.timeLeft = 0;
-            if (modPlayer.AncientMecha && Owner.mount.Active)//当然，还要再在这里强调一遍才能达到效果
+            if (modPlayer.EntropySilenceMecha && Owner.mount.Active)//当然，还要再在这里强调一遍才能达到效果
                 Projectile.timeLeft = 2;
+                
 
-            
+
 
 
             if (Initialized == 0)
@@ -124,10 +126,10 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight
             if (ArmPositions == null)
                 return true;
 
-            Texture2D teslaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMechaTesla")).Value;
-            Texture2D laserTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMechaLaser")).Value;
-            Texture2D nukeTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMechaNuke")).Value;
-            Texture2D plasmaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMechaPlasma")).Value;
+            Texture2D teslaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaTesla")).Value;
+            Texture2D laserTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaLaser")).Value;
+            Texture2D nukeTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaNuke")).Value;
+            Texture2D plasmaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaPlasma")).Value;
             ModLoader.TryGetMod("InfernumMode", out infern);
             if (infern != null)
             {
@@ -159,12 +161,12 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight
             //这里，handPosition 是通过 Projectile.Center（机械臂的中心）加上 position 乘以一个缩放系数来确定的。
             //handPosition 用于确定机械臂的手部位置，也就是机械臂的手部的坐标。
             /*position 是一个矢量，代表手部相对于机械臂中心的偏移。通过将这个偏移乘以 0.1f，你可以调整手部相对于机械臂中心的位置。
-            这个值的改变可以影响手部的距离，使它更接近或更远离机械臂中心。*/            
+            这个值的改变可以影响手部的距离，使它更接近或更远离机械臂中心。*/
             Vector2 position = handPosition - Projectile.Center;
             bool flipped = Math.Sign(position.X) != -1;
 
-            Texture2D armTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMechaArm").Value;//大臂
-            Texture2D forearmTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMechaForearm").Value;//小臂
+            Texture2D armTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaArm").Value;//大臂
+            Texture2D forearmTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaForearm").Value;//小臂
 
             Rectangle armFrame = new Rectangle(0, top ? 0 : 59, armTex.Width, 60);
             Rectangle handFrame = new Rectangle(0, infernum ? 40 : 0, 60, 38);
@@ -189,7 +191,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight
             forearmAngle 是下臂与手部之间的角度，它是通过 (handPosition - elbowPosition).ToRotation() 计算的。*/
             Vector2 forearmPosition = elbowPosition + forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition).Length() - 40) / 2f);
 
-            if(forearmPosition.Y > Owner.position.Y)//如果是下方的大臂则小臂用另一套相对位置
+            if (forearmPosition.Y > Owner.position.Y)//如果是下方的大臂则小臂用另一套相对位置
             {
                 forearmPosition = elbowPosition - forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition).Length() - 40)) * 0.6f;
             }
@@ -207,8 +209,8 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight
             //screenPosition 类似的变量用于将游戏中的虚拟世界坐标转换为屏幕上的像素坐标，offset 是一个用于微调绘制位置的向量，通常用于调整绘制对象在屏幕上的位置。
             Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition, armFrame, Color.White, armAngle, armOrigin, Projectile.scale, armFlip, 0);
             Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, null, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
-           
-            
+
+
 
             if (forearmPosition.Y > Owner.position.Y)//如果是下方的大臂则手部用另一套相对位置（不然手部离得太远）
             {
@@ -221,7 +223,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight
                 {
                     Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition + Vector2.UnitX * 110 - Vector2.UnitY * 140, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);
                 }
-                
+
             }
             else
             {
@@ -232,7 +234,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight
         //[JITWhenModsEnabled("CalamityMod")]
         private void DrawChain()//用于绘制链条效果，它使用贝塞尔曲线来模拟链条的曲线，然后绘制多个链条段。
         {
-            Texture2D chainTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMechaChain").Value;
+            Texture2D chainTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaChain").Value;
 
             float curvature = MathHelper.Clamp(Math.Abs(Owner.Center.X - Projectile.Center.X) / 50f * 80, 15, 80);
 
@@ -258,7 +260,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight
 
         public override void PostDraw(Color lightColor)//用于在绘制后执行额外的逻辑。在这里，它绘制了机械臂的眼睛
         {
-            Texture2D eyesTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMechaEyes").Value;
+            Texture2D eyesTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaEyes").Value;
 
             Vector2 offset = Utils.SafeNormalize(Main.MouseWorld - (Projectile.Center - Vector2.UnitY * 10), Vector2.Zero) * MathHelper.Clamp((Projectile.Center - Vector2.UnitY * 10 - Main.MouseWorld).Length(), 0, 1);
             float eyeOpacity = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 2f, 0, 1)) * 0.5f;
@@ -267,6 +269,5 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight
         }
 
         public bool summonedProjectile = false;
-
     }
 }

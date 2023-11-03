@@ -4,9 +4,9 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 
-namespace AncientGod.Items.Mounts.InfiniteFlight
+namespace AncientGod.Items.Mounts.InfiniteFlight.FutureMecha
 {
-    internal class AncientMechaKey : ModItem
+    internal class FutureMechaKey : ModItem
     {
         public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
@@ -21,10 +21,10 @@ namespace AncientGod.Items.Mounts.InfiniteFlight
             Item.rare = 6;
             Item.UseSound = SoundID.NPCHit56;
             Item.noMelee = true;
-            Item.mountType = ModContent.MountType<AncientMecha>();
+            Item.mountType = ModContent.MountType<FutureMecha>();
 
-            Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AncientMechaBody>();
-            Item.buffType = ModContent.BuffType<Buffs.Mounts.AncientMechaBuff>();
+            Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.FutureMecha.FutureMechaBody>();
+            Item.buffType = ModContent.BuffType<Buffs.Mounts.FutureMechaBuff>();
         }
 
         public override void UseStyle(Player player, Rectangle heldItemFrame)

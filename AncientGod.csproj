@@ -19,6 +19,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Buffs\Pets\" />
+    <Folder Include="Items\Mounts\InfiniteFlight\AncientMecha\" />
+    <Folder Include="Projectiles\Mounts\InfiniteFlight\AncientMecha\" />
     <Folder Include="Projectiles\Pets\" />
   </ItemGroup>
 </Project>
