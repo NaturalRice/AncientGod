@@ -260,7 +260,11 @@ namespace AncientGod
         public bool lumpe;
         public bool geldonalive;
         public bool arous;
+        public bool BigBangMecha;//这里为大爆炸机甲的布尔值
         public bool AncientMecha;//这里为远古机甲的布尔值
+        public bool ModernMecha;//这里为现代机甲的布尔值
+        public bool FutureMecha;//这里为未来机甲的布尔值
+        public bool EntropySilenceMecha;//这里为熵寂机甲的布尔值
         public bool nurex;
         public bool nreyeball;
         public float pongballposx;

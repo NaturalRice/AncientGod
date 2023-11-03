@@ -1,10 +1,10 @@
 ﻿using Terraria;
 using Terraria.ModLoader;
-using AncientGod.Items.Mounts.InfiniteFlight;
+using AncientGod.Items.Mounts.InfiniteFlight.AncientMecha;
 
 namespace AncientGod.Buffs.Mounts
 {
-    internal class AncientMechaBuff : ModBuff
+    public class AncientMechaBuff : ModBuff
     {
         public override void SetStaticDefaults()
         {
@@ -19,10 +19,10 @@ namespace AncientGod.Buffs.Mounts
             player.buffTime[buffIndex] = 18000;
 
             player.GetModPlayer<AncientGodPlayer>().AncientMecha = true;
-            bool petProjectileNotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AncientMechaBody>()] <= 0;
+            bool petProjectileNotSpawned = player.ownedProjectileCounts[ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AncientMecha.AncientMechaBody>()] <= 0;
             if (petProjectileNotSpawned && player.whoAmI == Main.myPlayer)
             {
-                Projectile.NewProjectile(player.GetSource_Buff(buffIndex), player.position.X + (float)(player.width / 2), player.position.Y + (float)(player.height / 2), 0f, 0f, ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AncientMechaBody>(), 0, 0f, player.whoAmI, 0f, 0f);
+                Projectile.NewProjectile(player.GetSource_Buff(buffIndex), player.position.X + (float)(player.width / 2), player.position.Y + (float)(player.height / 2), 0f, 0f, ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AncientMecha.AncientMechaBody>(), 0, 0f, player.whoAmI, 0f, 0f);
             }
         }
     }

@@ -80,6 +80,26 @@ Mods: {
 				DisplayName: Ancient Mecha Key
 				Tooltip: ""
 			}
+
+			ModernMechaKey: {
+				DisplayName: Modern Mecha Key
+				Tooltip: ""
+			}
+
+			FutureMechaKey: {
+				DisplayName: Future Mecha Key
+				Tooltip: ""
+			}
+
+			EntropySilenceMechaKey: {
+				DisplayName: Entropy Silence Mecha Key
+				Tooltip: ""
+			}
+
+			BigBangMechaKey: {
+				DisplayName: Big Bang Mecha Key
+				Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -97,8 +117,34 @@ Mods: {
 				DisplayName: Ancient Mecha Buff
 				Description: Mods.AncientGod.Buffs.AncientMechaBuff.Description
 			}
+
+			ModernMechaBuff: {
+				DisplayName: Modern Mecha Buff
+				Description: Mods.AncientGod.Buffs.ModernMechaBuff.Description
+			}
+
+			FutureMechaBuff: {
+				DisplayName: Future Mecha Buff
+				Description: Mods.AncientGod.Buffs.FutureMechaBuff.Description
+			}
+
+			EntropySilenceMechaBuff: {
+				DisplayName: Entropy Silence Mecha Buff
+				Description: Mods.AncientGod.Buffs.EntropySilenceMechaBuff.Description
+			}
+
+			BigBangMechaBuff: {
+				DisplayName: Big Bang Mecha Buff
+				Description: Mods.AncientGod.Buffs.BigBangMechaBuff.Description
+			}
 		}
 
-		Projectiles.AncientMechaBody.DisplayName: Ancient Mecha Body
+		Projectiles: {
+			AncientMechaBody.DisplayName: Ancient Mecha Body
+			ModernMechaBody.DisplayName: Modern Mecha Body
+			FutureMechaBody.DisplayName: Future Mecha Body
+			EntropySilenceMechaBody.DisplayName: Entropy Silence Mecha Body
+			BigBangMechaBody.DisplayName: Big Bang Mecha Body
+		}
 	}
 }
