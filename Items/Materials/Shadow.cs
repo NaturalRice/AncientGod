@@ -14,6 +14,7 @@ namespace AncientGod.Items.Materials
             Item.maxStack = 9999;
             Item.width = 50;
             Item.height = 50;
+            Item.rare = ItemRarityID.Orange;
         }
 
         public override void SetStaticDefaults()
@@ -30,6 +31,16 @@ namespace AncientGod.Items.Materials
             recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
             recipe.AddTile(TileID.Campfire);//加入合成站（这里为了有趣我改成了篝火）
             recipe.Register();
+
+            //墓地环境合成邪恶种子
+            Recipe.Create(ItemID.CrimsonSeeds, 5)
+                .AddIngredient(ModContent.ItemType<Shadow>(), 1)
+                .AddCondition(Condition.InGraveyard)
+                .Register();
+            Recipe.Create(ItemID.CorruptSeeds, 5)
+                .AddIngredient(ModContent.ItemType<Shadow>(), 1)
+                .AddCondition(Condition.InGraveyard)
+                .Register();
         }
     }
 }

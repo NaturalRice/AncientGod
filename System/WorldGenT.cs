@@ -37,7 +37,7 @@ namespace AncientGod.System
             int ResetIndex = -1;
             tasks.RemoveAll(genpass => !genpass.Name.Equals("Reset") && !genpass.Name.Equals("Terrain") && 
             !genpass.Name.Equals("Underworld") && !genpass.Name.Equals("Smooth World"));
-            ResetIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));
+            ResetIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Underworld"));
             if (ResetIndex != -1)
             {
                 // 6. We register our world generation pass by passing in an instance of our custom GenPass class below. The GenPass class will execute our world generation code.
@@ -70,7 +70,7 @@ namespace AncientGod.System
             progress.Message = WorldGenT.WorldGenTMessage.Value;
             for (int i = 0; i < Main.maxTilesX; i++)
             {
-                for (j = (int)((Main.worldSurface * 0.35) ); j < Main.rockLayer ; j++)
+                for (j = 0; j < Main.maxTilesY - 200  ; j++)
                 {
                     Tile t = Main.tile[i, j];
                     if (t.HasTile)

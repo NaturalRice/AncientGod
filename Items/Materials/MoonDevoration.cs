@@ -14,6 +14,7 @@ namespace AncientGod.Items.Materials
             Item.maxStack = 9999;
             Item.width = 16;
             Item.height = 16;
+            Item.rare = ItemRarityID.White;
         }
 
         public override void SetStaticDefaults()

@@ -21,10 +21,11 @@ namespace AncientGod.Items.Tiles
             //DustType = ModContent.DustType<Sparkle>();
             HitSound = SoundID.Dig;
             AddMapEntry(new Color(89, 102, 186));
+            TileObjectData.addTile(Type);
         }
         public override bool CanDrop(int i, int j)
         {
-            if (((Main.rand.Next(1919) * i % (j + 114)) + 514) % 100 > 83)
+            if (((Main.rand.Next(1919) * i % (j + 114)) + 514) % 100 > 70)
             {
                 return true;
             }
@@ -32,18 +33,19 @@ namespace AncientGod.Items.Tiles
         }
         public override IEnumerable<Item> GetItemDrops(int i, int j)
         {
-            //地表附近掉种子，其余地方不掉
-            int[] LootCandidate = { ModContent.ItemType<Placeables.Rubbish>(), ItemID.Wood, ItemID.DirtBlock, ItemID.TinOre, ItemID.IronOre, ItemID.Glass, 
+            //随机掉落
+            int[] LootCandidate = { ModContent.ItemType<Placeables.Rubbish>(), ModContent.ItemType<Items.Materials.Refrigerant>() ,ItemID.SandBlock,ItemID.Wood, ItemID.DirtBlock, ItemID.TinOre, ItemID.IronOre, ItemID.Glass, 
                 ItemID.GrassSeeds, ItemID.JungleGrassSeeds, ItemID.DaybloomSeeds, ItemID.Acorn};
             int dropItem = 0;
-            int randSeed = Main.rand.Next(100+i+j)% LootCandidate.Length;
+            int randSeed = 0;
+            randSeed = Main.rand.Next(100+i+j)% LootCandidate.Length;
             if (j <= Main.worldSurface)//地表层以上
             {
                 dropItem = LootCandidate[randSeed];
             }
             else
             {
-                dropItem = LootCandidate[randSeed%6];
+                dropItem = LootCandidate[randSeed%8];
             }
             yield return new Item(dropItem);
         }

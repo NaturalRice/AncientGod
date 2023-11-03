@@ -1,42 +1,58 @@
 Mods: {
 	AncientGod: {
-		// Projectiles.AncientMechaBody.DisplayName: Ancient Mecha Body
-		// NPCs.MadGuide.DisplayName: Mad Guide
+		Projectiles: {
+			// AncientMechaBody.DisplayName: Ancient Mecha Body
+			// BigBangMechaBody.DisplayName: Big Bang Mecha Body
+			// EntropySilenceMechaBody.DisplayName: Entropy Silence Mecha Body
+			// FutureMechaBody.DisplayName: Future Mecha Body
+			// ModernMechaBody.DisplayName: Modern Mecha Body
+		}
+
+		NPCs.MadGuide.DisplayName: 发狂向导
 
 		Items: {
 			SwordOfAG: {
-				// Tooltip: ""
-				// DisplayName: Sword Of A G
+				Tooltip: 似乎是一把很老的剑，普普通通
+				DisplayName: 远古之神的剑
 			}
 
 			AncientGodAnimatedGlowmaskTileItem: {
-				// Tooltip: ""
-				// DisplayName: Ancient God Animated Glowmask Tile Item
+				Tooltip: 你，你竟然，你竟然搞出来了这个！
+				DisplayName: 月噬天柱塔
 			}
 
 			WasteMetal: {
-				// Tooltip: ""
-				// DisplayName: Waste Metal
+				Tooltip:
+					'''
+					汽车、废墟、矿脉等总之一切人类金属造物现在的模样。
+					也许去锈重熔以后仍能发挥作用
+					'''
+				DisplayName: 废铜烂铁
 			}
 
 			WasteConcrete: {
-				// Tooltip: ""
-				// DisplayName: Waste Concrete
+				Tooltip:
+					'''
+					废墟中的断壁残垣，或许能收集到有用的物资。
+					“以前总有人说泰拉大陆太城市化了，但现在既
+					没有城市，也没有人了。”
+					'''
+				DisplayName: 断壁残垣
 			}
 
 			Rubbish: {
-				// Tooltip: ""
-				// DisplayName: Rubbish
+				Tooltip: 垃圾填埋场内堆积如山的垃圾，灾难后满布大地
+				DisplayName: 垃圾
 			}
 
 			BasePanel: {
-				// Tooltip: ""
-				// DisplayName: Base Panel
+				Tooltip: ""
+				DisplayName: 太空基地地板
 			}
 
 			BaseEnclosure: {
-				// Tooltip: ""
-				// DisplayName: Base Enclosure
+				Tooltip: ""
+				DisplayName: 太空基地外壳
 			}
 
 			MechaNo2Key: {
@@ -55,28 +71,116 @@ Mods: {
 			}
 
 			Shadow_Jungle: {
-				// Tooltip: ""
-				// DisplayName: Shadow_ Jungle
+				Tooltip:
+					'''
+					人们心中对于丛林环境的记忆，早已模糊不清
+					丛林是一片湿热的沙漠，每一点营养都被抢夺
+					每一分都有猎物被猎杀，树木藤曼昆虫乃至乌
+					龟都在这里野蛮生长，极为危险。
+					然而电锯和火焰可以摧毁一切，因此它只存在
+					在教科书种。
+					从这记忆中或许可以窥见尚生机勃勃的古老丛
+					林的真面目，并将其重现。
+					'''
+				DisplayName: 影子：丛林
 			}
 
 			Shadow_Forest: {
-				// Tooltip: ""
-				// DisplayName: Shadow_ Forest
+				Tooltip:
+					'''
+					人们心中对于森林环境的记忆，早已模糊不清
+					据说那里树木高大阳光明媚，莺歌燕舞一片和
+					谐，不过早就没人见过了。透过城市内小公园
+					的树叶是他们所能感受到仅有的森林气息。
+					从这记忆中或许可以窥见尚生机勃勃的古老森
+					林的真面目，并将其重现。
+					'''
+				DisplayName: 影子：森林
 			}
 
 			Shadow_Desert: {
-				// Tooltip: ""
-				// DisplayName: Shadow_ Desert
+				Tooltip:
+					'''
+					人们心中对于沙漠环境的记忆，相对清晰完整。
+					漫天的黄沙总是伴随风暴吹进城市，是众人为数
+					不多能见到的古老自然环境。然而这黄沙中早已
+					无生机。
+					从这记忆中或许可以窥见尚生机勃勃的古老沙漠
+					的真面目，并将其重现。
+					'''
+				DisplayName: 影子：沙漠
 			}
 
 			Shadow: {
-				// Tooltip: ""
-				// DisplayName: Shadow
+				Tooltip:
+					'''
+					如心脏般跳动的精神结晶，是人性和记忆交杂的沉淀
+					不过既然是人的精神造物，为何会出现在那些恐怖怪
+					物身上？
+					'''
+				DisplayName: 影子
 			}
 
 			MoonDevoration: {
+				Tooltip: 按理来说是来自天外的稀有力量，但是怎么到处都是？
+				DisplayName: 月噬
+			}
+
+			BigBangMechaKey: {
+				// DisplayName: Big Bang Mecha Key
 				// Tooltip: ""
-				// DisplayName: Moon Devoration
+			}
+
+			EntropySilenceMechaKey: {
+				// DisplayName: Entropy Silence Mecha Key
+				// Tooltip: ""
+			}
+
+			FutureMechaKey: {
+				// DisplayName: Future Mecha Key
+				// Tooltip: ""
+			}
+
+			ModernMechaKey: {
+				// DisplayName: Modern Mecha Key
+				// Tooltip: ""
+			}
+
+			Shadow_Corruption: {
+				DisplayName: 影子：腐化
+				Tooltip:
+					'''
+					人们心中对于恐怖的腐化环境的记忆，因流言和改编
+					而模糊不清。
+					传说腐化环境来自人心中的罪恶，自身便是一切人类
+					的天敌，无人可以从那里生还。
+					不过既然如此，在城市化的铁蹄下，腐化环境在哪里
+					呢？
+					从这记忆中或许可以窥见腐化的真面目，并将其
+					重现。
+					'''
+			}
+
+			Shadow_Iceland: {
+				DisplayName: 影子：冰原
+				Tooltip:
+					'''
+					人们心中对于雪原环境的记忆，虽然早已模糊。
+					据说泰拉大陆以前不只有钢筋水泥，还有丰富的
+					多样的自然环境，这便是其中之一。
+					从这记忆中或许可以窥见雪原的真面目，并将其
+					重现。
+					'''
+			}
+
+			Refrigerant: {
+				DisplayName: 制冷剂
+				Tooltip:
+					'''
+					用来制冷的化学品，以往给炎热的天气中的人们带来凉爽。
+					或许可以用它重现早已逝去的雪原环境————在那城市化到来
+					以前，冰封天地的雪景
+					'''
 			}
 		}
 
@@ -95,14 +199,34 @@ Mods: {
 				// Description: Mods.AncientGod.Buffs.AncientMechaBuff.Description
 				// DisplayName: Ancient Mecha Buff
 			}
+
+			BigBangMechaBuff: {
+				// DisplayName: Big Bang Mecha Buff
+				// Description: Mods.AncientGod.Buffs.BigBangMechaBuff.Description
+			}
+
+			EntropySilenceMechaBuff: {
+				// DisplayName: Entropy Silence Mecha Buff
+				// Description: Mods.AncientGod.Buffs.EntropySilenceMechaBuff.Description
+			}
+
+			FutureMechaBuff: {
+				// DisplayName: Future Mecha Buff
+				// Description: Mods.AncientGod.Buffs.FutureMechaBuff.Description
+			}
+
+			ModernMechaBuff: {
+				// DisplayName: Modern Mecha Buff
+				// Description: Mods.AncientGod.Buffs.ModernMechaBuff.Description
+			}
 		}
 
-		// WorldGen.WorldGenTMessage: Mods.AncientGod.WorldGen.WorldGenTMessage
+		WorldGen.WorldGenTMessage: 测试生成代码
 
 		Biomes: {
 			WasteLand: {
-				// TownNPCDialogueName: the Waste Land
-				// DisplayName: Waste Land
+				TownNPCDialogueName: 废墟
+				DisplayName: 废墟
 			}
 		}
 	}
