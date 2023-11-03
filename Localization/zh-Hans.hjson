@@ -1,0 +1,109 @@
+Mods: {
+	AncientGod: {
+		// Projectiles.AncientMechaBody.DisplayName: Ancient Mecha Body
+		// NPCs.MadGuide.DisplayName: Mad Guide
+
+		Items: {
+			SwordOfAG: {
+				// Tooltip: ""
+				// DisplayName: Sword Of A G
+			}
+
+			AncientGodAnimatedGlowmaskTileItem: {
+				// Tooltip: ""
+				// DisplayName: Ancient God Animated Glowmask Tile Item
+			}
+
+			WasteMetal: {
+				// Tooltip: ""
+				// DisplayName: Waste Metal
+			}
+
+			WasteConcrete: {
+				// Tooltip: ""
+				// DisplayName: Waste Concrete
+			}
+
+			Rubbish: {
+				// Tooltip: ""
+				// DisplayName: Rubbish
+			}
+
+			BasePanel: {
+				// Tooltip: ""
+				// DisplayName: Base Panel
+			}
+
+			BaseEnclosure: {
+				// Tooltip: ""
+				// DisplayName: Base Enclosure
+			}
+
+			MechaNo2Key: {
+				// Tooltip: ""
+				// DisplayName: Mecha No2 Key
+			}
+
+			MechaNo1Key: {
+				// Tooltip: ""
+				// DisplayName: Mecha No1 Key
+			}
+
+			AncientMechaKey: {
+				// Tooltip: ""
+				// DisplayName: Ancient Mecha Key
+			}
+
+			Shadow_Jungle: {
+				// Tooltip: ""
+				// DisplayName: Shadow_ Jungle
+			}
+
+			Shadow_Forest: {
+				// Tooltip: ""
+				// DisplayName: Shadow_ Forest
+			}
+
+			Shadow_Desert: {
+				// Tooltip: ""
+				// DisplayName: Shadow_ Desert
+			}
+
+			Shadow: {
+				// Tooltip: ""
+				// DisplayName: Shadow
+			}
+
+			MoonDevoration: {
+				// Tooltip: ""
+				// DisplayName: Moon Devoration
+			}
+		}
+
+		Buffs: {
+			MechaNo2Buff: {
+				// Description: Mods.AncientGod.Buffs.MechaNo2Buff.Description
+				// DisplayName: Mecha No2 Buff
+			}
+
+			MechaNo1Buff: {
+				// Description: Mods.AncientGod.Buffs.MechaNo1Buff.Description
+				// DisplayName: Mecha No1 Buff
+			}
+
+			AncientMechaBuff: {
+				// Description: Mods.AncientGod.Buffs.AncientMechaBuff.Description
+				// DisplayName: Ancient Mecha Buff
+			}
+		}
+
+		// WorldGen.WorldGenTMessage: Mods.AncientGod.WorldGen.WorldGenTMessage
+
+		Biomes: {
+			WasteLand: {
+				// TownNPCDialogueName: the Waste Land
+				// DisplayName: Waste Land
+			}
+		}
+	}
+}
