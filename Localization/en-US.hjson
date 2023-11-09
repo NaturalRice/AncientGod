@@ -1,6 +1,14 @@
 Mods: {
 	AncientGod: {
-		Projectiles.AncientMechaBody.DisplayName: Ancient Mecha Body
+		Projectiles: {
+			AncientMechaBody.DisplayName: Ancient Mecha Body
+			BigBangMechaBody.DisplayName: Big Bang Mecha Body
+			EntropySilenceMechaBody.DisplayName: Entropy Silence Mecha Body
+			FutureMechaBody.DisplayName: Future Mecha Body
+			ModernMechaBody.DisplayName: Modern Mecha Body
+			BigBangMechaBullet.DisplayName: Big Bang Mecha Bullet
+		}
+
 		NPCs.MadGuide.DisplayName: Mad Guide
 
 		Items: {
@@ -78,6 +86,31 @@ Mods: {
 				Tooltip: ""
 				DisplayName: Moon Devoration
 			}
+
+			BigBangMechaKey: {
+				DisplayName: Big Bang Mecha Key
+				Tooltip: ""
+			}
+
+			EntropySilenceMechaKey: {
+				DisplayName: Entropy Silence Mecha Key
+				Tooltip: ""
+			}
+
+			FutureMechaKey: {
+				DisplayName: Future Mecha Key
+				Tooltip: ""
+			}
+
+			ModernMechaKey: {
+				DisplayName: Modern Mecha Key
+				Tooltip: ""
+			}
+
+			BigBangMechaBullet: {
+				DisplayName: Big Bang Mecha Bullet
+				Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -94,6 +127,26 @@ Mods: {
 			AncientMechaBuff: {
 				Description: Mods.AncientGod.Buffs.AncientMechaBuff.Description
 				DisplayName: Ancient Mecha Buff
+			}
+
+			BigBangMechaBuff: {
+				DisplayName: Big Bang Mecha Buff
+				Description: Mods.AncientGod.Buffs.BigBangMechaBuff.Description
+			}
+
+			EntropySilenceMechaBuff: {
+				DisplayName: Entropy Silence Mecha Buff
+				Description: Mods.AncientGod.Buffs.EntropySilenceMechaBuff.Description
+			}
+
+			FutureMechaBuff: {
+				DisplayName: Future Mecha Buff
+				Description: Mods.AncientGod.Buffs.FutureMechaBuff.Description
+			}
+
+			ModernMechaBuff: {
+				DisplayName: Modern Mecha Buff
+				Description: Mods.AncientGod.Buffs.ModernMechaBuff.Description
 			}
 		}
 
