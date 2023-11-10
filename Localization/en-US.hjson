@@ -167,5 +167,31 @@ Mods: {
 				DisplayName: Waste Land
 			}
 		}
+
+		Dialogue: {
+			Guide: {
+				AfterSaving1: Mods.AncientGod.Dialogue.Guide.AfterSaving1
+				AfterSaving2: Mods.AncientGod.Dialogue.Guide.AfterSaving2
+				AfterSaving3: Mods.AncientGod.Dialogue.Guide.AfterSaving3
+
+				base: {
+					text1: Mods.AncientGod.Dialogue.Guide.base.text1
+					text2: Mods.AncientGod.Dialogue.Guide.base.text2
+					text3: Mods.AncientGod.Dialogue.Guide.base.text3
+				}
+
+				FirstShadow: {
+					text1: Mods.AncientGod.Dialogue.Guide.FirstShadow.text1
+					text2: Mods.AncientGod.Dialogue.Guide.FirstShadow.text2
+					text3: Mods.AncientGod.Dialogue.Guide.FirstShadow.text3
+				}
+
+				FirstBoss: {
+					text1: Mods.AncientGod.Dialogue.Guide.FirstBoss.text1
+					text2: Mods.AncientGod.Dialogue.Guide.FirstBoss.text2
+					text3: Mods.AncientGod.Dialogue.Guide.FirstBoss.text3
+				}
+			}
+		}
 	}
 }

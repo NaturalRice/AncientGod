@@ -62,30 +62,32 @@ namespace AncientGod.NPCs
 				new FlavorTextBestiaryInfoElement("The mad Guide"),
 			});
 		}
-        public override float SpawnChance(NPCSpawnInfo spawnInfo)
+		//前面的都是我从ExampleMod里面抄的代码，没改，我自己也不知道是啥意思
+		//下面这个函数决定了发狂向导是否会生成
+        public override float SpawnChance(NPCSpawnInfo spawnInfo)//决定生成概率
         {
-            if (!spawnInfo.Player.InModBiome(ModContent.GetInstance<WasteLand>()))
+            if (!spawnInfo.Player.InModBiome(ModContent.GetInstance<WasteLand>()))//这一行保证生成环境，如果不在对应环境返回0，即生成概率为0
             {
                 return 0;
             }
-            if (!ActiveNPC.MadGuide)
+            if (!ActiveNPC.MadGuide)//这个是Modtag，详见System/ActiveNPC.cs 和 System/GameProgress.cs，总而言之就是如果有向导就不会再刷发狂向导了
             {
                 return 0;
             }
-            if (NPC.AnyNPCs(ModContent.NPCType<MadGuide>()))
+            if (NPC.AnyNPCs(ModContent.NPCType<MadGuide>()))//确保地图上只有一个发狂向导
             {
                 return 0;
             }
             return SpawnCondition.OverworldNight.Chance * 0.1f;
         }
 
-        public override void OnKill()
+        public override void OnKill()//在死亡时执行的函数
 		{
-			if (ActiveNPC.MadGuide)
+			if (ActiveNPC.MadGuide)//检查一下modtag，看看有没有向导已经存在，如果没有就执行下面的代码
 			{
-				ActiveNPC.MadGuide = false;
-				ActiveNPC.Guide = true;
-				NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.position.X, (int)NPC.position.Y, NPCID.Guide);
+				ActiveNPC.MadGuide = false;//修改MadGuidetag让他为假，这样以后就不生成madguide了
+				ActiveNPC.Guide = true;//修改Guide tag为真，激活向导NPC
+				NPC.NewNPC(NPC.GetSource_Death(), (int)NPC.position.X, (int)NPC.position.Y, NPCID.Guide);//召唤一个向导
 			}
 		}
 	}

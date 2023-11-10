@@ -2,11 +2,18 @@
 using Terraria.ID;
 using Terraria.ModLoader;
 using AncientGod.Items.Materials;
-
+using AncientGod.System;
 namespace AncientGod.Items.Placeables
 {
     internal class Shadow_Corruption : ModItem
     {
+        public override void OnConsumeItem(Player player)
+        {
+            if (!GameProgress.FirstShadow)
+            {
+                GameProgress.FirstShadow = true;
+            }
+        }
         public override void SetDefaults()
         {
             Item.ResearchUnlockCount = 100;

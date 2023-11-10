@@ -229,5 +229,31 @@ Mods: {
 				DisplayName: 废墟
 			}
 		}
+
+		Dialogue: {
+			Guide: {
+				AfterSaving1: 啊啊...头好痛...为什么会有一身的血...
+				AfterSaving2: 城市为什么会是这个样子...我只记得我还在向导团里
+				AfterSaving3: 谢谢你救了我，希望我的知识在这末世还有点用
+
+				base: {
+					text1: 我是来自向导团的一名向导，希望我的知识在这末世还有点用
+					text2: 现在除了残垣断壁什么都没有，或许垃圾里还能刨出些物资
+					text3: 谢谢你救了我，有什么可以帮到你吗
+				}
+
+				FirstShadow: {
+					// text1: Mods.AncientGod.Dialogue.Guide.FirstShadow.text1
+					// text2: Mods.AncientGod.Dialogue.Guide.FirstShadow.text2
+					// text3: Mods.AncientGod.Dialogue.Guide.FirstShadow.text3
+				}
+
+				FirstBoss: {
+					// text1: Mods.AncientGod.Dialogue.Guide.FirstBoss.text1
+					// text2: Mods.AncientGod.Dialogue.Guide.FirstBoss.text2
+					// text3: Mods.AncientGod.Dialogue.Guide.FirstBoss.text3
+				}
+			}
+		}
 	}
 }

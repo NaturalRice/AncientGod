@@ -12,13 +12,6 @@ using AncientGod.Items.Tiles;
 
 namespace AncientGod.System
 {
-    public class DetourShimmer : ModSystem
-    {
-        public override void Load()
-        {
-
-        }
-    }
     // 2. Our world generation code must start from a class extending ModSystem
     public class WorldGenT : ModSystem
     {
@@ -41,13 +34,12 @@ namespace AncientGod.System
             if (ResetIndex != -1)
             {
                 // 6. We register our world generation pass by passing in an instance of our custom GenPass class below. The GenPass class will execute our world generation code.
-                tasks.Insert(ResetIndex + 1, new RubbishGenPass("World Gen Tutorial Ores", 100f));
+                tasks.Insert(ResetIndex + 1, new RubbishGenPass("World Gen Rubbish", 100f));
             }
         }
     }
-
-    // 7. Make sure to inherit from the GenPass class.
-    public class RubbishGenPass : GenPass
+// 7. Make sure to inherit from the GenPass class.
+public class RubbishGenPass : GenPass
     {
         public RubbishGenPass(string name, float loadWeight) : base(name, loadWeight)
         {
