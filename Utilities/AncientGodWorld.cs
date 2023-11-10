@@ -39,7 +39,7 @@ namespace AncientGod
         public static int labTiles;
         public static int dungeontiles;
         public static bool rescuedjelly;
-        public static bool jharim;
+        public static bool RunawayTank;
         public static bool orthofound;
         public static bool amogus;
         public static bool OneMonolith;
@@ -66,7 +66,7 @@ namespace AncientGod
         public override void OnWorldLoad()
         {
             rescuedjelly = false;
-            jharim = false;
+            RunawayTank = false;
             amogus = false;
             orthofound = false;
             Rockshrine = false;
@@ -83,7 +83,7 @@ namespace AncientGod
         public override void OnWorldUnload()
         {
             rescuedjelly = false;
-            jharim = false;
+            RunawayTank = false;
             amogus = false;
             orthofound = false;
             Rockshrine = false;
@@ -103,8 +103,8 @@ namespace AncientGod
             if (rescuedjelly)
                 tag["rescuedjelly"] = true;
 
-            if (jharim)
-                tag["jharim"] = true;
+            if (RunawayTank)
+                tag["RunawayTank"] = true;
 
             if (orthofound)
                 tag["orthofound"] = true;
@@ -149,7 +149,7 @@ namespace AncientGod
         public override void LoadWorldData(TagCompound tag)
         {
             rescuedjelly = tag.ContainsKey("rescuedjelly");
-            jharim = tag.ContainsKey("jharim");
+            RunawayTank = tag.ContainsKey("RunawayTank");
             orthofound = tag.ContainsKey("orthofound");
             amogus = tag.ContainsKey("amogus");
             Rockshrine = tag.ContainsKey("Rockshrine");
@@ -173,7 +173,7 @@ namespace AncientGod
         {
             BitsByte flags = new BitsByte();
             flags[0] = rescuedjelly;
-            flags[1] = jharim;
+            flags[1] = RunawayTank;
             flags[2] = orthofound;
             flags[3] = amogus;
             flags[4] = Rockshrine;
@@ -202,7 +202,7 @@ namespace AncientGod
         {
             BitsByte flags = reader.ReadByte();
             rescuedjelly = flags[0];
-            jharim = flags[1];
+            RunawayTank = flags[1];
             orthofound = flags[2];
             amogus = flags[3];
             Rockshrine = flags[4];

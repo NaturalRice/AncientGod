@@ -107,7 +107,7 @@ namespace AncientGod
                 censusMod.Call("TownNPCCondition", ModContent.NPCType<OracleNPC>(), "Equip a Pet or Light Pet");
                 censusMod.Call("TownNPCCondition", ModContent.NPCType<JellyPriestNPC>(),
                     "Find at the Sulphurous Sea after defeating the Acid Rain's first tier");
-                censusMod.Call("TownNPCCondition", ModContent.NPCType<AprilFools.Jharim.Jharim>(), "It's a secret");
+                censusMod.Call("TownNPCCondition", ModContent.NPCType<AprilFools.RunawayTank.RunawayTank>(), "It's a secret");
                 censusMod.Call("TownNPCCondition", ModContent.NPCType<NPCs.TownPets.Slimes.AstroSlime>(), "Hit Astrum Aureus with the ABandoned Slime Staff's minion");
                 censusMod.Call("TownNPCCondition", ModContent.NPCType<NPCs.TownPets.Slimes.NinjaSlime>(), "Has a chance to spawn upon hitting any normal slime with a Shuriken");
 
@@ -133,9 +133,9 @@ namespace AncientGod
                         // This discord rich presence stuff is very wacky.
                         // Get in contact with (Discord: nalyddd#9372, Github: NalydddNobel) if you want to change any of this.
                         // (even if you are completely removing this, atleast tell me so I can get rid of my Discord-Developer-Application which hosts these images)
-                        drp.Call("AddClient", "929973580178010152", "mod_calvalex");
+                        drp.Call("AddClient", "929973580178010152", "mod_AncientGod");
                         drp.Call("AddBiome", (Func<bool>)(() => Main.LocalPlayer.GetModPlayer<NaturalRiceFirstModPlayer>().ZoneAstral), "Astral Blight",
-                            "biome_astralblight", 50f, "mod_calvalex");
+                            "biome_astralblight", 50f, "mod_AncientGod");
                     }
                 }
                 catch (Exception ex)
@@ -222,7 +222,7 @@ namespace AncientGod
             MessageType msgType = (MessageType)reader.ReadByte();
             byte playerNumber;
             OraclePlayer oraclePlayer;
-            NaturalRiceFirstModPlayer calValEXPlayer;
+            NaturalRiceFirstModPlayer AncientGodPlayer;
             int SCalHits;
             switch (msgType)
             {
@@ -249,29 +249,29 @@ namespace AncientGod
 
                 case MessageType.SyncNaturalRiceFirstModPlayer:
                     playerNumber = reader.ReadByte();
-                    calValEXPlayer = Main.player[playerNumber].GetModPlayer<NaturalRiceFirstModPlayer>();
+                    AncientGodPlayer = Main.player[playerNumber].GetModPlayer<NaturalRiceFirstModPlayer>();
                     SCalHits = reader.ReadInt32();
-                    calValEXPlayer.SCalHits = SCalHits;
+                    AncientGodPlayer.SCalHits = SCalHits;
                     break;
 
                 case MessageType.SyncSCalHits:
                     playerNumber = reader.ReadByte();
-                    calValEXPlayer = Main.player[playerNumber].GetModPlayer<NaturalRiceFirstModPlayer>();
+                    AncientGodPlayer = Main.player[playerNumber].GetModPlayer<NaturalRiceFirstModPlayer>();
                     SCalHits = reader.ReadInt32();
-                    calValEXPlayer.SCalHits = SCalHits;
+                    AncientGodPlayer.SCalHits = SCalHits;
                     if (Main.netMode == NetmodeID.Server)
                     {
                         var packet = GetPacket();
                         packet.Write((byte)MessageType.SyncSCalHits);
                         packet.Write(playerNumber);
-                        packet.Write(calValEXPlayer.SCalHits);
+                        packet.Write(AncientGodPlayer.SCalHits);
                         packet.Send(-1, playerNumber);
                     }
 
                     break;
 
                 default:
-                    Logger.WarnFormat("CalValEX: Unknown Message type: {0}", msgType);
+                    Logger.WarnFormat("AncientGod: Unknown Message type: {0}", msgType);
                     break;
             }
         }*/
