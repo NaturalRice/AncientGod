@@ -8,6 +8,10 @@ Mods: {
 			ModernMechaBody.DisplayName: Modern Mecha Body
 			BigBangMechaBullet.DisplayName: Big Bang Mecha Bullet
 			RunawayTankLaser.DisplayName: Runaway Tank Laser
+			RunawayMechaFist.DisplayName: Runaway Mecha Fist
+			RunawayMechaLaser.DisplayName: Runaway Mecha Laser
+			RunawayMechaPet.DisplayName: Runaway Mecha Pet
+			RunawayMechaBody.DisplayName: Runaway Mecha Body
 		}
 
 		NPCs: {
@@ -34,6 +38,8 @@ Mods: {
 					Princess_LovesNPC: I like {NPCName}.
 				}
 			}
+
+			RunawayMecha.DisplayName: Runaway Mecha
 		}
 
 		Items: {
@@ -141,6 +147,11 @@ Mods: {
 				DisplayName: Invishield
 				Tooltip: ""
 			}
+
+			RunawayMechaKey: {
+				DisplayName: Runaway Mecha Key
+				Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -177,6 +188,11 @@ Mods: {
 			ModernMechaBuff: {
 				DisplayName: Modern Mecha Buff
 				Description: Mods.AncientGod.Buffs.ModernMechaBuff.Description
+			}
+
+			RunawayMechaPetBuff: {
+				DisplayName: Runaway Mecha Pet Buff
+				Description: Mods.AncientGod.Buffs.RunawayMechaPetBuff.Description
 			}
 		}
 

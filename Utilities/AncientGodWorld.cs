@@ -48,7 +48,7 @@ namespace AncientGod
         public static bool RockshrinEX;
         public static bool jharinter;
         public static bool downedMeldosaurus;
-        public static bool downedFogbound;
+        public static bool downedRunawayMecha;
         public static bool masorev;
 
         // Chickens
@@ -73,7 +73,7 @@ namespace AncientGod
             RockshrinEX = false;
             jharinter = false;
             downedMeldosaurus = false;
-            downedFogbound = false;
+            downedRunawayMecha = false;
 
             nugget = draco = folly = godnug = mammoth = shadow = isThereAHouse = false;
             ninja = false;
@@ -90,7 +90,7 @@ namespace AncientGod
             RockshrinEX = false;
             jharinter = false;
             downedMeldosaurus = false;
-            downedFogbound = false;
+            downedRunawayMecha = false;
             ninja = false;
             astro = false;
 
@@ -124,8 +124,8 @@ namespace AncientGod
             if (downedMeldosaurus)
                 tag["downedMeldosaurus"] = true;
 
-            if (downedFogbound)
-                tag["downedFogbound"] = true;
+            if (downedRunawayMecha)
+                tag["downedRunawayMecha"] = true;
 
             // Chickens
             if (nugget)
@@ -156,7 +156,7 @@ namespace AncientGod
             RockshrinEX = tag.ContainsKey("RockshrinEX");
             jharinter = tag.ContainsKey("jharinter");
             downedMeldosaurus = tag.ContainsKey("downedMeldosaurus");
-            downedFogbound = tag.ContainsKey("downedFogbound");
+            downedRunawayMecha = tag.ContainsKey("downedRunawayMecha");
 
             nugget = tag.ContainsKey("nugget");
             draco = tag.ContainsKey("draco");
@@ -182,7 +182,7 @@ namespace AncientGod
 
             BitsByte flags2 = new BitsByte();
             flags2[0] = downedMeldosaurus;
-            flags2[1] = downedFogbound;
+            flags2[1] = downedRunawayMecha;
             flags2[2] = ninja;
             flags2[3] = astro;
 
@@ -211,7 +211,7 @@ namespace AncientGod
 
             BitsByte flags2 = reader.ReadByte();
             downedMeldosaurus = flags2[0];
-            downedFogbound = flags2[1];
+            downedRunawayMecha = flags2[1];
             ninja = flags2[2];
             astro = flags2[3];
 

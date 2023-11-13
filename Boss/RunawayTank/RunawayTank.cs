@@ -82,14 +82,25 @@ namespace AncientGod.Boss.RunawayTank
             NPC.friendly = false;//非友好NPC
             NPC.width = 18;
             NPC.height = 40;
-            NPC.aiStyle = 7;//第7类NPC，具体类型详见此代码末尾
+            NPC.aiStyle = -1;//第7类NPC，具体类型详见此代码末尾(试试-1)
             NPC.damage = 1;
             NPC.defense = 150;
             NPC.lifeMax = 250000;
-            NPC.HitSound = SoundID.NPCHit1;
-            NPC.DeathSound = SoundID.NPCDeath1;
-            NPC.knockBackResist = 0.5f;
-            AnimationType = NPCID.PartyGirl;
+
+            NPC.boss = true;//它tm是个Boss
+            Main.npcFrameCount[NPC.type] = 1;
+            NPC.knockBackResist = 0f;
+            NPC.value = Item.buyPrice(0, 10, 0, 0);
+            NPC.alpha = 1;
+            NPC.lavaImmune = true;
+            NPC.behindTiles = true;
+            NPC.noGravity = false;//因为是坦克，受重力影响
+            NPC.noTileCollide = true;
+            NPC.HitSound = SoundID.NPCHit23;
+            NPC.DeathSound = SoundID.NPCDeath3;
+            Music = MusicID.LunarBoss;
+            NPC.netAlways = true;
+            NPC.chaseable = true;
 
             AIType = NPCID.Zombie; // Use vanilla zombie's type when executing AI code. (This also means it will try to despawn during daytime)
             AnimationType = NPCID.Zombie; // Use vanilla zombie's type when executing animation code. Important to also match Main.npcFrameCount[NPC.type] in SetStaticDefaults.
@@ -121,6 +132,11 @@ namespace AncientGod.Boss.RunawayTank
         {
             // 确保 NPC 是敌对的
             NPC.friendly = false;
+
+            Player target = Main.player[NPC.target];//确定目标？
+            float lifeRatio = NPC.life / NPC.lifeMax;
+
+
             if (!AncientGodWorld.RunawayTank)
             {
                 AncientGodWorld.RunawayTank = true;
@@ -396,7 +412,7 @@ namespace AncientGod.Boss.RunawayTank
             {
                 return 0;
             }
-            return SpawnCondition.Overworld.Chance * 0.1f;//全天候有概率生成
+            return SpawnCondition.Overworld.Chance * 0.5f;//全天候有概率生成
         }
 
         public override bool CanGoToStatue(bool toKingStatue)

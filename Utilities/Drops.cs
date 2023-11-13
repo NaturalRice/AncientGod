@@ -441,8 +441,8 @@ namespace AncientGod
                     {
                         npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CloudCandy>(), 10));
                         npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<CloudWaistbelt>(), 10));
-                        npcLoot.Add(ItemDropRule.ByCondition(new FogboundCondition(), ModContent.ItemType<PurifiedFog>(), 20));
-                        npcLoot.Add(ItemDropRule.ByCondition(new FogboundCondition2(), ModContent.ItemType<PurifiedFog>(), 999999));
+                        npcLoot.Add(ItemDropRule.ByCondition(new RunawayMechaCondition(), ModContent.ItemType<PurifiedFog>(), 20));
+                        npcLoot.Add(ItemDropRule.ByCondition(new RunawayMechaCondition2(), ModContent.ItemType<PurifiedFog>(), 999999));
                     }
                     if (npc.type == AncientGod.CalamityNPC("CragmawMire"))
                     {
@@ -785,8 +785,8 @@ namespace AncientGod
                 
                 npcLoot.Add(ItemDropRule.ByCondition(new MeldosaurusDowned(), ModContent.ItemType<AprilFools.Meldosaurus.KnowledgeMeldosaurus>()));
             }
-            //Fogbound
-            if (npc.type == ModContent.NPCType<AprilFools.Fogbound>())
+            //RunawayMecha
+            if (npc.type == ModContent.NPCType<AprilFools.RunawayMecha>())
             {
                 npcLoot.Add(ItemDropRule.Common(ModContent.ItemType<PurifiedFog>(), 1));                
             }
