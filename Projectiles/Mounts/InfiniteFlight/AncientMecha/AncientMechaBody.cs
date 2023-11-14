@@ -230,7 +230,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
         }
 
         //[JITWhenModsEnabled("CalamityMod")]
-        private void DrawChain()//用于绘制链条效果，它使用贝塞尔曲线来模拟链条的曲线，然后绘制多个链条段。
+        private void DrawChain()//用于绘制链条效果，它使用贝塞尔曲线来模拟链条的曲线，然后绘制多个链条段，这段代码用于绘制一条连接玩家机甲的牵引线
         {
             Texture2D chainTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMecha/AncientMechaChain").Value;
 

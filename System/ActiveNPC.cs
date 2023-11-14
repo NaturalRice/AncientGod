@@ -14,6 +14,8 @@ namespace AncientGod.System
     {
         public static bool Guide = false;
         public static bool MadGuide = true;
+        public static bool RunawayTank = true;
+        public static bool RunawayMecha = true;
         // public static bool downedOtherBoss = false;
 
         public override void ClearWorld()

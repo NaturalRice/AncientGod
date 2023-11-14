@@ -21,7 +21,7 @@ namespace AncientGod
 {
     public class AncientGodPlayer : ModPlayer
     {
-        //public static readonly ClassSpecificPlayerLayer DraedonSet = new ClassSpecificPlayerLayer("CalValEX/Items/Equips/Shirts/Draedon/", "CalValEX/Items/Equips/Hats/Draedon/", "DraedonChestplate", "DraedonHelmet");
+        //public static readonly ClassSpecificPlayerLayer DraedonSet = new ClassSpecificPlayerLayer("AncientGod/Items/Equips/Shirts/Draedon/", "AncientGod/Items/Equips/Hats/Draedon/", "DraedonChestplate", "DraedonHelmet");
 
         private const int saveVersion = 0;
 
@@ -265,6 +265,7 @@ namespace AncientGod
         public bool ModernMecha;//这里为现代机甲的布尔值
         public bool FutureMecha;//这里为未来机甲的布尔值
         public bool EntropySilenceMecha;//这里为熵寂机甲的布尔值
+        public bool RunawayMecha;//这里为Boss失控机甲的布尔值
         public bool nurex;
         public bool nreyeball;
         public float pongballposx;
@@ -1004,8 +1005,8 @@ namespace AncientGod
                 return;
             }
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = ModLoader.GetMod("CalValEX");
-            CalValEXPlayer modPlayer = drawPlayer.GetModPlayer<CalValEXPlayer>();
+            Mod mod = ModLoader.GetMod("AncientGod");
+            AncientGodPlayer modPlayer = drawPlayer.GetModPlayer<AncientGodPlayer>();
             if (modPlayer.morshugun)
             {
                 int gnuflip = 66 * -drawPlayer.direction;
@@ -1017,15 +1018,15 @@ namespace AncientGod
             }
         });*/
 
-        /*public static readonly PlayerLayer Mimigun2 = new PlayerLayer("CalValEX", "Mimigun2", PlayerLayer.Arms, delegate (PlayerDrawInfo drawInfo)
+        /*public static readonly PlayerLayer Mimigun2 = new PlayerLayer("AncientGod", "Mimigun2", PlayerLayer.Arms, delegate (PlayerDrawInfo drawInfo)
         {
             if (drawInfo.shadow != 0f)
             {
                 return;
             }
             Player drawPlayer = drawInfo.drawPlayer;
-            Mod mod = ModLoader.GetMod("CalValEX");
-            CalValEXPlayer modPlayer = drawPlayer.GetModPlayer<CalValEXPlayer>();
+            Mod mod = ModLoader.GetMod("AncientGod");
+            AncientGodPlayer modPlayer = drawPlayer.GetModPlayer<AncientGodPlayer>();
             if (modPlayer.morshugun)
             {
                 int gnuflip = 36 * -drawPlayer.direction;

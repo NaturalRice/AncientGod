@@ -9,6 +9,41 @@ Mods: {
 		}
 
 		NPCs.MadGuide.DisplayName: 发狂向导
+			// BigBangMechaBullet.DisplayName: Big Bang Mecha Bullet
+			// RunawayTankLaser.DisplayName: Runaway Tank Laser
+			// RunawayMechaFist.DisplayName: Runaway Mecha Fist
+			// RunawayMechaLaser.DisplayName: Runaway Mecha Laser
+			// RunawayMechaPet.DisplayName: Runaway Mecha Pet
+			// RunawayMechaBody.DisplayName: Runaway Mecha Body
+		}
+
+		NPCs: {
+			// MadGuide.DisplayName: Mad Guide
+
+			RunawayTank: {
+				// DisplayName: Runaway Tank
+
+				TownNPCMood: {
+					// Content: 我很满足。
+					// NoHome: 我讨厌没有家。
+					// FarFromHome: 我离家太远了。
+					// LoveSpace: 我非常喜欢有这么大的空间。
+					// DislikeCrowded: 我不喜欢这么拥挤。
+					// HateCrowded: 我讨厌这么拥挤。
+					// LoveBiome: 我非常喜欢{BiomeName}。
+					// LikeBiome: 我喜欢{BiomeName}。
+					// DislikeBiome: 我不喜欢{BiomeName}。
+					// HateBiome: 我讨厌{BiomeName}。
+					// LoveNPC: 我非常喜欢{NPCName}。
+					// LikeNPC: 我喜欢{NPCName}。
+					// DislikeNPC: 我不喜欢{NPCName}。
+					// LikeNPC_Princess: I like {NPCName}.
+					// Princess_LovesNPC: I like {NPCName}.
+				}
+			}
+
+			// RunawayMecha.DisplayName: Runaway Mecha
+		}
 
 		Items: {
 			SwordOfAG: {
@@ -182,6 +217,41 @@ Mods: {
 					以前，冰封天地的雪景
 					'''
 			}
+
+			BigBangMechaKey: {
+				// DisplayName: Big Bang Mecha Key
+				// Tooltip: ""
+			}
+
+			EntropySilenceMechaKey: {
+				// DisplayName: Entropy Silence Mecha Key
+				// Tooltip: ""
+			}
+
+			FutureMechaKey: {
+				// DisplayName: Future Mecha Key
+				// Tooltip: ""
+			}
+
+			ModernMechaKey: {
+				// DisplayName: Modern Mecha Key
+				// Tooltip: ""
+			}
+
+			BigBangMechaBullet: {
+				// DisplayName: Big Bang Mecha Bullet
+				// Tooltip: ""
+			}
+
+			Invishield: {
+				// DisplayName: Invishield
+				// Tooltip: ""
+			}
+
+			RunawayMechaKey: {
+				// DisplayName: Runaway Mecha Key
+				// Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -219,6 +289,12 @@ Mods: {
 				// DisplayName: Modern Mecha Buff
 				// Description: Mods.AncientGod.Buffs.ModernMechaBuff.Description
 			}
+
+			RunawayMechaPetBuff: {
+				// DisplayName: Runaway Mecha Pet Buff
+				// Description: Mods.AncientGod.Buffs.RunawayMechaPetBuff.Description
+			}
+
 		}
 
 		WorldGen.WorldGenTMessage: 测试生成代码
@@ -254,6 +330,99 @@ Mods: {
 					// text3: Mods.AncientGod.Dialogue.Guide.FirstBoss.text3
 				}
 			}
+		}
+
+		Configs: {
+			AncientGodConfig: {
+				// DisplayName: Ancient God Config
+
+				DisableVanityDrops: {
+					// Label: "{$Mods.AncientGod.Config.Dr0ps.Label}"
+					// Tooltip: Disables all of the mod's direct drops
+				}
+
+				ConfigBossBlocks: {
+					// Label: "{$Mods.AncientGod.Config.Bl0cks.Label}"
+					// Tooltip: Makes it so that bosses and their bags no longer drop blocks
+				}
+
+				FatDog: {
+					// Label: "{$Mods.AncientGod.Config.Doggers.Label}"
+					// Tooltip: Makes a certain pet a lot larger when true
+				}
+
+				SupCombo: {
+					// Label: "{$Mods.AncientGod.Config.Sup.Label}"
+					// Tooltip: Allows the Superstitious Jewel to summon the 11 ingredient pets used to craft it
+				}
+
+				DragonballName: {
+					// Label: "{$Mods.AncientGod.Config.Birb.Label}"
+					// Tooltip: Disables the easter egg caused by the Dragonball pet
+				}
+
+				Polterskin: {
+					// Label: "{$Mods.AncientGod.Config.Polt.Label}"
+					// Tooltip: Makes it so that the Toy Scythe's pet always uses its default skin
+				}
+
+				Pitbul: {
+					// Label: "{$Mods.AncientGod.Config.Bark.Label}"
+					// Tooltip: Makes it so that the Pitbull pet doesn't bark at rare enemies
+				}
+
+				TownNPC: {
+					// Label: Town N P C
+					// Tooltip: Prevents the Oracle and Jelly Priestess from spawning
+				}
+
+				IsopodBait: {
+					// Label: "{$Mods.AncientGod.Config.Isopod.Label}"
+					// Tooltip: Makes it so that Abyssal Isopods have max bait power at all times
+				}
+
+				CritterSpawns: {
+					// Label: "{$Mods.AncientGod.Config.Critters.Label}"
+					// Tooltip: Makes it so that all Calamity's Vanities critters no longer spawn naturally
+				}
+
+				GroundMountLol: {
+					// Label: Disable Mount Nerf
+					// Tooltip: Disables the stat cripple which ground mounts give
+				}
+
+				DiscordRichPresence: {
+					// Label: "{$Mods.AncientGod.Config.DRP.Label}"
+					/* Tooltip:
+						'''
+						Whether or not to initialize the Discord Rich Presence addons for the Discord Rich Presence mod by Purplefin Neptuna.
+						Requires that mod to be active in order to do anything.
+						''' */
+				}
+
+				OwnerOnly: {
+					// Label: Owner Only
+					/* Tooltip:
+						'''
+						Recommended for Host & Play or hosting server on same machine you play on.
+						If not enabled, all users can make changes to the config
+						''' */
+				}
+
+				HerosPerm: {
+					// Label: "{$Mods.AncientGod.Config.HerosPerm.Label}"
+					/* Tooltip:
+						'''
+						For those that use Heros Mod in multiplayer.
+						If not enabled, all users can make changes to the config
+						''' */
+				}
+			}
+		}
+
+		Config: {
+			// Drops: Disable Vanity Drops Header
+			// Pets: Fat Dog Header
 		}
 	}
 }

@@ -24,7 +24,6 @@
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Buffs\Pets\" />
     <Folder Include="Items\Mounts\InfiniteFlight\AncientMecha\" />
     <Folder Include="Projectiles\Mounts\InfiniteFlight\AncientMecha\" />
   </ItemGroup>

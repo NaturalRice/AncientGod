@@ -5,11 +5,20 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Terraria;
 using Terraria.ModLoader;
+using AncientGod.Projectiles.Ammo;
+using AncientGod.Projectiles;
+using Mono.Cecil;
 
 namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
 {
-    internal class BigBangMechaBody : ModProjectile//此类用于实现AncientMecha的机械臂的行为。
+    public class BigBangMechaBody : ModProjectile//此类用于实现AncientMecha的机械臂的行为。
     {
+        public int owner; // 自定义字段，用于存储投射物的源
+
+        private const float TargetDistance = 800f; // 设置寻找敌人的最大距离
+        private int target = -1; // 记录当前目标敌人的索引
+
+
         bool isInfernumActive;//用于标记Infernum模式是否激活
         Mod infern;//Mod类型的变量，用于引用Infernum模组
         //A list of the ideal positions for each arm. The first 2 variables of the Vector2 represent the relative position of the arm to the body and the last variable represents the rotation of the hand
@@ -54,6 +63,24 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
             Projectile.aiStyle = -1;
         }
 
+        private void FindTarget()
+        {
+            target = -1; // 默认值，表示没有找到目标
+            float maxDistance = TargetDistance; // 设置最大寻找距离
+
+            for (int i = 0; i < Main.npc.Length; i++)
+            {
+                NPC npc = Main.npc[i];
+
+                // 检查敌人是否活着、活跃，并且在最大寻找范围内
+                if (npc.active && !npc.friendly && Vector2.Distance(npc.Center, Projectile.Center) < maxDistance)
+                {
+                    maxDistance = Vector2.Distance(npc.Center, Projectile.Center);
+                    target = i; // 更新目标索引
+                }
+            }
+        }
+
 
         public override void AI()
         {
@@ -64,13 +91,18 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
             if (Owner.dead || !Owner.mount.Active)//此处添加了一个条件用来保证坐骑消失时这些投射物也会消失
                 Projectile.timeLeft = 0;
             if (!modPlayer.BigBangMecha)
+            {
                 Projectile.timeLeft = 0;
+                Projectile.active = false;
+            }
             if (modPlayer.BigBangMecha && Owner.mount.Active)//当然，还要再在这里强调一遍才能达到效果
-                Projectile.timeLeft = 2;
+            {
+                Projectile.timeLeft = 2;                
 
+               
+            }
 
-
-
+                
             if (Initialized == 0)
             {
                 //Initialize the arm positions
@@ -113,6 +145,48 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
 
 
                     ArmPositions[i] = new Vector3(vector2position, armPosition.Z);
+
+                    // 寻找附近的敌人
+                    FindTarget(); // 调用FindTarget方法来更新target值
+
+                    if (target != -1)
+                    {
+                        NPC targetNPC = Main.npc[target];
+
+                        // 瞄准敌人
+                        Vector2 direction = targetNPC.Center - Projectile.Center;
+                        direction.Normalize();
+                        Projectile.velocity = direction * 8f;
+
+                        // 设置投射物的旋转角度
+                        armPosition.Z = direction.ToRotation();
+
+                        // 发射子弹
+                        if (Projectile.localAI[0] == 0f)
+                        {
+                            Projectile.localAI[0] = 1f;
+
+                            // 计算发射角度，这里示例为向下发射
+                            float shootAngle = direction.ToRotation();
+
+                            // 发射弹药
+                            for (int j = 0; j < 100000; j++) // 这里可以根据需要发射多个弹药(好像不能设无限，否则会无限循环，卡死）
+                            {
+                                Vector2 shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f; // 这里示例为向右发射
+                                int newProjectile = Projectile.NewProjectile(null, Projectile.position, shotVelocity, ModContent.ProjectileType<BigBangMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);
+                                Main.projectile[newProjectile].timeLeft = 300;
+                                Main.projectile[newProjectile].netUpdate = true;
+
+                                shootAngle += MathHelper.PiOver4; // 增加弹药之间的间隔角度
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // 当没有目标时，保持静止
+                        Projectile.velocity = Vector2.Zero;
+                        Projectile.localAI[0] = 0f; // 重置发射标记
+                    }
                 }
             }
         }
@@ -188,6 +262,18 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
             /*这里，forearmPosition 是通过 elbowPosition 和 forearmAngle 计算得到的。首先，通过 elbowPosition 加上 forearmAngle 方向的矢量来确定下臂的位置。
             forearmAngle 是下臂与手部之间的角度，它是通过 (handPosition - elbowPosition).ToRotation() 计算的。*/
             Vector2 forearmPosition = elbowPosition + forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition).Length() - 40) / 2f);
+
+            if (forearmPosition.Y < Owner.position.Y && forearmAngle > 200)
+            {
+                if (forearmPosition.X < Owner.position.X)
+                {
+                    forearmPosition = elbowPosition + forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition - Vector2.UnitX * 120 + Vector2.UnitY * 120).Length() - 40));
+                }
+                else
+                {
+                    forearmPosition = elbowPosition + forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition + Vector2.UnitX * 120 + Vector2.UnitY * 120).Length() - 40));
+                }
+            }
 
             if (forearmPosition.Y > Owner.position.Y)//如果是下方的大臂则小臂用另一套相对位置
             {

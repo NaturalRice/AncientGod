@@ -39,7 +39,7 @@ namespace AncientGod
         public static int labTiles;
         public static int dungeontiles;
         public static bool rescuedjelly;
-        public static bool jharim;
+        public static bool RunawayTank;
         public static bool orthofound;
         public static bool amogus;
         public static bool OneMonolith;
@@ -48,7 +48,7 @@ namespace AncientGod
         public static bool RockshrinEX;
         public static bool jharinter;
         public static bool downedMeldosaurus;
-        public static bool downedFogbound;
+        public static bool downedRunawayMecha;
         public static bool masorev;
 
         // Chickens
@@ -66,14 +66,14 @@ namespace AncientGod
         public override void OnWorldLoad()
         {
             rescuedjelly = false;
-            jharim = false;
+            RunawayTank = false;
             amogus = false;
             orthofound = false;
             Rockshrine = false;
             RockshrinEX = false;
             jharinter = false;
             downedMeldosaurus = false;
-            downedFogbound = false;
+            downedRunawayMecha = false;
 
             nugget = draco = folly = godnug = mammoth = shadow = isThereAHouse = false;
             ninja = false;
@@ -83,14 +83,14 @@ namespace AncientGod
         public override void OnWorldUnload()
         {
             rescuedjelly = false;
-            jharim = false;
+            RunawayTank = false;
             amogus = false;
             orthofound = false;
             Rockshrine = false;
             RockshrinEX = false;
             jharinter = false;
             downedMeldosaurus = false;
-            downedFogbound = false;
+            downedRunawayMecha = false;
             ninja = false;
             astro = false;
 
@@ -103,8 +103,8 @@ namespace AncientGod
             if (rescuedjelly)
                 tag["rescuedjelly"] = true;
 
-            if (jharim)
-                tag["jharim"] = true;
+            if (RunawayTank)
+                tag["RunawayTank"] = true;
 
             if (orthofound)
                 tag["orthofound"] = true;
@@ -124,8 +124,8 @@ namespace AncientGod
             if (downedMeldosaurus)
                 tag["downedMeldosaurus"] = true;
 
-            if (downedFogbound)
-                tag["downedFogbound"] = true;
+            if (downedRunawayMecha)
+                tag["downedRunawayMecha"] = true;
 
             // Chickens
             if (nugget)
@@ -149,14 +149,14 @@ namespace AncientGod
         public override void LoadWorldData(TagCompound tag)
         {
             rescuedjelly = tag.ContainsKey("rescuedjelly");
-            jharim = tag.ContainsKey("jharim");
+            RunawayTank = tag.ContainsKey("RunawayTank");
             orthofound = tag.ContainsKey("orthofound");
             amogus = tag.ContainsKey("amogus");
             Rockshrine = tag.ContainsKey("Rockshrine");
             RockshrinEX = tag.ContainsKey("RockshrinEX");
             jharinter = tag.ContainsKey("jharinter");
             downedMeldosaurus = tag.ContainsKey("downedMeldosaurus");
-            downedFogbound = tag.ContainsKey("downedFogbound");
+            downedRunawayMecha = tag.ContainsKey("downedRunawayMecha");
 
             nugget = tag.ContainsKey("nugget");
             draco = tag.ContainsKey("draco");
@@ -173,7 +173,7 @@ namespace AncientGod
         {
             BitsByte flags = new BitsByte();
             flags[0] = rescuedjelly;
-            flags[1] = jharim;
+            flags[1] = RunawayTank;
             flags[2] = orthofound;
             flags[3] = amogus;
             flags[4] = Rockshrine;
@@ -182,7 +182,7 @@ namespace AncientGod
 
             BitsByte flags2 = new BitsByte();
             flags2[0] = downedMeldosaurus;
-            flags2[1] = downedFogbound;
+            flags2[1] = downedRunawayMecha;
             flags2[2] = ninja;
             flags2[3] = astro;
 
@@ -202,7 +202,7 @@ namespace AncientGod
         {
             BitsByte flags = reader.ReadByte();
             rescuedjelly = flags[0];
-            jharim = flags[1];
+            RunawayTank = flags[1];
             orthofound = flags[2];
             amogus = flags[3];
             Rockshrine = flags[4];
@@ -211,7 +211,7 @@ namespace AncientGod
 
             BitsByte flags2 = reader.ReadByte();
             downedMeldosaurus = flags2[0];
-            downedFogbound = flags2[1];
+            downedRunawayMecha = flags2[1];
             ninja = flags2[2];
             astro = flags2[3];
 
