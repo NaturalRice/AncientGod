@@ -2,7 +2,6 @@
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using Terraria;
 using Terraria.ModLoader;
 
@@ -83,12 +82,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
             }
 
             Vector2 idealPosition = Owner.Center + Vector2.UnitY * -60;
-            Projectile.Center = Vector2.Lerp(Projectile.Center, idealPosition, 0.2f);
-            Projectile.Center.MoveTowards(idealPosition, 2);
-
-            //Teleport ares to the ideal position if the owner is too far
-            if ((idealPosition - Projectile.Center).Length() > 0)//这里由2000改为0，使得机械臂在快速移动时不会脱离得太离谱
-                Projectile.Center = idealPosition;
+            Projectile.Center = idealPosition;
 
             if (ArmPositions != null)
             {
@@ -103,14 +97,14 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
 
 
                     //vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f) + BobVector;//如果机械臂相对位置摆动得太逆天，可能要禁用这个动画效果
-                    vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f);
+                    vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.6f);//手部位置鬼畜的问题出在这里的Lerp函数；经过多次测试，目前此数值0.6最适合
 
                     //Make the cannon look at the mouse cursor if its close enough
 
                     armPosition.Z = Utils.AngleLerp(armPosition.Z, IdealPositions[i].Z, MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
 
                     armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Main.MouseWorld).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
-
+                    //两个armPosition.Z都是必要的，后者用于在鼠标靠近时瞄准鼠标，前者用于鼠标远离时重新指向地面
 
                     ArmPositions[i] = new Vector3(vector2position, armPosition.Z);
                 }
@@ -161,7 +155,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
             /*position 是一个矢量，代表手部相对于机械臂中心的偏移。通过将这个偏移乘以 0.1f，你可以调整手部相对于机械臂中心的位置。
             这个值的改变可以影响手部的距离，使它更接近或更远离机械臂中心。*/            
             Vector2 position = handPosition - Projectile.Center;
-            bool flipped = Math.Sign(position.X) != -1;
+            bool flipped = Math.Sign(position.X) != -1;//翻转效果，根据左右
 
             Texture2D armTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMecha/AncientMechaArm").Value;//大臂
             Texture2D forearmTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AncientMecha/AncientMechaForearm").Value;//小臂
@@ -180,8 +174,8 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
             float armLenght = 175;
             float directLenght = MathHelper.Clamp((handPosition - armPosition).Length(), 0, armLenght); //Clamp the direct lenght to avoid getting an error from trying to calculate the square root of a negative number
             float elbowElevation = (float)Math.Sqrt(Math.Pow(armLenght / 2f, 2) - Math.Pow(directLenght / 2f, 2));
-            Vector2 elbowPosition = Vector2.Lerp(handPosition, armPosition, 0.5f) + Utils.SafeNormalize(position, Vector2.Zero).RotatedBy(-MathHelper.PiOver2 * Math.Sign(position.X)) * elbowElevation;
-
+            Vector2 elbowPosition = Vector2.Lerp(handPosition, armPosition, 0.5f) + Utils.SafeNormalize(position, Vector2.Zero).RotatedBy(-MathHelper.PiOver2 * Math.Sign(position.X)) * elbowElevation;//胳膊肘位置
+            
             float armAngle = (elbowPosition - armPosition).ToRotation();
             float forearmAngle = (handPosition - elbowPosition).ToRotation();
 
@@ -207,8 +201,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
             //screenPosition 类似的变量用于将游戏中的虚拟世界坐标转换为屏幕上的像素坐标，offset 是一个用于微调绘制位置的向量，通常用于调整绘制对象在屏幕上的位置。
             Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition, armFrame, Color.White, armAngle, armOrigin, Projectile.scale, armFlip, 0);
             Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, null, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
-           
-            
+
 
             if (forearmPosition.Y > Owner.position.Y)//如果是下方的大臂则手部用另一套相对位置（不然手部离得太远）
             {
@@ -221,10 +214,10 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
                 {
                     Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition + Vector2.UnitX * 110 - Vector2.UnitY * 140, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);
                 }
-                
+
             }
             else
-            {
+            {               
                 Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);
             }
         }

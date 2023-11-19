@@ -266,6 +266,7 @@ namespace AncientGod
         public bool FutureMecha;//这里为未来机甲的布尔值
         public bool EntropySilenceMecha;//这里为熵寂机甲的布尔值
         public bool RunawayMecha;//这里为Boss失控机甲的布尔值
+        public bool RunawayTank;//这里为Boss失控坦克的布尔值
         public bool nurex;
         public bool nreyeball;
         public float pongballposx;

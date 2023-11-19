@@ -103,14 +103,14 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.ModernMecha
 
 
                     //vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f) + BobVector;//如果机械臂相对位置摆动得太逆天，可能要禁用这个动画效果
-                    vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f);
+                    vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.6f);//手部位置鬼畜的问题出在这里的Lerp函数；经过多次测试，目前此数值0.6最适合
 
                     //Make the cannon look at the mouse cursor if its close enough
 
                     armPosition.Z = Utils.AngleLerp(armPosition.Z, IdealPositions[i].Z, MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
 
                     armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Main.MouseWorld).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
-
+                    //两个armPosition.Z都是必要的，后者用于在鼠标靠近时瞄准鼠标，前者用于鼠标远离时重新指向地面
 
                     ArmPositions[i] = new Vector3(vector2position, armPosition.Z);
                 }
@@ -207,7 +207,6 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.ModernMecha
             //screenPosition 类似的变量用于将游戏中的虚拟世界坐标转换为屏幕上的像素坐标，offset 是一个用于微调绘制位置的向量，通常用于调整绘制对象在屏幕上的位置。
             Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition, armFrame, Color.White, armAngle, armOrigin, Projectile.scale, armFlip, 0);
             Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, null, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
-
 
 
             if (forearmPosition.Y > Owner.position.Y)//如果是下方的大臂则手部用另一套相对位置（不然手部离得太远）

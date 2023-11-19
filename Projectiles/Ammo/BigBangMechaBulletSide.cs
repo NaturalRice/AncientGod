@@ -9,7 +9,7 @@ using Terraria.ModLoader;
 
 namespace AncientGod.Projectiles.Ammo
 {
-    public class BigBangMechaBullet : ModProjectile
+    public class BigBangMechaBulletSide : ModProjectile
     {
         public override void SetStaticDefaults()
         {
@@ -19,55 +19,22 @@ namespace AncientGod.Projectiles.Ammo
 
         public override void SetDefaults()
         {
-            Projectile.width = 16; // 投射物碰撞盒的宽度
-            Projectile.height = 48; // 投射物碰撞盒的高度
+            Projectile.width = 1; // 投射物碰撞盒的宽度
+            Projectile.height = 108; // 投射物碰撞盒的高度
             Projectile.aiStyle = 1; // 投射物的AI风格，请参考Terraria源代码
             Projectile.friendly = true; // 投射物能对敌人造成伤害吗？
             Projectile.hostile = false; // 投射物能对玩家造成伤害吗？
             Projectile.DamageType = DamageClass.Ranged; // 投射物的伤害类型，是由远程武器发射的吗？
-            Projectile.penetrate = 5; // 投射物能穿透多少个敌怪。（OnTileCollide方法也会减少穿透次数）
+
             Projectile.timeLeft = 600; // 投射物的生存时间（60 = 1秒，所以600是10秒）
             Projectile.alpha = 255; // 投射物的透明度，255为完全透明。（aiStyle 1会快速使投射物变透明。如果不使用逐渐变透明的aiStyle，请删除这一行，否则你的投射物会变得看不见）
             Projectile.light = 1f; // 投射物周围的光照强度
             Projectile.ignoreWater = false; // 投射物的速度是否受水影响？
-            Projectile.tileCollide = true; // 投射物能否与地块碰撞？
+            Projectile.tileCollide = false; // 投射物能否与地块碰撞？
             Projectile.extraUpdates = 1; // 如果希望投射物在一帧内更新多次，请设置大于0的值
-
 
             AIType = ProjectileID.Bullet; // 行为与默认子弹完全相同
 
-        }
-
-        public override bool OnTileCollide(Vector2 oldVelocity)
-        {
-            // 如果与地块碰撞，减少穿透次数。
-            // 因此，投射物最多可以反射5次
-            Projectile.penetrate--;
-            if (Projectile.penetrate <= 0)
-            {
-                Projectile.Kill();
-            }
-            else
-            {
-                Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
-                SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-
-                // 如果投射物击中了地块的左侧或右侧，反转X速度
-                if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
-                {
-                    Projectile.velocity.X = -oldVelocity.X;
-                    Explode();
-                }
-
-                // 如果投射物击中了地块的顶部或底部，反转Y速度
-                if (Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon)
-                {
-                    Projectile.velocity.Y = -oldVelocity.Y;
-                    Explode();
-                }
-            }
-
-            return false;
         }
 
         private void Explode()//添加爆炸效果
@@ -89,7 +56,7 @@ namespace AncientGod.Projectiles.Ammo
             {
                 if (npc.active && !npc.friendly && Vector2.Distance(npc.Center, Projectile.Center) < explosionRadius)
                 {
-                    npc.SimpleStrikeNPC(40, 0, true, 0f);
+                    npc.SimpleStrikeNPC(20, 0, true, 0f);
                     // 如果需要，可以在这里添加更多效果或逻辑。
                 }
             }
@@ -108,7 +75,7 @@ namespace AncientGod.Projectiles.Ammo
                 {
                     // 对NPC造成伤害,伤害为100
                     Explode();
-                    npc.SimpleStrikeNPC(40, 0, true, 0f);
+                    npc.SimpleStrikeNPC(20, 0, true, 0f);
                     // 如果需要，可以在此添加更多效果或逻辑。
                 }
             }

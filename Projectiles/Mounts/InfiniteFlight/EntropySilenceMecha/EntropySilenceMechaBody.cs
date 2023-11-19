@@ -5,11 +5,24 @@ using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
 using Terraria;
 using Terraria.ModLoader;
+using AncientGod.Projectiles.Ammo;
+using AncientGod.Projectiles;
+using Mono.Cecil;
+using AncientGod.Projectiles.Pets.RunawayMecha;
+using Terraria.ID;
+using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 
 namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
 {
     internal class EntropySilenceMechaBody : ModProjectile
     {
+        public int owner; // 自定义字段，用于存储投射物的源
+
+        private const float TargetDistance = 1200f; // 设置寻找敌人的最大距离
+        private int target = -1; // 记录当前目标敌人的索引
+        private float fireCooldown = 60f; // 弹药冷却时间
+
         bool isInfernumActive;//用于标记Infernum模式是否激活
         Mod infern;//Mod类型的变量，用于引用Infernum模组
         //A list of the ideal positions for each arm. The first 2 variables of the Vector2 represent the relative position of the arm to the body and the last variable represents the rotation of the hand
@@ -54,8 +67,26 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
             Projectile.aiStyle = -1;
         }
 
+        private void FindTarget()
+        {
+            target = -1; // 默认值，表示没有找到目标
+            float maxDistance = TargetDistance; // 设置最大寻找距离
 
-        public override void AI()
+            for (int i = 0; i < Main.npc.Length; i++)
+            {
+                NPC npc = Main.npc[i];
+
+                // 检查敌人是否活着、活跃，并且在最大寻找范围内
+                if (npc.active && !npc.friendly && Vector2.Distance(npc.Center, Projectile.Center) < maxDistance)
+                {
+                    maxDistance = Vector2.Distance(npc.Center, Projectile.Center);
+                    target = i; // 更新目标索引
+                }
+            }
+        }
+
+
+        public override void AI()//熵寂机甲是否具有黑洞的属性，能把敌人螺旋吸过来
         {
             /*这是机械臂的主要逻辑部分。在这个方法中，机械臂的行为受到不同条件的控制，包括拥有者是否已死亡、是否激活了坐骑等。
             机械臂的位置、浮动效果和旋转角度等都在这个方法中计算和更新。
@@ -63,14 +94,17 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
             AncientGodPlayer modPlayer = Owner.GetModPlayer<AncientGodPlayer>();
             if (Owner.dead || !Owner.mount.Active)//此处添加了一个条件用来保证坐骑消失时这些投射物也会消失
                 Projectile.timeLeft = 0;
-                
-            if (!modPlayer.EntropySilenceMecha)
+            if (!modPlayer.BigBangMecha)
+            {
                 Projectile.timeLeft = 0;
-            if (modPlayer.EntropySilenceMecha && Owner.mount.Active)//当然，还要再在这里强调一遍才能达到效果
+                Projectile.active = false;
+            }
+            if (modPlayer.BigBangMecha && Owner.mount.Active)//当然，还要再在这里强调一遍才能达到效果
+            {
                 Projectile.timeLeft = 2;
-                
 
 
+            }
 
 
             if (Initialized == 0)
@@ -84,13 +118,41 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
                 Initialized = 1f;
             }
 
-            Vector2 idealPosition = Owner.Center + Vector2.UnitY * -60;
-            Projectile.Center = Vector2.Lerp(Projectile.Center, idealPosition, 0.2f);
-            Projectile.Center.MoveTowards(idealPosition, 2);
 
-            //Teleport ares to the ideal position if the owner is too far
-            if ((idealPosition - Projectile.Center).Length() > 0)//这里由2000改为0，使得机械臂在快速移动时不会脱离得太离谱
-                Projectile.Center = idealPosition;
+            foreach (Item item in Main.item)
+            {
+                if (item.Distance(Projectile.Center) < 3000f && !item.beingGrabbed)
+                {
+                    // 计算朝向玩家中心的矢量
+                    Vector2 toMecha = Owner.Center - item.Center;
+                    toMecha.Normalize();
+
+                    // 缓慢吸附掉落物
+                    float speed = 0.4f; // 调整这个速度
+                    item.velocity += toMecha * speed / toMecha.Length();
+
+                    // 如果需要，可以在这里添加其他吸引效果
+                }
+            }
+
+            foreach (Projectile projectile in Main.projectile)
+            {
+                if (!projectile.friendly && projectile.Distance(Projectile.Center) < 3000f)
+                {
+                    // 计算朝向玩家中心的矢量
+                    Vector2 toMecha = Owner.Center - projectile.Center;
+                    toMecha.Normalize();
+
+                    // 缓慢吸附敌方敌方投射物
+                    float speed = 0.4f; // 调整这个速度
+                    projectile.velocity += toMecha * speed / toMecha.Length();
+
+                    // 如果需要，可以在这里添加其他吸引效果
+                }
+            }
+
+            Vector2 idealPosition = Owner.Center + Vector2.UnitY * -60;
+            Projectile.Center = idealPosition;
 
             if (ArmPositions != null)
             {
@@ -105,23 +167,184 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
 
 
                     //vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f) + BobVector;//如果机械臂相对位置摆动得太逆天，可能要禁用这个动画效果
-                    vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f);
+                    vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.6f);//手部位置鬼畜的问题出在这里的Lerp函数；经过多次测试，目前此数值0.6最适合
 
                     //Make the cannon look at the mouse cursor if its close enough
 
                     armPosition.Z = Utils.AngleLerp(armPosition.Z, IdealPositions[i].Z, MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
 
                     armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Main.MouseWorld).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
-
+                    //两个armPosition.Z都是必要的，后者用于在鼠标靠近时瞄准鼠标，前者用于鼠标远离时重新指向地面
 
                     ArmPositions[i] = new Vector3(vector2position, armPosition.Z);
+
+                    // 寻找附近的敌人
+                    FindTarget(); // 调用FindTarget方法来更新target值
+
+                    if (target != -1)
+                    {
+                        NPC targetNPC = Main.npc[target];
+
+
+                        //手部瞄准敌人                        
+                        Vector2 direction = targetNPC.Center - Projectile.position;
+
+
+                        armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - direction).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
+
+                        direction.Normalize();
+
+                        Projectile.velocity = direction * 16f;
+
+                        // 遍历所有敌方NPC
+                        foreach (NPC npc in Main.npc)
+                        {
+                            // 判断敌方NPC是否活着且在一定范围内
+                            if (!npc.friendly && Vector2.Distance(npc.Center, Projectile.Center) < 3000f)
+                            {
+                                // 计算朝向玩家的方向向量
+                                Vector2 directionToMech = Owner.Center - npc.Center;
+
+                                // 缓慢吸附敌方NPC
+                                float speed = 0.2f; // 调整这个速度
+                                npc.velocity += directionToMech * speed / directionToMech.Length();
+                            }
+                        }
+
+                       
+                        // 设置投射物的旋转角度
+                        //armPosition.Z = direction.ToRotation();
+
+                        if (fireCooldown <= 0f)
+                        {
+                            // 发射子弹
+                            if (Projectile.localAI[0] == 0f)
+                            {
+                                Projectile.localAI[0] = 1f;//Projectile.localAI[0] 设置为1，表示已经发射过，以避免连续的发射。
+
+                                // 计算发射角度，这里示例为向下发射
+                                float shootAngle = direction.ToRotation();
+
+                                // 发射弹药
+                                for (int j = 0; j < 1; j++) // 你可以根据需要发射多个弹药（这里不是间隔的连射，而是一次性射多少弹药）
+                                {
+                                    direction = targetNPC.Center - (Projectile.position + Vector2.UnitX * 170 + Vector2.UnitY * 150);
+                                    shootAngle = direction.ToRotation();
+                                    Vector2 shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f; // 这里示例为向右发射(底下是发射源的定义），瞄准方向
+                                    int newProjectile11 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 170 + Vector2.UnitY * 150, shotVelocity, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
+                                    int newProjectile12 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 170 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle - 20) * 8f, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
+                                    int newProjectile13 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 170 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle + 20) * 8f, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
+                                    direction = targetNPC.Center - (Projectile.position - Vector2.UnitX * 140 + Vector2.UnitY * 50);
+                                    shootAngle = direction.ToRotation();
+                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
+                                    int newProjectile21 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 140 + Vector2.UnitY * 50, shotVelocity, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左上
+                                    int newProjectile22 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 140 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle - 20) * 8f, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左上
+                                    int newProjectile23 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 140 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle + 20) * 8f, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左上
+                                    direction = targetNPC.Center - (Projectile.position + Vector2.UnitX * 195 + Vector2.UnitY * 50);
+                                    shootAngle = direction.ToRotation();
+                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
+                                    int newProjectile31 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 195 + Vector2.UnitY * 50, shotVelocity, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右上
+                                    int newProjectile32 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 195 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle - 20) * 8f, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右上
+                                    int newProjectile33 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 195 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle + 20) * 8f, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右上
+                                    direction = targetNPC.Center - (Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150);
+                                    shootAngle = direction.ToRotation();
+                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
+                                    int newProjectile41 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, shotVelocity, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
+                                    int newProjectile42 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle - 20) * 8f, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
+                                    int newProjectile43 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle + 20) * 8f, ModContent.ProjectileType<EntropySilenceMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
+                                    //这里四个机关炮的准心有一定差别
+                                    Main.projectile[newProjectile11].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile12].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile13].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile21].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile22].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile23].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile31].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile32].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile33].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile41].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile42].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile43].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile11].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile12].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile13].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile21].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile22].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile23].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile31].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile32].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile33].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile41].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile42].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile43].netUpdate = true;//是否将投射物的信息同步到其他客户端
+
+
+                                    shootAngle += MathHelper.PiOver4; // 增加弹药之间的间隔角度
+                                }
+
+                                Projectile.localAI[0] = 0f;//为了连射
+
+                                // 重置冷却计时器
+                                fireCooldown = 30f; // 设置为你想要的冷却时间（间隔时间0.5秒）
+                            }
+                        }
+                        else
+                        {
+                            // 更新冷却计时器
+                            fireCooldown--;
+                        }
+                    }
+                    else
+                    {
+                        // 当没有目标时，保持静止
+                        Projectile.velocity = Vector2.Zero;
+                        Projectile.localAI[0] = 0f; // 重置发射标记
+                    }
                 }
             }
         }
+
+        /*private void DrawImpact(Vector2 position, float rotation, float scale)
+        {
+            Texture2D impactTexture = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaChain").Value;
+            Color impactColor = new Color(0, 255, 255) * 0.6f; // 调整颜色和透明度
+
+            float num = (float)Math.Sin(Main.time % MathHelper.Pi); // 控制效果的周期性变化
+            float num2 = num * 0.2f + 0.8f; // 控制光影效果的强度，可以调整这个值
+
+            Vector2 origin = new Vector2(impactTexture.Width / 2, impactTexture.Height / 2);
+            Vector2 scaleVector = new Vector2(scale) * num2;
+
+            // 使用内置的 Pulse 效果
+            GameShaders.Misc["Pulse"].UseColor(impactColor.ToVector3());
+
+            // 开始使用 SpriteBatch 进行绘制
+            Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.Additive);
+
+            // 绘制纹理
+            Main.spriteBatch.Draw(
+                impactTexture,
+                position - Main.screenPosition,
+                null,
+                impactColor,
+                rotation,
+                origin,
+                scaleVector,
+                SpriteEffects.None,
+                0
+            );
+
+            // 结束 SpriteBatch 绘制
+            Main.spriteBatch.End();
+        }*/
+
+
+
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
-            DrawChain();
-
+            //DrawChain();
+            // 添加光影效果
+            //DrawImpact(Projectile.Center, Projectile.rotation, Projectile.scale);
 
             if (ArmPositions == null)
                 return true;
@@ -211,7 +434,6 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
             Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, null, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
 
 
-
             if (forearmPosition.Y > Owner.position.Y)//如果是下方的大臂则手部用另一套相对位置（不然手部离得太远）
             {
                 //再判断左右边
@@ -232,7 +454,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
         }
 
         //[JITWhenModsEnabled("CalamityMod")]
-        private void DrawChain()//用于绘制链条效果，它使用贝塞尔曲线来模拟链条的曲线，然后绘制多个链条段。
+        /*private void DrawChain()//用于绘制链条效果，它使用贝塞尔曲线来模拟链条的曲线，然后绘制多个链条段。
         {
             Texture2D chainTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/EntropySilenceMecha/EntropySilenceMechaChain").Value;
 
@@ -256,7 +478,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
                 Vector2 origin = new Vector2(chainTex.Width / 2, chainTex.Height); //Draw from center bottom of texture
                 Main.EntitySpriteDraw(chainTex, position - Main.screenPosition, null, chainLightColor, rotation, origin, scale, SpriteEffects.None, 0);
             }
-        }
+        }*/
 
         public override void PostDraw(Color lightColor)//用于在绘制后执行额外的逻辑。在这里，它绘制了机械臂的眼睛
         {
@@ -266,6 +488,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
             float eyeOpacity = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 2f, 0, 1)) * 0.5f;
 
             Main.EntitySpriteDraw(eyesTex, Projectile.Center + offset - Main.screenPosition, null, Color.White * eyeOpacity, Projectile.rotation, eyesTex.Size() / 2f, Projectile.scale, 0f, 0);
+            
         }
 
         public bool summonedProjectile = false;

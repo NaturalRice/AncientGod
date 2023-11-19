@@ -12,6 +12,9 @@ Mods: {
 			// RunawayMechaLaser.DisplayName: Runaway Mecha Laser
 			// RunawayMechaPet.DisplayName: Runaway Mecha Pet
 			// RunawayMechaBody.DisplayName: Runaway Mecha Body
+			// RunawayTankBody.DisplayName: Runaway Tank Body
+			// BigBangMechaBulletSide.DisplayName: Big Bang Mecha Bullet Side
+			// EntropySilenceMechaBullet.DisplayName: Entropy Silence Mecha Bullet
 		}
 
 		NPCs: {
@@ -150,6 +153,11 @@ Mods: {
 
 			RunawayMechaKey: {
 				// DisplayName: Runaway Mecha Key
+				// Tooltip: ""
+			}
+
+			BigBangMechaBulletSide: {
+				// DisplayName: Big Bang Mecha Bullet Side
 				// Tooltip: ""
 			}
 		}

@@ -9,9 +9,9 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections;
 
-namespace AncientGod.Projectiles.Pets.RunawayMecha
+namespace AncientGod.Projectiles.Pets.RunawayTank
 {
-    public class RunawayMechaBody : ModFlyingEnemyPet//此类用于实现失控机甲的所有部分的行为。
+    public class RunawayTankBody : ModWalkingEnemyPet//此类用于实现失控机甲的所有部分的行为。
     {
         public override float TeleportThreshold => 1200f;
         public override Vector2 FlyingOffset => new Vector2(0f, 0f);//这里决定了飞行目标
@@ -92,7 +92,7 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
             return true;
         }
 
-        /*private void CheckDamage()//似乎没啥卵用
+        private void CheckDamage()//似乎没啥卵用
         {
             int life = 100;
             int damage = 0;
@@ -104,7 +104,7 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
             }
 
             if (damage > 0)
-            { 
+            {
                 // 处理伤害逻辑，例如减少生命值
                 life -= damage;
                 if (life <= 0)
@@ -112,7 +112,7 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
                     Projectile.Kill(); // 如果生命值小于等于零，销毁投射物
                 }
             }
-        }*/
+        }
 
         public override void AI()
         {
@@ -146,11 +146,11 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
                     //vector2position 用于确定机械臂的位置，即机械臂的上部（臂部）的位置。这个位置是根据理想位置、浮动效果和其他变化因素计算出来的。
                     //vector2position 在接下来的计算中用于控制机械臂的位置，并使其在上下浮动以及跟踪鼠标光标时具有平滑的运动效果。这有助于模拟机械臂的运动和定位。
                     //vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f) + BobVector;//如果机械臂相对位置摆动得太逆天，可能要禁用这个动画效果
-                    vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.6f);//手部位置鬼畜的问题出在这里的Lerp函数；经过多次测试，目前此数值0.6最适合
+                    vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f);
 
-                    //Make the cannon look at the mouse cursor if its close enough 这里改成瞄准玩家
-                    armPosition.Z = Utils.AngleLerp(armPosition.Z, IdealPositions[i].Z, MathHelper.Clamp((Owner.position - vector2position).Length() / 300f, 0, 1));
-                    armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Owner.position).ToRotation(), 1 - MathHelper.Clamp((Owner.position - vector2position).Length() / 300f, 0, 1));
+                    //Make the cannon look at the mouse cursor if its close enough
+                    armPosition.Z = Utils.AngleLerp(armPosition.Z, IdealPositions[i].Z, MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
+                    armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Main.MouseWorld).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
 
                     ArmPositions[i] = new Vector3(vector2position, armPosition.Z);
                 }
@@ -170,10 +170,10 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
             if (ArmPositions == null)
                 return true;
 
-            Texture2D teslaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayMecha/RunawayMechaTesla")).Value;
-            Texture2D laserTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayMecha/RunawayMechaLaser")).Value;
-            Texture2D nukeTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayMecha/RunawayMechaNuke")).Value;
-            Texture2D plasmaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayMecha/RunawayMechaPlasma")).Value;
+            Texture2D teslaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayTank/RunawayTankTesla")).Value;
+            Texture2D laserTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayTank/RunawayTankLaser")).Value;
+            Texture2D nukeTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayTank/RunawayTankNuke")).Value;
+            Texture2D plasmaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayTank/RunawayTankPlasma")).Value;
             ModLoader.TryGetMod("InfernumMode", out infern);
             if (infern != null)
             {
@@ -209,8 +209,8 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
             Vector2 position = handPosition - Projectile.Center;
             bool flipped = Math.Sign(position.X) != -1;
 
-            Texture2D armTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayMecha/RunawayMechaArm").Value;//大臂
-            Texture2D forearmTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayMecha/RunawayMechaForearm").Value;//小臂
+            Texture2D armTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayTank/RunawayTankArm").Value;//大臂
+            Texture2D forearmTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayTank/RunawayTankForearm").Value;//小臂
 
             Rectangle armFrame = new Rectangle(0, top ? 0 : 59, armTex.Width, 60);
             Rectangle handFrame = new Rectangle(0, infernum ? 40 : 0, 60, 38);
@@ -255,6 +255,7 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
             Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, null, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
 
 
+
             if (forearmPosition.Y > Owner.position.Y)//如果是下方的大臂则手部用另一套相对位置（不然手部离得太远）
             {
                 //再判断左右边
@@ -280,7 +281,7 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
 
         private void DrawChain()//用于绘制链条效果，它使用贝塞尔曲线来模拟链条的曲线，然后绘制多个链条段，这段代码用于绘制一条连接玩家机甲的牵引线
         {//作为Boss,是否可以改写一下这里，使得链条用于牵引机械臂呢？
-            Texture2D chainTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayMecha/RunawayMechaChain").Value;
+            Texture2D chainTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayTank/RunawayTankChain").Value;
 
             int numPoints = 10; //"Should make dynamic based on curve length, but I'm not sure how to smoothly do that while using a bezier curve" -Graydee, from the code i referenced. I do agree.
             float curvature = MathHelper.Clamp(Math.Abs(Forearmposition.X - Handposition.X) / 50f * 80, 15, 80);
@@ -342,7 +343,7 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
 
         public override void PostDraw(Color lightColor)//用于在绘制后执行额外的逻辑。在这里，它绘制了机械臂的眼睛
         {
-            Texture2D eyesTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayMecha/RunawayMechaEyes").Value;
+            Texture2D eyesTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Pets/RunawayTank/RunawayTankEyes").Value;
 
             Vector2 offset = Utils.SafeNormalize(Main.MouseWorld - (Projectile.Center - Vector2.UnitY * 10), Vector2.Zero) * MathHelper.Clamp((Projectile.Center - Vector2.UnitY * 10 - Main.MouseWorld).Length(), 0, 1);
             float eyeOpacity = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 2f, 0, 1)) * 0.5f;
@@ -356,10 +357,10 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
         {
             AncientGodPlayer modPlayer = player.GetModPlayer<AncientGodPlayer>();
 
-            /*if (player.dead)
-                modPlayer.RunawayMecha = false;*/
+            if (player.dead)
+                modPlayer.RunawayTank = false;
 
-            if (modPlayer.RunawayMecha)
+            if (modPlayer.RunawayTank)
                 Projectile.timeLeft = 2;
         }
 
