@@ -15,6 +15,8 @@ Mods: {
 			// RunawayTankBody.DisplayName: Runaway Tank Body
 			// BigBangMechaBulletSide.DisplayName: Big Bang Mecha Bullet Side
 			// EntropySilenceMechaBullet.DisplayName: Entropy Silence Mecha Bullet
+			// MachineGunBullet.DisplayName: Machine Gun Bullet
+			// FourDimensionalInsectBody.DisplayName: Four Dimensional Insect Body
 		}
 
 		NPCs: {
@@ -160,6 +162,11 @@ Mods: {
 				// DisplayName: Big Bang Mecha Bullet Side
 				// Tooltip: ""
 			}
+
+			FourDimensionalInsectKey: {
+				// DisplayName: Four Dimensional Insect Key
+				// Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -201,6 +208,11 @@ Mods: {
 			RunawayMechaPetBuff: {
 				// DisplayName: Runaway Mecha Pet Buff
 				// Description: Mods.AncientGod.Buffs.RunawayMechaPetBuff.Description
+			}
+
+			FourDimensionalInsectBuff: {
+				// DisplayName: Four Dimensional Insect Buff
+				// Description: Mods.AncientGod.Buffs.FourDimensionalInsectBuff.Description
 			}
 		}
 

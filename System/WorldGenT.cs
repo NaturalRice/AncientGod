@@ -86,6 +86,36 @@ namespace AncientGod.System
                     }
                 }
             }
+
+            /*progress.Message = WorldGenT.WorldGenTMessage.Value;
+
+            // 获取一个随机位置，作为建筑物的左上角
+            int buildingX = WorldGen.genRand.Next(200, Main.maxTilesX - 200);
+            int buildingY = (int)(Main.worldSurface * 0.35);
+
+            // 建筑物的尺寸
+            int buildingWidth = 20;
+            int buildingHeight = 10;
+
+            // 替换方块，构建建筑物
+            for (int i = buildingX; i < buildingX + buildingWidth; i++)
+            {
+                for (int k = buildingY; k < buildingY + buildingHeight; k++)
+                {
+                    Tile t = Main.tile[i, k];
+                    if (t.HasTile)
+                    {
+                        if (t.TileType == TileID.Dirt)
+                        {
+                            t.TileType = (ushort)ModContent.TileType<Rubbish>();
+                        }
+                        if (t.TileType == TileID.Stone)
+                        {
+                            t.TileType = (ushort)ModContent.TileType<WasteConcrete>();
+                        }
+                    }
+                }
+            }*/
         }
     }
 }
