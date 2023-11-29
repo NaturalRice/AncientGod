@@ -1,9 +1,8 @@
 ﻿using Terraria;
 using Terraria.ID;
 using Terraria.ModLoader;
-using AncientGod.Items;
 
-namespace AncientGod.Items.Placeables
+namespace AncientGod.Items.Placeables.SpaceBase
 {
     internal class BasePanel : ModItem
     {
@@ -11,7 +10,7 @@ namespace AncientGod.Items.Placeables
         {
             Item.ResearchUnlockCount = 100;
             Item.maxStack = 9999;
-            Item.DefaultToPlaceableTile(ModContent.TileType<Tiles.BasePanel>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<Items.Tiles.SpaceBase.BasePanel>());
             Item.width = 16;
             Item.height = 16;
         }

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace AncientGod.Items.Tiles
 {
-    internal class Rubbish : ModTile
+    public class Rubbish : ModTile
     { public override void SetStaticDefaults()
         {
             Main.tileSolid[Type] = true;

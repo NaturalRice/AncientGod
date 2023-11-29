@@ -49,7 +49,6 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.FourDimensionalInsect
             //设置了坐骑在空闲状态下动画帧的起始索引。通常，空闲状态的动画会从第0帧开始播放
             MountData.idleFrameLoop = true;//设置了空闲状态下的动画是否循环播放。如果设置为 true，则动画将循环播放
 
-
             if (!Main.dedServ) // 检查是否在服务器端运行游戏。这段代码块只会在客户端运行时执行
             {
                 Asset<Texture2D> texture = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsect_Back");

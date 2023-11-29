@@ -12,6 +12,9 @@ using AncientGod.Projectiles.Pets.RunawayMecha;
 using Humanizer;
 using System.Reflection;
 using System.Reflection.Metadata;
+using Microsoft.CodeAnalysis.Text;
+using AncientGod.Projectiles.Ammo.FourDimensionalInsectBullet;
+using Terraria.ID;
 
 namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
 {
@@ -22,6 +25,9 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
         private const float TargetDistance = 1200f; // 设置寻找敌人的最大距离
         private int target = -1; // 记录当前目标敌人的索引
         private float fireCooldown = 60f; // 弹药冷却时间
+        private float fireCooldown2 = 60f; // 弹药冷却时间
+        private float fireCooldown3 = 60f; // 弹药冷却时间
+        private float sum = 0;//用于中央光束的CD
 
         //A list of the ideal positions for each arm. The first 2 variables of the Vector2 represent the relative position of the arm to the body and the last variable represents the rotation of the hand
         internal readonly List<Vector3> IdealPositions = new List<Vector3>()//一个列表，其中包含了四个Vector3元素，每个元素表示一个机械臂的理想位置。这些位置包括相对于机械臂中心的X和Y偏移，以及手的旋转角度
@@ -48,6 +54,105 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
             new Vector3(170f, -250f, MathHelper.ToRadians(0)) //右外翼
         };
 
+
+
+        //动画效果
+        private List<double> keyFrameTimes = new List<double>//存储了关键帧的时间点。
+        {
+            0,
+            1,
+            1.5,
+        };
+
+        private List<List<Vector3>> keyFrames = new List<List<Vector3>>()//存储了每个关键帧上每个部件（compIndex）的位置信息。
+        {
+            new List<Vector3>()
+            {
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+            },
+            new List<Vector3>()
+            {
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+            },
+            new List<Vector3>()
+            {
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+            },
+
+            new List<Vector3>()
+            {
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+            },
+            new List<Vector3>()
+            {
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+            },
+            new List<Vector3>()
+            {
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+                new Vector3(-170f, -250f, MathHelper.ToRadians(240)),
+            },
+        };
+
+        private double time;//表示动画的当前时间。
+
+        private Vector3 GetAnimationFrame(int compIndex)//通过比较当前时间 time 和关键帧时间列表 keyFrameTimes，找到当前所在的帧。
+                                                        //计算当前帧的插值进度 progress，表示在两个关键帧之间的插值位置。
+                                                        //使用 Vector3.Lerp 方法计算出当前帧的位置。
+        {
+            int frame = 0;
+            double progress = 0;
+            for (int t = 0; t < keyFrameTimes.Count; t++)
+            {
+                double keyTime = keyFrameTimes[t];
+                if (keyTime >= time)
+                {
+                    frame = t;
+
+                    if (t == 0)
+                    {
+                        progress = 1;
+                    }
+                    else
+                    {
+                        double timePrev = keyFrameTimes[t - 1];
+                        progress = (time - timePrev) / (keyTime - timePrev);
+                    }
+
+                    break;
+                }
+            }
+
+            Vector3 pos;
+
+            if (Math.Abs(progress - 1) < 0.05)
+            {
+                pos = keyFrames[compIndex][frame];
+            }
+            else
+            {
+                Vector3 posPrev = keyFrames[compIndex][frame - 1];
+                Vector3 posNext = keyFrames[compIndex][frame];
+                pos = Vector3.Lerp(posPrev, posNext, (float)progress);
+            }
+
+            return pos;
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
         private Vector2 GetIdealPosition(int i)
         {
             return Projectile.Center + new Vector2(IdealPositions[i].X, IdealPositions[i].Y);//去关键帧
@@ -56,25 +161,28 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
         {
             return Projectile.Center + new Vector2(IdealWingPositions[i].X, IdealWingPositions[i].Y);//去关键帧
         }
-
-        //private Vector2 BobVector => new Vector2(0, -2 + 4 * MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi), 0, 1) * 0.7f + 0.3f);
-        //一个Vector2，用于模拟机械臂上下浮动的动画效果（暂时不使用）
-
         private List<Vector3> ArmPositions;
         //一个列表，用于存储机械臂的位置信息
-
         private List<Vector3> WingPositions;
         //一个列表，用于存储翅膀的位置信息
-
         public ref float Initialized => ref Projectile.ai[0];
         //一个浮点数引用，用于初始化机械臂
-
         public Player Owner => Main.player[Projectile.owner];
         //一个引用，表示拥有这个机械臂的玩家
 
+        //以下到SetStaticDefaults之前是针对小飞虫的
+        public Vector2[] PositionsApollo;
+        public Vector2[] PositionsArtemis;
+        public float ApolloRotation;
+        public float ArtemisRotation;
+        public Color RibbonStartColor = new Color(34, 40, 48);
+        public ref float Behavior => ref Projectile.ai[1];
+        public static int TrailLenght = 30;
+        public float SpinRadius => 125 + (Owner.GetModPlayer<AncientGodPlayer>().FourDimensionalInsect ? 210 : 0); //Change the 200 for any distance you want to add whenever ares is equipped
+
         public override void SetStaticDefaults()//用于设置静态默认值，包括指定该投射物作为玩家的宠物
         {
-            Main.projFrames[Projectile.type] = 1;
+            Main.projFrames[Projectile.type] = 4;
             Main.projPet[Projectile.type] = true;
         }
 
@@ -111,6 +219,8 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
 
         public override void AI()
         {
+            //给玩家添加光照
+            Lighting.AddLight(Owner.position, new Vector3(1, 1, 1));
             /*这是机械臂的主要逻辑部分。在这个方法中，机械臂的行为受到不同条件的控制，包括拥有者是否已死亡、是否激活了坐骑等。
             机械臂的位置、浮动效果和旋转角度等都在这个方法中计算和更新。
             此外，机械臂的位置也会受到鼠标光标的位置影响，使其能够朝向鼠标光标。*/
@@ -125,13 +235,20 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
             if (modPlayer.FourDimensionalInsect && Owner.mount.Active)//当然，还要再在这里强调一遍才能达到效果
             {
                 Projectile.timeLeft = 2;
-
-
             }
 
 
             if (Initialized == 0)
             {
+                //Initialize the arm positions(SmallBug)
+                PositionsArtemis = new Vector2[TrailLenght];
+                PositionsApollo = new Vector2[TrailLenght];
+
+                for (int i = 0; i < TrailLenght; i++)
+                {
+                    PositionsApollo[i] = Projectile.Center;
+                    PositionsArtemis[i] = Projectile.Center;
+                }
                 //Initialize the arm positions
                 ArmPositions = new List<Vector3>(6);
                 WingPositions = new List<Vector3>(8);
@@ -176,7 +293,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
                     // 寻找附近的敌人
                     FindTarget(); // 调用FindTarget方法来更新target值
 
-                    if (target != -1)
+                    /*if (target != -1)
                     {
                         NPC targetNPC = Main.npc[target];
 
@@ -185,7 +302,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
                         Vector2 direction = targetNPC.Center - Projectile.position;
 
 
-                        armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - direction).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
+                        //armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - direction).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
 
                         direction.Normalize();
 
@@ -280,7 +397,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
                         // 当没有目标时，保持静止
                         Projectile.velocity = Vector2.Zero;
                         Projectile.localAI[0] = 0f; // 重置发射标记
-                    }
+                    }*/
 
 
 
@@ -306,12 +423,14 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
 
                     wingPosition.Z = Utils.AngleLerp(wingPosition.Z, IdealWingPositions[i].Z, MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
 
-                    //armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Main.MouseWorld).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
-                    //两个armPosition.Z都是必要的，后者用于在鼠标靠近时瞄准鼠标，前者用于鼠标远离时重新指向地面
+                    //wingPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Main.MouseWorld).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
+                    //两个wingPosition.Z都是必要的，后者用于在鼠标靠近时瞄准鼠标，前者用于鼠标远离时重新指向地面
 
                     WingPositions[i] = new Vector3(vector2position, wingPosition.Z);
                 }
             }
+            //SmallBug
+            UpdateTwins();
         }
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
@@ -319,7 +438,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
 
             if (ArmPositions == null)
                 return true;
-
+            //手部
             Texture2D tophandTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectHand/FourDimensionalInsectTopHand")).Value;
             Texture2D middlehandTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectHand/FourDimensionalInsectMiddleHand")).Value;
             Texture2D bottomhandTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectHand/FourDimensionalInsectBottomHand")).Value;
@@ -506,14 +625,171 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
 
         public override void PostDraw(Color lightColor)//用于在绘制后执行额外的逻辑。在这里，它绘制了机械臂的眼睛
         {
+            //炮塔
+            Texture2D centralbeamTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectCannon/CentralBeam").Value;//中央光束
+            Texture2D machinegunTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectCannon/MachineGun").Value;//机关炮
+
+            //关于中央光束的：
+            Vector2 gunoffset = Main.MouseWorld - Projectile.Center - Vector2.UnitX * 0 - Vector2.UnitY * 0;
+            // 计算旋转角度，使得炮塔对准鼠标位置
+            float centralbeamRotation = gunoffset.ToRotation() - MathHelper.PiOver2;
+            // 计算炮塔的位置
+            Vector2 centralbeamPosition = Projectile.Center + Vector2.Normalize(gunoffset) * 30; // 这里的30是一个调整位置的值
+            //Vector2 centralbeamPosition = Projectile.Center + gunoffset * 0.5f; //这玩意儿虽然这里不对，但是有奇效
+            // 获取贴图的旋转中心位置
+            Vector2 centralbeamOrigin = new Vector2(centralbeamTex.Width*0.5f, centralbeamTex.Height*0.705f);
+
+            //关于机关炮的：
+            Vector2 gunoffset2 = target != -1 ? Main.npc[target].Center - Projectile.Center : Main.MouseWorld - Projectile.Center;
+            float machinegunTexRotation = gunoffset2.ToRotation() - MathHelper.PiOver2;
+            Vector2 machinegunPosition = Projectile.Center + Vector2.Normalize(gunoffset2) * 30; 
+            Vector2 machinegunOrigin = new Vector2(machinegunTex.Width * 0.5f, machinegunTex.Height * 1f);
+
+            if (target != -1)
+            {
+                NPC targetNPC = Main.npc[target];
+                //手部瞄准敌人                        
+                gunoffset2.Normalize();
+
+                if (fireCooldown <= 0f)
+                {
+                    // 发射子弹
+                    if (Projectile.localAI[0] == 0f)
+                    {
+                        // 发射弹药
+                        for (int j = 0; j < 1; j++) // 你可以根据需要发射多个弹药（这里不是间隔的连射，而是一次性射多少弹药）
+                        {
+                            gunoffset2 = targetNPC.Center - (Projectile.position + Vector2.UnitX * 96 + Vector2.UnitY * 114);
+                            machinegunTexRotation = gunoffset2.ToRotation();
+                            Vector2 shotVelocity = Vector2.UnitX.RotatedBy(machinegunTexRotation) * 8f; // 这里示例为向右发射(底下是发射源的定义），瞄准方向
+                            int newProjectile11 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 96 + Vector2.UnitY * 114, shotVelocity, ModContent.ProjectileType<MachineGunBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
+
+                            gunoffset2 = targetNPC.Center - (Projectile.position - Vector2.UnitX * 104 - Vector2.UnitY * 66);
+                            machinegunTexRotation = gunoffset2.ToRotation();
+                            shotVelocity = Vector2.UnitX.RotatedBy(machinegunTexRotation) * 8f;
+                            int newProjectile21 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 104 - Vector2.UnitY * 66, shotVelocity, ModContent.ProjectileType<MachineGunBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左上
+
+                            gunoffset2 = targetNPC.Center - (Projectile.position + Vector2.UnitX * 96 - Vector2.UnitY * 66);
+                            machinegunTexRotation = gunoffset2.ToRotation();
+                            shotVelocity = Vector2.UnitX.RotatedBy(machinegunTexRotation) * 8f;
+                            int newProjectile31 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 96 - Vector2.UnitY * 66, shotVelocity, ModContent.ProjectileType<MachineGunBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右上
+
+                            gunoffset2 = targetNPC.Center - (Projectile.position - Vector2.UnitX * 104 + Vector2.UnitY * 114);
+                            machinegunTexRotation = gunoffset2.ToRotation();
+                            shotVelocity = Vector2.UnitX.RotatedBy(machinegunTexRotation) * 8f;
+                            int newProjectile41 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 104 + Vector2.UnitY * 114, shotVelocity, ModContent.ProjectileType<MachineGunBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
+
+                            Main.projectile[newProjectile11].timeLeft = 1000;//弹药存活时间
+                            Main.projectile[newProjectile21].timeLeft = 1000;//弹药存活时间
+                            Main.projectile[newProjectile31].timeLeft = 1000;//弹药存活时间
+                            Main.projectile[newProjectile41].timeLeft = 1000;//弹药存活时间
+                            Main.projectile[newProjectile11].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                            Main.projectile[newProjectile21].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                            Main.projectile[newProjectile31].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                            Main.projectile[newProjectile41].netUpdate = true;//是否将投射物的信息同步到其他客户端
+
+                            //machinegunTexRotation += MathHelper.PiOver4; // 增加弹药之间的间隔角度
+                        }
+
+                        Projectile.localAI[0] = 0f;//为了连射
+
+                        // 重置冷却计时器
+                        fireCooldown = 15f; // 设置为你想要的冷却时间（间隔时间0.25秒）
+                    }
+                }
+                else if (fireCooldown2 <= 0f)
+                {
+                    // 发射子弹
+                    if (Projectile.localAI[0] == 0f)
+                    {
+                        Projectile.localAI[0] = 1f;//Projectile.localAI[0] 设置为1，表示已经发射过，以避免连续的发射。
+
+                        // 计算发射角度，这里示例为向下发射
+
+                        // 发射可追踪的 CentralBeam
+                        //Vector2 centralbeamVelocity = targetNPC.Center - centralbeamPosition;//追踪敌人
+                        Vector2 centralbeamVelocity = Main.MouseWorld - centralbeamPosition;//追踪鼠标
+                        centralbeamVelocity.Normalize();
+                        int newCentralBeamProjectile = Projectile.NewProjectile(null, centralbeamPosition, centralbeamVelocity * 8f, ModContent.ProjectileType<TrackingCentralBeam>(), (int)(Projectile.damage * 0.8f), 0, Main.myPlayer);
+
+                        Main.projectile[newCentralBeamProjectile].timeLeft = 1000;
+                        Main.projectile[newCentralBeamProjectile].netUpdate = true;
+
+                        Projectile.localAI[0] = 0f;//为了连射
+
+                        // 重置冷却计时器
+                        fireCooldown2 = 3f; // 设置为你想要的冷却时间（间隔时间0.05秒）
+                        sum += 1;
+                        if(sum ==30)
+                        {
+                            fireCooldown2 = 180f;//中央光束有3秒的CD
+                            sum = 0;
+                        }
+                    }
+                }
+                else if(fireCooldown3 <= 0f)
+                {
+                    // 发射子弹
+                    if (Projectile.localAI[0] == 0f)
+                    {
+                        Projectile.localAI[0] = 1f;//Projectile.localAI[0] 设置为1，表示已经发射过，以避免连续的发射。
+
+                        // 计算发射角度，这里示例为向下发射
+
+                        // 发射可追踪的 CentralBeam
+                        Vector2 InsectBombVelocity = targetNPC.Center - centralbeamPosition;//追踪敌人
+                        //Vector2 centralbeamVelocity = Main.MouseWorld - centralbeamPosition;//追踪鼠标
+                        InsectBombVelocity.Normalize();
+                        int InsectBombProjectile1 = Projectile.NewProjectile(null, centralbeamPosition + Vector2.UnitX * 596 + Vector2.UnitY * 114, InsectBombVelocity * 8f, ModContent.ProjectileType<InsectBomb>(), (int)(Projectile.damage * 0.8f), 0, Main.myPlayer);//右下
+                        int InsectBombProjectile2 = Projectile.NewProjectile(null, centralbeamPosition - Vector2.UnitX * 254 - Vector2.UnitY * 366, InsectBombVelocity * 8f, ModContent.ProjectileType<InsectBomb>(), (int)(Projectile.damage * 0.8f), 0, Main.myPlayer);//左上
+                        int InsectBombProjectile3 = Projectile.NewProjectile(null, centralbeamPosition + Vector2.UnitX * 256 - Vector2.UnitY * 366, InsectBombVelocity * 8f, ModContent.ProjectileType<InsectBomb>(), (int)(Projectile.damage * 0.8f), 0, Main.myPlayer);//右上
+                        int InsectBombProjectile4 = Projectile.NewProjectile(null, centralbeamPosition - Vector2.UnitX * 604 + Vector2.UnitY * 114, InsectBombVelocity * 8f, ModContent.ProjectileType<InsectBomb>(), (int)(Projectile.damage * 0.8f), 0, Main.myPlayer);//左下
+
+                        Main.projectile[InsectBombProjectile1].timeLeft = 1000;
+                        Main.projectile[InsectBombProjectile2].timeLeft = 1000;
+                        Main.projectile[InsectBombProjectile3].timeLeft = 1000;
+                        Main.projectile[InsectBombProjectile4].timeLeft = 1000;
+                        Main.projectile[InsectBombProjectile1].netUpdate = true;
+                        Main.projectile[InsectBombProjectile2].netUpdate = true;
+                        Main.projectile[InsectBombProjectile3].netUpdate = true;
+                        Main.projectile[InsectBombProjectile4].netUpdate = true;
+
+                        Projectile.localAI[0] = 0f;//为了连射
+
+                        // 重置冷却计时器
+                        fireCooldown3 = 30f; // 设置为你想要的冷却时间（间隔时间0.5秒）
+                    }
+                }
+                else
+                {
+                    // 更新冷却计时器
+                    fireCooldown--;
+                    fireCooldown2--;
+                    fireCooldown3--;
+                }
+            }
+            else
+            {
+                // 当没有目标时，保持静止
+                Projectile.velocity = Vector2.Zero;
+                Projectile.localAI[0] = 0f; // 重置发射标记
+            }
+
             Texture2D eyesTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectEyes").Value;
             Texture2D topTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectTop").Value;
             Texture2D bottomTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectBottom").Value;
 
             Vector2 offset = Utils.SafeNormalize(Main.MouseWorld - (Projectile.Center - Vector2.UnitY * 10), Vector2.Zero) * MathHelper.Clamp((Projectile.Center - Vector2.UnitY * 10 - Main.MouseWorld).Length(), 0, 1);
             float eyeOpacity = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 2f, 0, 1)) * 0.5f + 1f;
+           
+            Main.EntitySpriteDraw(eyesTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 3 + Vector2.UnitY * 30, null, Color.White * eyeOpacity, 0, eyesTex.Size() / 2f, Projectile.scale, 0f, 0);//墙壳
 
-            Main.EntitySpriteDraw(eyesTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 3 + Vector2.UnitY * 30, null, Color.White * eyeOpacity, Projectile.rotation, eyesTex.Size() / 2f, Projectile.scale, 0f, 0);
+            Main.EntitySpriteDraw(centralbeamTex, centralbeamPosition - Main.screenPosition - Vector2.UnitX * 4f + Vector2.UnitY * 24, null, Color.White, centralbeamRotation, centralbeamOrigin, Projectile.scale, 0f, 0);//中央光束
+            Main.EntitySpriteDraw(machinegunTex, machinegunPosition - Main.screenPosition - Vector2.UnitX * 104 - Vector2.UnitY * 66, null, Color.White, machinegunTexRotation, machinegunOrigin, Projectile.scale, 0f, 0);//机关炮左上
+            Main.EntitySpriteDraw(machinegunTex, machinegunPosition - Main.screenPosition - Vector2.UnitX * 104 + Vector2.UnitY * 114, null, Color.White, machinegunTexRotation, machinegunOrigin, Projectile.scale, 0f, 0);//机关炮左下
+            Main.EntitySpriteDraw(machinegunTex, machinegunPosition - Main.screenPosition + Vector2.UnitX * 96 - Vector2.UnitY * 66, null, Color.White, machinegunTexRotation, machinegunOrigin, Projectile.scale, 0f, 0);//机关炮右上
+            Main.EntitySpriteDraw(machinegunTex, machinegunPosition - Main.screenPosition + Vector2.UnitX * 96 + Vector2.UnitY * 114, null, Color.White, machinegunTexRotation, machinegunOrigin, Projectile.scale, 0f, 0);//机关炮右下
+
 
             Texture2D rightbottomwingTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectWing/FourDimensionalInsectBottomWingRight").Value;//内翼
             Texture2D rightmiddlewingTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectWing/FourDimensionalInsectMiddleWingRight").Value;//中翼
@@ -525,18 +801,138 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
             Texture2D leftbottomempennageTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectWing/FourDimensionalInsectBottomEmpennageLeft").Value;//尾翼
 
             //右边翅膀
-            Main.EntitySpriteDraw(rightbottomwingTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 440 + Vector2.UnitY * 95, null, Color.White, Projectile.rotation, rightbottomwingTex.Size(), Projectile.scale, 0f, 0);//内翼
-            Main.EntitySpriteDraw(rightmiddlewingTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 640 + Vector2.UnitY * 20, null, Color.White, Projectile.rotation, rightmiddlewingTex.Size(), Projectile.scale, 0f, 0);//中翼
-            Main.EntitySpriteDraw(righttopwingTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 760 - Vector2.UnitY * 50, null, Color.White, Projectile.rotation, righttopwingTex.Size(), Projectile.scale, 0f, 0);//外翼
-            Main.EntitySpriteDraw(rightbottomempennageTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 340 + Vector2.UnitY * 195, null, Color.White, Projectile.rotation, rightbottomempennageTex.Size(), Projectile.scale, 0f, 0);//尾翼
+            Main.EntitySpriteDraw(rightbottomwingTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 440 + Vector2.UnitY * 95, null, Color.White, 0, rightbottomwingTex.Size(), Projectile.scale, 0f, 0);//内翼
+            Main.EntitySpriteDraw(rightmiddlewingTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 640 + Vector2.UnitY * 20, null, Color.White, 0, rightmiddlewingTex.Size(), Projectile.scale, 0f, 0);//中翼
+            Main.EntitySpriteDraw(righttopwingTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 760 - Vector2.UnitY * 50, null, Color.White, 0, righttopwingTex.Size(), Projectile.scale, 0f, 0);//外翼
+            Main.EntitySpriteDraw(rightbottomempennageTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 340 + Vector2.UnitY * 195, null, Color.White, 0, rightbottomempennageTex.Size(), Projectile.scale, 0f, 0);//尾翼
             //左边翅膀
-            Main.EntitySpriteDraw(leftbottomwingTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 170 + Vector2.UnitY * 95, null, Color.White, Projectile.rotation, leftbottomwingTex.Size(), Projectile.scale, 0f, 0);//内翼
-            Main.EntitySpriteDraw(leftmiddlewingTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 230 + Vector2.UnitY * 20, null, Color.White, Projectile.rotation, leftmiddlewingTex.Size(), Projectile.scale, 0f, 0);//中翼
-            Main.EntitySpriteDraw(lefttopwingTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 270 - Vector2.UnitY * 50, null, Color.White, Projectile.rotation, lefttopwingTex.Size(), Projectile.scale, 0f, 0);//外翼
-            Main.EntitySpriteDraw(leftbottomempennageTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 220 + Vector2.UnitY * 195, null, Color.White, Projectile.rotation, leftbottomempennageTex.Size(), Projectile.scale, 0f, 0);//尾翼
+            Main.EntitySpriteDraw(leftbottomwingTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 170 + Vector2.UnitY * 95, null, Color.White, 0, leftbottomwingTex.Size(), Projectile.scale, 0f, 0);//内翼
+            Main.EntitySpriteDraw(leftmiddlewingTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 230 + Vector2.UnitY * 20, null, Color.White, 0, leftmiddlewingTex.Size(), Projectile.scale, 0f, 0);//中翼
+            Main.EntitySpriteDraw(lefttopwingTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 270 - Vector2.UnitY * 50, null, Color.White, 0, lefttopwingTex.Size(), Projectile.scale, 0f, 0);//外翼
+            Main.EntitySpriteDraw(leftbottomempennageTex, Projectile.Center + offset - Main.screenPosition - Vector2.UnitX * 220 + Vector2.UnitY * 195, null, Color.White, 0, leftbottomempennageTex.Size(), Projectile.scale, 0f, 0);//尾翼
             //头部和底部
-            Main.EntitySpriteDraw(topTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 97 - Vector2.UnitY * 140, null, Color.White, Projectile.rotation, topTex.Size(), Projectile.scale, 0f, 0);
-            Main.EntitySpriteDraw(bottomTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 54 + Vector2.UnitY * 400, null, Color.White, Projectile.rotation, bottomTex.Size(), Projectile.scale, 0f, 0);
+            Main.EntitySpriteDraw(topTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 97 - Vector2.UnitY * 140, null, Color.White, 0, topTex.Size(), Projectile.scale, 0f, 0);
+            Main.EntitySpriteDraw(bottomTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 54 + Vector2.UnitY * 400, null, Color.White, 0, bottomTex.Size(), Projectile.scale, 0f, 0);
+        }
+
+
+        //以下是关于SmallBug
+        public void UpdateTwins()
+        {
+            Projectile.rotation += (MathHelper.Pi / (40f - (Owner.velocity.Length() / 20f) * 20f)) * (Owner.direction);//这里用于实现飞虫的环绕，或许还可用于实现翅膀的摆动
+            //Projectile.Center = Owner.Center;
+            //Shift down the previous positions
+            for (int i = 0; i < TrailLenght - 1; i++)
+            {
+                PositionsApollo[i] = PositionsApollo[i + 1];
+                PositionsArtemis[i] = PositionsArtemis[i + 1];
+            }
+
+            //Give them a new position
+
+            //If the owner is going fast, place them at both sides of the player facing in the direction of the motion
+            if (Owner.velocity.Length() > 10)
+            {
+                PositionsApollo[TrailLenght - 1] = Vector2.Lerp(PositionsApollo[TrailLenght - 1], Owner.Center + Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) * SpinRadius + Owner.velocity, 0.2f);
+                PositionsArtemis[TrailLenght - 1] = Vector2.Lerp(PositionsArtemis[TrailLenght - 1], Owner.Center - Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) * SpinRadius + Owner.velocity, 0.2f);
+
+                ApolloRotation = ApolloRotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+                ArtemisRotation = ApolloRotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+            }
+
+            //If the owner is going slow make them rotate around the player
+            else
+            {
+                PositionsApollo[TrailLenght - 1] = Vector2.Lerp(PositionsApollo[TrailLenght - 1], Projectile.Center + Projectile.rotation.ToRotationVector2() * SpinRadius, 0.2f);
+                PositionsArtemis[TrailLenght - 1] = Vector2.Lerp(PositionsArtemis[TrailLenght - 1], Projectile.Center - Projectile.rotation.ToRotationVector2() * SpinRadius, 0.2f);
+
+                float idealApolloRotation = Projectile.rotation - MathHelper.Pi * (Owner.direction < 0 ? 0 : 1);
+                float idealArtemisRotation = Projectile.rotation - MathHelper.Pi * (Owner.direction < 0 ? 1 : 0);
+
+                //Snap them in place if they're close enough to their ideal rotation or else some funky stuff starts to happen
+                if (Math.Abs(ApolloRotation - idealApolloRotation) > MathHelper.PiOver4)
+                    ApolloRotation = ApolloRotation.AngleTowards(idealApolloRotation, 0.2f);
+                else
+                    ApolloRotation = idealApolloRotation;
+
+                if (Math.Abs(ArtemisRotation - idealArtemisRotation) > MathHelper.PiOver4)
+                    ArtemisRotation = ArtemisRotation.AngleTowards(idealArtemisRotation, 0.2f);
+                else
+                    ArtemisRotation = idealArtemisRotation;
+            }
+
+            //Ribbons go blue if you go fast, go back to gray if you go slow
+            //RibbonStartColor 用于表示轨迹的颜色，它会在快速移动时变为蓝色，慢速移动时恢复为灰色。
+            Color IdealColor = Color.Lerp(new Color(34, 40, 48), Color.DeepSkyBlue, MathHelper.Clamp(Owner.velocity.Length() - 5, 0, 20) / 10f);
+            RibbonStartColor = Color.Lerp(RibbonStartColor, IdealColor, 0.2f);
+        }
+
+        public float RibbonTrailWidthFunction(float completionRatio)
+        {
+            float tail = (float)Math.Pow(completionRatio, 2) * 7;
+            float bump = Utils.GetLerpValue(0.7f, 0.8f, 1 - completionRatio, true) * Utils.GetLerpValue(1f, 0.8f, 1 - completionRatio, true) * 4;
+            return tail + bump;
+        }
+        public Color OrangeRibbonTrailColorFunction(float completionRatio)
+        {
+            Color startingColor = RibbonStartColor;
+            Color endColor = new Color(219, 82, 28);
+            return Color.Lerp(startingColor, endColor, (float)Math.Pow(1 - completionRatio, 1.5D)) * 0.7f;
+        }
+        public Color GreenRibbonTrailColorFunction(float completionRatio)
+        {
+            Color startingColor = RibbonStartColor;
+            Color endColor = new Color(40, 160, 32);
+            return Color.Lerp(startingColor, endColor, (float)Math.Pow(1 - completionRatio, 1.5D)) * 0.7f;
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D tex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/SmallBug")).Value;
+
+            bool secondPhase = false;
+            if (Owner.velocity.Length() > 10)
+                secondPhase = true;
+
+
+            Rectangle apolloFrame = new Rectangle(0, secondPhase ? 62 : 0, 74, 60);
+            Rectangle artemisFrame = new Rectangle(74, secondPhase ? 62 : 0, 74, 60);
+            Vector2 origin = new Vector2(31, 36);
+
+            if (Projectile.isAPreviewDummy)
+            {
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + Vector2.UnitX * 20, new Rectangle(0, 0, 74, 60), lightColor, MathHelper.PiOver2, origin, Projectile.scale, 0, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + Vector2.UnitX * 20 - Vector2.UnitY * 40, new Rectangle(74, 0, 74, 60), lightColor, MathHelper.PiOver2, origin, Projectile.scale, 0, 0);
+                return false;
+            }
+
+            float[] RotationsApollo = new float[PositionsApollo.Length];
+            float[] RotationsArtemis = new float[PositionsArtemis.Length];
+            for (int i = 1; i < PositionsApollo.Length; i++)
+            {
+                RotationsApollo[i] = PositionsApollo[i - 1].AngleTo(PositionsApollo[i]);
+                RotationsArtemis[i] = PositionsArtemis[i - 1].AngleTo(PositionsArtemis[i]);
+            }
+            RotationsApollo[0] = ApolloRotation;
+            RotationsArtemis[0] = ArtemisRotation;
+
+            Terraria.Graphics.VertexStrip apolloStrip = new Terraria.Graphics.VertexStrip();
+            Terraria.Graphics.VertexStrip artemisStrip = new Terraria.Graphics.VertexStrip();
+            apolloStrip.PrepareStripWithProceduralPadding(PositionsApollo, RotationsApollo, GreenRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
+            artemisStrip.PrepareStripWithProceduralPadding(PositionsArtemis, RotationsArtemis, OrangeRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
+            //使用 Effect 和自定义的着色方法实现了轨迹的颜色渐变效果。
+            Effect vertexShader = ModContent.Request<Effect>($"{nameof(AncientGod)}/Effects/VertexShader", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            vertexShader.Parameters["uColor"].SetValue(Vector4.One);
+            vertexShader.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+            vertexShader.CurrentTechnique.Passes[0].Apply();
+
+            apolloStrip.DrawTrail();
+            artemisStrip.DrawTrail();
+
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+            Main.EntitySpriteDraw(tex, PositionsApollo[TrailLenght - 1] - Main.screenPosition, apolloFrame, lightColor, ApolloRotation, origin, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(tex, PositionsArtemis[TrailLenght - 1] - Main.screenPosition, artemisFrame, lightColor, ArtemisRotation, origin, Projectile.scale, 0, 0);
+            return false;
         }
 
         public bool summonedProjectile = false;

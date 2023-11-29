@@ -17,6 +17,9 @@ Mods: {
 			// EntropySilenceMechaBullet.DisplayName: Entropy Silence Mecha Bullet
 			// MachineGunBullet.DisplayName: Machine Gun Bullet
 			// FourDimensionalInsectBody.DisplayName: Four Dimensional Insect Body
+			// TrackingCentralBeam.DisplayName: Tracking Central Beam
+			// SmallBug.DisplayName: Small Bug
+			// InsectBomb.DisplayName: Insect Bomb
 		}
 
 		NPCs: {
@@ -59,18 +62,18 @@ Mods: {
 			}
 
 			WasteMetal: {
-				// Tooltip: ""
-				// DisplayName: Waste Metal
+				// Tooltip: 被摧毁的金属残骸，从中或许能找到什么有用的
+				// DisplayName: 废铜烂铁
 			}
 
 			WasteConcrete: {
 				// Tooltip: ""
-				// DisplayName: Waste Concrete
+				// DisplayName: 废弃混凝土
 			}
 
 			Rubbish: {
 				// Tooltip: ""
-				// DisplayName: Rubbish
+				// DisplayName: 垃圾
 			}
 
 			BasePanel: {
@@ -167,6 +170,76 @@ Mods: {
 				// DisplayName: Four Dimensional Insect Key
 				// Tooltip: ""
 			}
+
+			SmallBugKey: {
+				// DisplayName: Small Bug Key
+				// Tooltip: ""
+			}
+
+			NanometerFurnace: {
+				// DisplayName: Nanometer Furnace
+				// Tooltip: ""
+			}
+
+			BasePlatform: {
+				// DisplayName: Base Platform
+				// Tooltip: ""
+			}
+
+			BaseManufacturer: {
+				// DisplayName: Base Manufacturer
+				// Tooltip: ""
+			}
+
+			BaseBathtub: {
+				// DisplayName: Base Bathtub
+				// Tooltip: ""
+			}
+
+			BaseChair: {
+				// DisplayName: Base Chair
+				// Tooltip: ""
+			}
+
+			BaseChandelier: {
+				// DisplayName: Base Chandelier
+				// Tooltip: ""
+			}
+
+			BaseChest: {
+				// DisplayName: Base Chest
+				// Tooltip: ""
+			}
+
+			BaseTable: {
+				// DisplayName: Base Table
+				// Tooltip: ""
+			}
+
+			BaseBed: {
+				// DisplayName: Base Bed
+				// Tooltip: ""
+			}
+
+			BaseBookshelf: {
+				// DisplayName: Base Bookshelf
+				// Tooltip: ""
+			}
+
+			BaseDoor: {
+				// DisplayName: Base Door
+				// Tooltip: ""
+			}
+
+			BaseEnclosureWall: {
+				// DisplayName: Base Enclosure Wall
+				// Tooltip: ""
+			}
+
+			BaseEnclosureWallItem: {
+				// DisplayName: Base Enclosure Wall Item
+				// Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -213,6 +286,11 @@ Mods: {
 			FourDimensionalInsectBuff: {
 				// DisplayName: Four Dimensional Insect Buff
 				// Description: Mods.AncientGod.Buffs.FourDimensionalInsectBuff.Description
+			}
+
+			SmallBugBuff: {
+				// DisplayName: Small Bug Buff
+				// Description: Mods.AncientGod.Buffs.SmallBugBuff.Description
 			}
 		}
 
@@ -316,6 +394,20 @@ Mods: {
 		Config: {
 			// Drops: Disable Vanity Drops Header
 			// Pets: Fat Dog Header
+		}
+
+		Tiles: {
+			// NanometerFurnace.MapEntry: Nanometer Furnace
+			// BaseManufacturer.MapEntry: Base Manufacturer
+			// BaseTable.MapEntry: Base Table
+			// BaseChest.MapEntry: Base Chest
+			// BaseChandelier.MapEntry: Base Chandelier
+			// BaseChair.MapEntry: Base Chair
+			// BaseBathtub.MapEntry: Base Bathtub
+			// BaseBed.MapEntry: Base Bed
+			// BaseBookshelf.MapEntry: Base Bookshelf
+			// BaseDoorClosed.MapEntry: Base Door Closed
+			// BaseDoorOpen.MapEntry: Base Door Open
 		}
 	}
 }

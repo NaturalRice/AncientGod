@@ -11,6 +11,10 @@ namespace AncientGod.Projectiles.Ammo.FourDimensionalInsectBullet
 {
     public class MachineGunBullet : ModProjectile
     {
+        public int owner; // 自定义字段，用于存储投射物的源
+
+        public Player Owner => Main.player[Projectile.owner];
+
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // 记录旧位置的长度
@@ -77,7 +81,7 @@ namespace AncientGod.Projectiles.Ammo.FourDimensionalInsectBullet
             {
                 int dustIndex = Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Smoke);
                 Main.dust[dustIndex].noGravity = true;
-                Main.dust[dustIndex].velocity *= 1.4f;
+                //Main.dust[dustIndex].velocity *= 1.4f;
             }
 
             // 播放爆炸声音。
@@ -99,7 +103,12 @@ namespace AncientGod.Projectiles.Ammo.FourDimensionalInsectBullet
         public override void AI()
         {
             // 添加这个AI方法以检查与NPC的碰撞并造成伤害
-
+            // 先获取速度的标量
+            float speed = Projectile.velocity.Length();
+            // 设置你希望的速度标量，例如增加 0.01 倍
+            float newSpeed = speed * 1.0f;
+            // 规范化当前速度，并乘以新的速度标量
+            Projectile.velocity = Projectile.velocity.SafeNormalize(Projectile.velocity) * newSpeed;
             // 循环遍历所有NPC
             foreach (NPC npc in Main.npc)
             {
@@ -121,17 +130,17 @@ namespace AncientGod.Projectiles.Ammo.FourDimensionalInsectBullet
 
         public override bool PreDraw(ref Color lightColor)
         {
-            Main.instance.LoadProjectile(Projectile.type);
-            Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
+                Main.instance.LoadProjectile(Projectile.type);
+                Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
 
-            // 使用不受光照影响的颜色重新绘制投射物
-            Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
-            for (int k = 0; k < Projectile.oldPos.Length; k++)
-            {
-                Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
-                Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
-            }
+                // 使用不受光照影响的颜色重新绘制投射物
+                Vector2 drawOrigin = new Vector2(texture.Width * 0.5f, Projectile.height * 0.5f);
+                for (int k = 0; k < Projectile.oldPos.Length; k++)
+                {
+                    Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                    Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                    Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
+                }          
 
             return true;
         }

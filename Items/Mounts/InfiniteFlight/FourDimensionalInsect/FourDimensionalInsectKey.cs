@@ -3,6 +3,7 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
+using Terraria.DataStructures;
 
 namespace AncientGod.Items.Mounts.InfiniteFlight.FourDimensionalInsect
 {
@@ -21,9 +22,10 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.FourDimensionalInsect
             Item.rare = 6;
             Item.UseSound = SoundID.NPCHit56;
             Item.noMelee = true;
+            Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect.FourDimensionalInsectBody>();
             Item.mountType = ModContent.MountType<FourDimensionalInsect>();
 
-            Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect.FourDimensionalInsectBody>();
+            
             Item.buffType = ModContent.BuffType<Buffs.Mounts.FourDimensionalInsectBuff>();
         }
 
@@ -54,6 +56,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.FourDimensionalInsect
                 }
             }
         }
+
 
         public override void AddRecipes()
         {
