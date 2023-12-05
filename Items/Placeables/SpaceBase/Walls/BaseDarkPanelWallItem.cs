@@ -3,11 +3,9 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using AncientGod;
 using AncientGod.Items.Tiles;
-
-
 namespace AncientGod.Items.Placeables.SpaceBase.Walls
 {
-    public class BaseEnclosureWallItem : ModItem
+    public class BaseDarkPanelWallItem : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -25,7 +23,7 @@ namespace AncientGod.Items.Placeables.SpaceBase.Walls
             Item.useTime = 7;
             Item.useStyle = ItemUseStyleID.Swing;
             Item.consumable = true;
-            Item.createWall = ModContent.WallType<Tiles.SpaceBase.Walls.BaseEnclosureWall>();
+            Item.createWall = ModContent.WallType<Tiles.SpaceBase.Walls.BaseDarkPanelWall>();
         }
 
         /*public override void AddRecipes()

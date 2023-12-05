@@ -5,7 +5,7 @@ using AncientGod.Items.Placeables.SpaceBase.Walls;
 
 namespace AncientGod.Items.Tiles.SpaceBase.Walls
 {
-    public class BaseEnclosureWall : ModWall
+    public class BaseYellowBlockWall : ModWall
     {
         public override void SetStaticDefaults()
         {

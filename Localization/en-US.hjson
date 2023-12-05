@@ -240,6 +240,51 @@ Mods: {
 				DisplayName: Base Enclosure Wall Item
 				Tooltip: ""
 			}
+
+			BaseBaffle: {
+				DisplayName: Base Baffle
+				Tooltip: ""
+			}
+
+			BaseArmor: {
+				DisplayName: Base Armor
+				Tooltip: ""
+			}
+
+			BasePinkBlock: {
+				DisplayName: Base Pink Block
+				Tooltip: ""
+			}
+
+			BaseLightBlueBlock: {
+				DisplayName: Base Light Blue Block
+				Tooltip: ""
+			}
+
+			BaseYellowBlock: {
+				DisplayName: Base Yellow Block
+				Tooltip: ""
+			}
+
+			BaseBracket: {
+				DisplayName: Base Bracket
+				Tooltip: ""
+			}
+
+			BaseDarkPanel: {
+				DisplayName: Base Dark Panel
+				Tooltip: ""
+			}
+
+			BaseGlass: {
+				DisplayName: Base Glass
+				Tooltip: ""
+			}
+
+			BaseSkeleton: {
+				DisplayName: Base Skeleton
+				Tooltip: ""
+			}
 		}
 
 		Buffs: {

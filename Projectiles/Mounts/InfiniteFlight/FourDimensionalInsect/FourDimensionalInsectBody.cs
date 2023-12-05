@@ -800,6 +800,9 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
             Texture2D lefttopwingTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectWing/FourDimensionalInsectTopWingLeft").Value;//外翼
             Texture2D leftbottomempennageTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/FourDimensionalInsect/FourDimensionalInsectWing/FourDimensionalInsectBottomEmpennageLeft").Value;//尾翼
 
+            float wingrotation = Projectile.rotation;//翅膀旋转角度
+            wingrotation += (MathHelper.Pi / (40f - (Owner.velocity.Length() / 20f) * 20f)) * (float)Math.Cos(wingrotation);
+
             //右边翅膀
             Main.EntitySpriteDraw(rightbottomwingTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 440 + Vector2.UnitY * 95, null, Color.White, 0, rightbottomwingTex.Size(), Projectile.scale, 0f, 0);//内翼
             Main.EntitySpriteDraw(rightmiddlewingTex, Projectile.Center + offset - Main.screenPosition + Vector2.UnitX * 640 + Vector2.UnitY * 20, null, Color.White, 0, rightmiddlewingTex.Size(), Projectile.scale, 0f, 0);//中翼

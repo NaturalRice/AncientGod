@@ -4,13 +4,13 @@ using Terraria.ModLoader;
 
 namespace AncientGod.Items.Placeables.SpaceBase
 {
-    public class BaseEnclosure : ModItem
+    public class BaseLightBlueBlock : ModItem
     {
         public override void SetDefaults()
         {
             Item.ResearchUnlockCount = 100;
             Item.maxStack = 9999;
-            Item.DefaultToPlaceableTile(ModContent.TileType<Items.Tiles.SpaceBase.BaseEnclosure>());
+            Item.DefaultToPlaceableTile(ModContent.TileType<Items.Tiles.SpaceBase.BaseLightBlueBlock>());
             Item.width = 16;
             Item.height = 16;
         }

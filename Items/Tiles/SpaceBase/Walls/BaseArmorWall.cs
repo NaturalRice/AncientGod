@@ -5,11 +5,11 @@ using AncientGod.Items.Placeables.SpaceBase.Walls;
 
 namespace AncientGod.Items.Tiles.SpaceBase.Walls
 {
-    public class BaseEnclosureWall : ModWall
+    public class BaseArmorWall : ModWall
     {
         public override void SetStaticDefaults()
         {
-            //Main.wallHouse[Type] = true;//这里也会运行异常
+            //Main.wallHouse[Type] = true;这里也会运行异常
             //ItemDrop = ModContent.ItemType<BaseEnclosureWall>();
             AddMapEntry(new Color(232, 39, 30));
         }

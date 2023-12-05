@@ -3,6 +3,7 @@ using System;
 using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
+using log4net;
 
 namespace AncientGod
 {
@@ -36,6 +37,11 @@ namespace AncientGod
         public static int day;
         public static int month;
         public static Texture2D AstralSky;
+
+        public static ILog getlog()
+        {
+            return instance.Logger;
+        }
 
         public override void Load()
         {

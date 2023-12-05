@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AncientGod.Items.Tiles.SpaceBase
 {
-    public class BaseEnclosure : ModTile
+    public class BaseLightBlueBlock : ModTile
     {
         public override void SetStaticDefaults()
         {
@@ -34,7 +34,7 @@ namespace AncientGod.Items.Tiles.SpaceBase
         public override IEnumerable<Item> GetItemDrops(int i, int j)
         {
             //地表附近掉种子，其余地方不掉
-            int[] LootCandidate = { ModContent.ItemType<Items.Placeables.SpaceBase.BaseEnclosure>(), ItemID.Wood};
+            int[] LootCandidate = { ModContent.ItemType<Items.Placeables.SpaceBase.BaseLightBlueBlock>(), ItemID.Wood };
             int Height = Main.tile[i, j].TileFrameY;
             int dropItem = 0;
             int randSeed = Main.rand.Next(LootCandidate.Length);
@@ -62,8 +62,8 @@ namespace AncientGod.Items.Tiles.SpaceBase
         public override bool PreDraw(int i, int j, SpriteBatch spriteBatch)
         {
             Tile tile = Main.tile[i, j];
-            Texture2D texture = ModContent.Request<Texture2D>("AncientGod/Items/Tiles/SpaceBase/BaseEnclosure").Value;
-            Texture2D glowTexture = ModContent.Request<Texture2D>("AncientGod/Items/Tiles/SpaceBase/BaseEnclosure_Glow").Value;
+            Texture2D texture = ModContent.Request<Texture2D>("AncientGod/Items/Tiles/SpaceBase/BaseLightBlueBlock").Value;
+            Texture2D glowTexture = ModContent.Request<Texture2D>("AncientGod/Items/Tiles/SpaceBase/BaseLightBlueBlock_Glow").Value;
 
             // If you are using ModTile.SpecialDraw or PostDraw or PreDraw, use this snippet and add zero to all calls to spriteBatch.Draw
             // The reason for this is to accommodate the shift in drawing coordinates that occurs when using the different Lighting mode
