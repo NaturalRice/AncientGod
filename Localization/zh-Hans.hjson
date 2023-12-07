@@ -285,6 +285,56 @@ Mods: {
 				// DisplayName: Base Skeleton
 				// Tooltip: ""
 			}
+
+			BaseArmorWallItem: {
+				// DisplayName: Base Armor Wall Item
+				// Tooltip: ""
+			}
+
+			BaseBaffleWall: {
+				// DisplayName: Base Baffle Wall
+				// Tooltip: ""
+			}
+
+			BaseDarkPanelWallItem: {
+				// DisplayName: Base Dark Panel Wall Item
+				// Tooltip: ""
+			}
+
+			BaseGlassWallItem: {
+				// DisplayName: Base Glass Wall Item
+				// Tooltip: ""
+			}
+
+			BaseLightBlueBlockWallItem: {
+				// DisplayName: Base Light Blue Block Wall Item
+				// Tooltip: ""
+			}
+
+			BasePanelWallItem: {
+				// DisplayName: Base Panel Wall Item
+				// Tooltip: ""
+			}
+
+			BasePinkBlockWallItem: {
+				// DisplayName: Base Pink Block Wall Item
+				// Tooltip: ""
+			}
+
+			BaseSkeletonWallItem: {
+				// DisplayName: Base Skeleton Wall Item
+				// Tooltip: ""
+			}
+
+			BaseYellowBlockWallItem: {
+				// DisplayName: Base Yellow Block Wall Item
+				// Tooltip: ""
+			}
+
+			BaseLantern: {
+				// DisplayName: Base Lantern
+				// Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -453,6 +503,7 @@ Mods: {
 			// BaseBookshelf.MapEntry: Base Bookshelf
 			// BaseDoorClosed.MapEntry: Base Door Closed
 			// BaseDoorOpen.MapEntry: Base Door Open
+			// BaseLantern.MapEntry: Base Lantern
 		}
 	}
 }
