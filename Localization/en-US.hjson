@@ -335,6 +335,11 @@ Mods: {
 				DisplayName: Base Lantern
 				Tooltip: ""
 			}
+
+			BaseLamp: {
+				DisplayName: Base Lamp
+				Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -395,6 +400,11 @@ Mods: {
 			WasteLand: {
 				TownNPCDialogueName: the Waste Land
 				DisplayName: Waste Land
+			}
+
+			SpaceBase: {
+				DisplayName: Space Base
+				TownNPCDialogueName: the Space Base
 			}
 		}
 
@@ -504,6 +514,7 @@ Mods: {
 			BaseDoorClosed.MapEntry: Base Door Closed
 			BaseDoorOpen.MapEntry: Base Door Open
 			BaseLantern.MapEntry: Base Lantern
+			BaseLamp.MapEntry: Base Lamp
 		}
 	}
 }

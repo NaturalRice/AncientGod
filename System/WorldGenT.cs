@@ -115,9 +115,376 @@ namespace AncientGod.System
                 int houseY = Main.maxTilesY / 10;
 
                 AncientGod.getlog().Info($"Generating house at: {houseX}, {houseY}");
+                //创建基础建筑结构
+                LoadBearingColumn(Main.maxTilesX / 2 + 40, Main.maxTilesY / 10  + 42, 30, 45);
+                LoadBearingColumn(Main.maxTilesX / 2 - 40, Main.maxTilesY / 10 + 42, 30, 45);
+
+                DetectionTower(Main.maxTilesX / 2 + 60, Main.maxTilesY / 10 - 20, 10, 40);
+                DetectionTower(Main.maxTilesX / 2 - 60, Main.maxTilesY / 10 - 20, 10, 40);
+                DetectionTower(Main.maxTilesX / 2 + 90, Main.maxTilesY / 10 - 16, 15, 30);
+                DetectionTower(Main.maxTilesX / 2 - 90, Main.maxTilesY / 10 - 16, 15, 30);
+                DetectionTower(Main.maxTilesX / 2 + 120, Main.maxTilesY / 10 - 3, 10, 30);
+                DetectionTower(Main.maxTilesX / 2 - 120, Main.maxTilesY / 10 - 3, 10, 30);              
+
+                SignalTower(Main.maxTilesX / 2 + 40, Main.maxTilesY / 10 - 30, 10, 40);
+                SignalTower(Main.maxTilesX / 2 - 40, Main.maxTilesY / 10 - 30, 10, 40);
+                SignalTower(Main.maxTilesX / 2 + 70, Main.maxTilesY / 10 - 18, 15, 45);
+                SignalTower(Main.maxTilesX / 2 - 70, Main.maxTilesY / 10 - 18, 15, 45);
+                SignalTower(Main.maxTilesX / 2 + 140, Main.maxTilesY / 10 - 1, 8, 30);
+                SignalTower(Main.maxTilesX / 2 - 140, Main.maxTilesY / 10 - 1, 8, 30);
+
+                SignalTower(Main.maxTilesX / 2 + 40, Main.maxTilesY / 10 + 80, 20, 50);
+                SignalTower(Main.maxTilesX / 2 - 40, Main.maxTilesY / 10 + 80, 20, 50);
+                SignalTower(Main.maxTilesX / 2 + 70, Main.maxTilesY / 10 + 74, 15, 40);
+                SignalTower(Main.maxTilesX / 2 - 70, Main.maxTilesY / 10 + 74, 15, 40);
+                SignalTower(Main.maxTilesX / 2 + 140, Main.maxTilesY / 10 + 65, 10, 30);
+                SignalTower(Main.maxTilesX / 2 - 140, Main.maxTilesY / 10 + 65, 10, 30);
+
+                ShelfTower(Main.maxTilesX / 2 + 100, Main.maxTilesY / 10 + 10, 50, 20);
+                ShelfTower(Main.maxTilesX / 2 - 100, Main.maxTilesY / 10 + 10, 50, 20);
+                ShelfTower(Main.maxTilesX / 2 + 110, Main.maxTilesY / 10 + 56, 40, 15);
+                ShelfTower(Main.maxTilesX / 2 - 110, Main.maxTilesY / 10 + 56, 40, 15);
+                ShelfTower(Main.maxTilesX / 2 + 130, Main.maxTilesY / 10 + 15, 45, 15);
+                ShelfTower(Main.maxTilesX / 2 - 130, Main.maxTilesY / 10 + 15, 45, 15);
+                ShelfTower(Main.maxTilesX / 2 + 150, Main.maxTilesY / 10 + 57, 40, 20);
+                ShelfTower(Main.maxTilesX / 2 - 150, Main.maxTilesY / 10 + 57, 40, 20);
+                ShelfTower(Main.maxTilesX / 2 + 30, Main.maxTilesY / 10 - 24, 40, 20);
+                ShelfTower(Main.maxTilesX / 2 - 30, Main.maxTilesY / 10 - 24, 40, 20);
+
+
+
                 GenerateHouse(houseX, houseY);
+                
+
+                
             }
         }
+
+        private void LoadBearingColumn(int centerX, int centerY, int width, int height)//承重柱结构
+        {
+            for (int x = centerX - width / 2; x <= centerX + width / 2; x++)
+            {
+                for (int y = centerY - height / 2; y <= centerY + height / 2; y++)
+                {
+                    if (y - centerY <= -width / 2 + 4 || y - centerY >= width / 2 - 4)
+                    {
+                        if ((y - centerY >= (x - centerX) * height / width && y - centerY >= -(x - centerX) * height / width) || (y - centerY <= (x - centerX) * height / width && y - centerY <= -(x - centerX) * height / width))
+                        {
+                            if(y - centerY >= -width / 2 + 2 && y- centerY <= -width / 2 + 3)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBracket>(), true, true);
+                            }
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseSkeleton>(), true, true);
+                        }
+                    }
+                    else
+                    {
+                        if (x - centerX >= -width / 4 && x - centerX <= width / 4)
+                        {
+                            if (y - centerY == -width / 2 + 8 || y - centerY == width / 2 - 8)
+                            {
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);
+                            }
+                            if (y - centerY == -width / 2 + 10 || y - centerY == width / 2 - 10)
+                            {
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseYellowBlockWall>(), true);
+                            }
+                            if ((x - centerX >= -width / 4 && x - centerX <= -width / 8) || (x - centerX >= width / 8 && x - centerX <= width / 4))
+                            {
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                            
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);
+                            if ((y - centerY >= -width / 2 + 5 && y - centerY <= -width / 2 + 7) || (y - centerY >= width / 2 - 7 && y - centerY <= width / 2 - 5))
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBaffle>(), true, true);
+                            }
+                        }        
+                        
+                    }
+                }
+            }
+        }     
+
+        private void DetectionTower(int centerX, int centerY, int width, int height)//探测塔结构
+        {
+            for (int x = centerX - width / 2; x <= centerX + width / 2; x++)
+            {
+                for (int y = centerY - height / 2; y <= centerY + height / 2; y++)
+                {
+                    if(y - centerY <= height / 2 - 15)
+                    {
+                        if((x - centerX > -width / 2 + 3 && x - centerX <= -width / 2 + 4) || (x - centerX >= width / 2 - 4 && x - centerX < width / 2 - 3) || (x - centerX > -width / 2 + 2 && x - centerX <= -width / 2 + 3 && y - centerY >= -height / 2 + 3) || (x - centerX >= width / 2 - 3 && x - centerX < width / 2 - 2 && y - centerY >= -height / 2 + 3))
+                        {
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                        }
+                        if ((x - centerX > -width / 2 + 1 && x - centerX < -width / 2 + 3 && y - centerY >= -height / 2 + 6) || (x - centerX > width / 2 - 3 && x - centerX < width / 2 - 1 && y - centerY >= -height / 2 + 6))
+                        {
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBracket>(), true, true);
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);
+                        }
+
+                    }
+                    else
+                    {
+                        if ((y - centerY >= height / 2 - 14 && y - centerY < height / 2 - 13) || (y - centerY >= height / 2 - 12 && y - centerY < height / 2 - 11) || (y - centerY >= height / 2 - 10 && y - centerY < height / 2 - 9))
+                        {
+                            if(x - centerX >= -width / 2 + 4 && x - centerX <= width / 2 - 4)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBaffle>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                        }
+                         else if ((y - centerY >= height / 2 - 13 && y - centerY < height / 2 - 12) || (y - centerY >= height / 2 - 11 && y - centerY < height / 2 - 10) || (y - centerY >= height / 2 - 9 && y - centerY < height / 2 - 8))
+                        {
+                            if (x - centerX >= -width / 2 + 3 && x - centerX <= width / 2 - 3)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseArmor>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseArmorWall>(), true);
+                            }
+                        }
+                        else if ((y - centerY >= height / 2 - 8 && y - centerY < height / 2 - 7) || (y - centerY >= height / 2 - 6 && y - centerY < height / 2 - 5))
+                        {
+                            if (x - centerX >= -width / 2 + 3 && x - centerX <= width / 2 - 3)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BasePinkBlock>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseYellowBlockWall>(), true);
+                            }
+                        }
+                        else if(y - centerY >= -(x - centerX) * height / width && y - centerY >= (x - centerX) * height / width)
+                        {
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseGlass>(), true, true);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SignalTower(int centerX, int centerY, int width, int height)//信号塔结构
+        {
+            for (int x = centerX - width / 2; x <= centerX + width / 2; x++)
+            {
+                for (int y = centerY - height / 2; y <= centerY + height / 2; y++)
+                {
+                    if (centerX - Main.maxTilesX / 2 > 0)//如果在右
+                    {
+                        if(centerY - Main.maxTilesY / 10 < 0)//如果在右上
+                        {
+                            if (x - centerX <= -width / 2 + 2 && y - centerY >= (x - centerX) * height / width)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseGlass>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                            if(x - centerX > -width / 2 + 2 && x - centerX <= -width / 2 + 5 && y - centerY >= -height / 2 + 10)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseArmor>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseArmorWall>(), true);
+                            }
+                            if (x - centerX > -width / 2 + 5 && x - centerX <= -width / 2 + 7 && y - centerY >= -height / 2 + 15)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseYellowBlock>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);
+                            }
+                            if (y - centerY >= (x - centerX) * height / width + height / 4)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBaffle>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);
+                            }
+                        }
+                        else//如果在右下
+                        {
+                            if (x - centerX <= -width / 2 + 2 && y - centerY <= -(x - centerX) * height / width)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseGlass>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                            if (x - centerX > -width / 2 + 2 && x - centerX <= -width / 2 + 5 && y - centerY <= height / 2 - 10)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseArmor>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseArmorWall>(), true);
+                            }
+                            if (x - centerX > -width / 2 + 5 && x - centerX <= -width / 2 + 7 && y - centerY <= height / 2 - 15)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseYellowBlock>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);
+                            }
+                            if (y - centerY <= -(x - centerX) * height / width - height / 4)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBaffle>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);
+                            }
+                        }
+                    }
+                    else//如果在左
+                    {
+                        if (centerY - Main.maxTilesY / 10 < 0)//如果在左上
+                        {
+                            if (x - centerX >= width / 2 - 2 && y - centerY >= -(x - centerX) * height / width)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseGlass>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                            if (x - centerX < width / 2 - 2 && x - centerX >= width / 2 - 5 && y - centerY >= -height / 2 + 10)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseArmor>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseArmorWall>(), true);
+                            }
+                            if (x - centerX < width / 2 - 5 && x - centerX >= width / 2 - 7 && y - centerY >= -height / 2 + 15)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseYellowBlock>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);
+                            }
+                            if (y - centerY >= -(x - centerX) * height / width + height / 4)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBaffle>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);
+                            }
+                        }
+                        else//如果在左下
+                        {
+                            if (x - centerX >= width / 2 - 2 && y - centerY <= (x - centerX) * height / width)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseGlass>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                            if (x - centerX < width / 2 - 2 && x - centerX >= width / 2 - 5 && y - centerY <= height / 2 - 10)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseArmor>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseArmorWall>(), true);
+                            }
+                            if (x - centerX < width / 2 - 5 && x - centerX >= width / 2 - 7 && y - centerY <= height / 2 - 15)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseYellowBlock>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);
+                            }
+                            if (y - centerY <= (x - centerX) * height / width - height / 4)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBaffle>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);
+                            }
+                        }
+                    }
+
+
+                }
+            }
+        }
+
+        private void ShelfTower(int centerX, int centerY, int width, int height)//承重柱结构
+        {
+            for (int x = centerX - width / 2; x <= centerX + width / 2; x++)
+            {
+                for (int y = centerY - height / 2; y <= centerY + height / 2; y++)
+                {
+                    if (centerX - Main.maxTilesX / 2 > 0)//如果在右
+                    {
+                        if (centerY - Main.maxTilesY / 10 < 0)//如果在右上
+                        {
+                            if (y - centerY <= -height / 2 + 2 && x - centerX >= (y - centerY) * width / height)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseGlass>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                            if (y - centerY > -height / 2 + 2 && y - centerY <= -height / 2 + 5 && x - centerX >= -width / 2 + 10)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBracket>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);
+                            }
+                            if (y - centerY > -height / 2 + 5 && y - centerY <= -height / 2 + 7 && x - centerX >= -width / 2 + 15)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseLightBlueBlock>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseYellowBlockWall>(), true);
+                            }
+                            if (x - centerX >= (y - centerY) * width / height + width / 4)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseArmor>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseSkeletonWall>(), true);
+                            }
+                        }
+                        else//如果在右下
+                        {
+                            if (y - centerY <= -height / 2 + 2 && x - centerX <= -(y - centerY) * width / height)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseGlass>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                            if (y - centerY > -height / 2 + 2 && y - centerY <= -height / 2 + 5 && x - centerX <= width / 2 - 10)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBracket>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);
+                            }
+                            if (y - centerY > -height / 2 + 5 && y - centerY <= -height / 2 + 7 && x - centerX <= width / 2 - 15)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseLightBlueBlock>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseYellowBlockWall>(), true);
+                            }
+                            if (x - centerX <= -(y - centerY) * width / height - width / 4)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseArmor>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseSkeletonWall>(), true);
+                            }
+                        }
+                    }
+                    else//如果在左
+                    {
+                        if (centerY - Main.maxTilesY / 10 < 0)//如果在左上
+                        {
+                            if (y - centerY <= -height / 2 + 2 && x - centerX >= -(y - centerY) * width / height)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseGlass>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                            if (y - centerY > -height / 2 + 2 && y - centerY <= -height / 2 + 5 && x - centerX <= width / 2 - 10)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBracket>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);
+                            }
+                            if (y - centerY > -height / 2 + 5 && y - centerY <= -height / 2 + 7 && x - centerX <= width / 2 - 15)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseLightBlueBlock>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseYellowBlockWall>(), true);
+                            }
+                            if (x - centerX <= -(y - centerY) * width / height - width / 4)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseArmor>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseSkeletonWall>(), true);
+                            }
+                        }
+                        else//如果在左下
+                        {
+                            if (y - centerY <= -height / 2 + 2 && x - centerX <= (y - centerY) * width / height)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseGlass>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseBaffleWall>(), true);
+                            }
+                            if (y - centerY > -height / 2 + 2 && y - centerY <= -height / 2 + 5 && x - centerX >= -width / 2 + 10)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBracket>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);
+                            }
+                            if (y - centerY > -height / 2 + 5 && y - centerY <= -height / 2 + 7 && x - centerX >= -width / 2 + 15)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseLightBlueBlock>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseYellowBlockWall>(), true);
+                            }
+                            if (x - centerX >= (y - centerY) * width / height + width / 4)
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseArmor>(), true, true);
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseSkeletonWall>(), true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
+
+
+
+
+
 
         private void GenerateHouse(int centerX, int centerY)//整个太空基地的生成逻辑 ~ \^o^/ ~
         {
@@ -142,6 +509,9 @@ namespace AncientGod.System
             float intercept4 = -90;//顶部护甲截距
 
 
+            
+
+
 
             // 创建外层方块
             for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
@@ -162,6 +532,7 @@ namespace AncientGod.System
                         if(y - centerY >= -slope1 * (x - centerX) + intercept1 && y - centerY >= slope1 * (x - centerX) + intercept1)
                         {
                             WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseSkeleton>(), true, true);//主舱下方骨架
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseSkeletonWall>(), true);
                         }
                     }
                     else if(Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) > 2)//旋翼外壳
@@ -230,7 +601,8 @@ namespace AncientGod.System
                         if ((y - centerY > -slope4 * 0.4 * (x - centerX) + intercept4 + 30 && x - centerX < -10) || (x - centerX > 10 && y - centerY > slope4 * 0.4 * (x - centerX) + intercept4 + 30))
                             WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBracket>(), true, true);//顶部中央主舱支架                       
                     }
-                    if ((y - centerY < -slope2 * (x - centerX) + intercept2 - 10 || y - centerY < slope2 * (x - centerX) + intercept2 - 10) && Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) > 2)
+                    //这一段的效果太Low了，Low得不行，先注释掉
+                    /*if ((y - centerY < -slope2 * (x - centerX) + intercept2 - 10 || y - centerY < slope2 * (x - centerX) + intercept2 - 10) && Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) > 2)
                     {
                         if (y - centerY > -slope2 * 1.7 * (x - centerX) + intercept2 - 32 && y - centerY > slope2 * 1.7 * (x - centerX) + intercept2 - 32)
                         {
@@ -249,7 +621,7 @@ namespace AncientGod.System
                             if (((x - centerX) < 80 && (x - centerX) > 75) || ((x - centerX) < 70 && (x - centerX) > 65) || ((x - centerX) < 100 && (x - centerX) > 95) || ((x - centerX) < 125 && (x - centerX) > 120) || ((x - centerX) < 165 && (x - centerX) > 160) || ((x - centerX) < 180 && (x - centerX) > 175))
                                 WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BaseBracket>(), true, true);//旋翼顶部外部支架
                         }
-                    }
+                    }*/
                 }
             }
 
@@ -295,19 +667,230 @@ namespace AncientGod.System
 
 
 
-            // 创建家具
-            //主舱
+            
+
+            
+
+
+
+
+
+            // 创建墙
+            //NPC住房
             for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
             {
-                for (int y  = centerY - totalHeight; y <= centerY + totalHeight; y++)
+                for (int y = centerY + totalHeight - 1; y >= centerY - totalHeight; y--)
                 {
-                    if (Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) <= 0.9)
+                    if ((x - centerX >= -totalWidth + 26 && x - centerX < -75) || (x - centerX > 75 && x - centerX <= totalWidth - 26))
                     {
-                        WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseLantern>(), true, true);//灯
+                        if (y - centerY > bottom - 28 && y - centerY <= bottom - 3)
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);//NPC住房粉色墙
                     }
                 }
             }
+
+            /*for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
+            {
+                //if (a == 12 || a == 11 || a == 13)
+                //break;
+                for (int y = centerY - totalHeight; y <= centerY + totalHeight; y++)
+                {
+                    if (b == 7 || b == 6 || b == 8)
+                    {
+                        WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);//NPC住房淡蓝色墙
+                        b = 0;
+                    }
+                    else
+                    {
+                        if ((x - centerX >= -totalWidth + 26 && x - centerX < -75) || (x - centerX > 75 && x - centerX <= totalWidth - 26))
+                        {
+                            if (y - centerY > bottom - 28 && y - centerY <= bottom - 3)
+                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);//NPC住房粉色墙
+                        }
+                    }
+                    b += 1;
+                }
+                //a += 1;
+            }*/
+
+
+            for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
+            {
+                for (int y = centerY - totalHeight; y <= centerY + totalHeight; y++)
+                {                   
+                    if (Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) <= 1)
+                    {
+                        if (Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) <= 0.5 && y - centerY < 0)
+                        {
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseGlassWall>(), true);//中央驾驶台周围玻璃舱盖
+                        }
+                        WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseEnclosureWall>(), true);//主舱外墙
+                    }
+                    if (y - centerY >= -slope2 * (x - centerX) + intercept2 && y - centerY >= slope2 * (x - centerX) + intercept2)
+                    {
+                        if (y - centerY <= bottom - 2 && (x - centerX >= -totalWidth + 2 && x - centerX <= totalWidth - 2))
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseEnclosureWall>(), true);//旋翼外墙
+                    }
+                    if ((y - centerY < -slope3 * (x - centerX) + intercept3 - 3 && y - centerY < slope3 * (x - centerX) + intercept3 - 3) && y - centerY > bottom - 4 && y - centerY <= bottom2 - 6)
+                    {
+                        WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseEnclosureWall>(), true);//腹舱外墙
+                    }
+                    if (y - centerY > bottom2 - 4)
+                    {
+                        if (Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY - bottom - 5), 2) / Math.Pow(minorAxis1, 2) <= 1.1)
+                        {
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseEnclosureWall>(), true);//底舱外墙
+                        }
+                    }                   
+                }
+            }
+
+            //创建平台和通道
+            for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
+            {
+                for (int y = centerY - totalHeight; y <= centerY + totalHeight; y++)
+                {
+                    if(x - centerX >= -4 && x - centerX <= 4)
+                    {
+                        if (y - centerY >= -minorAxis1 - 1 && y - centerY <= bottom2 + 20 )
+                        {
+                            WorldGen.KillTile(x, y, false, false, true); // 移除现有瓷砖
+                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseGlassWall>(), true);
+                            if ((y - centerY >= -minorAxis1 - 1 && y - centerY <= -minorAxis1) || (y - centerY >= minorAxis1 && y - centerY <= minorAxis1 + 1) || (y - centerY >= minorAxis1 + 11 && y - centerY <= minorAxis1 + 12) || (y - centerY >= bottom2 + 1 && y - centerY <= bottom2 + 2) || (y - centerY >= bottom2 + 15 && y - centerY <= bottom2 + 16) || (y - centerY >= bottom2 + 20 && y - centerY <= bottom2 + 21))
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BasePlatform>(), true, true);
+                            }                           
+                        }                        
+                    }
+
+                    if (Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) <= 0.9)
+                    {
+                        if ((y - centerY >= 0 && y - centerY < 1) || (y - centerY >= 12 && y - centerY < 13) || (y - centerY >= -13 && y - centerY < -12))
+                        {
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BasePlatform>(), true, true);
+                        }
+                    }
+
+                    if ((Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) >= 2) && (y - centerY >= -slope2 * (x - centerX) + intercept2 && y - centerY >= slope2 * (x - centerX) + intercept2) && (y - centerY <= bottom - 2))
+                    {
+                        if(!((x - centerX >= -totalWidth + 26 && x - centerX < -75) || (x - centerX > 75 && x - centerX <= totalWidth - 26) && (y - centerY > bottom - 28 && y - centerY <= bottom - 3)))
+                        {
+                            if((y - centerY >= bottom - 27 && y - centerY < bottom - 26) || (y - centerY >= bottom - 19 && y - centerY < bottom - 18) || (y - centerY >= bottom - 2 && y - centerY < bottom - 1) || (y - centerY >= bottom - 11 && y - centerY < bottom - 10))
+                            {
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BasePlatform>(), true, true);
+                            }
+                        }
+                    }
+                }
+            }
+
+
+
+            // 创建家具
+            for (int x = centerX + totalWidth + 9; x >= 3; x--)
+            {
+                for (int y = centerY - totalHeight + 6; y <= centerY + totalHeight + 7; y++)
+                {
+                    if ((x - centerX >= -40 && x - centerX <= -20) || (x - centerX >= 20 && x - centerX <= 40))
+                    {
+                        if (y - centerY >= -20 && y - centerY <= 20)
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseBookshelf>(), true, true);//书架
+                    }
+                    y += 7;
+                }
+                x -= 12;
+            }
+            for (int x = centerX + totalWidth + 9; x >= 3; x--)
+            {
+                for (int y = centerY - totalHeight + 6; y <= centerY + totalHeight + 7; y++)
+                {
+                    if ((x - centerX >= -40 && x - centerX <= -10) || (x - centerX >= 10 && x - centerX <= 40))
+                    {
+                        if (y - centerY >= 0 && y - centerY <= 10)
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.NanometerFurnace>(), true, true);//纳米熔炉
+                    }
+                }
+                x -= 16;
+            }
+            for (int x = centerX + totalWidth + 9; x >= 3; x--)
+            {
+                for (int y = centerY - totalHeight + 6; y <= centerY + totalHeight + 7; y++)
+                {
+                    if ((x - centerX >= -20 && x - centerX <= 20))
+                    {
+                        if (y - centerY >= -10 && y - centerY <= 10)
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseManufacturer>(), true, true);//工作台
+                    }
+                }
+                x -= 10;
+            }
+            for (int x = centerX + totalWidth + 9; x >= 3; x--)
+            {
+                for (int y = centerY - totalHeight + 6; y <= centerY + totalHeight + 7; y++)
+                {
+                    if ((x - centerX >= -100 && x - centerX <= -10) || (x - centerX >= 10 && x - centerX <= 100))
+                    {
+                        if (y - centerY >= 0 && y - centerY <= 70)
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseBed>(), true, true);//床
+                    }
+                }
+                x -= 10;
+            }
+            for (int x = centerX + totalWidth + 9; x >= 3; x--)
+            {
+                for (int y = centerY - totalHeight + 6; y <= centerY + totalHeight + 7; y++)
+                {
+                    if ((x - centerX >= -100 && x - centerX <= -10) || (x - centerX >= 10 && x - centerX <= 100))
+                    {
+                        if (y - centerY >= 0 && y - centerY <= 70)
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseBathtub>(), true, true);//浴盆
+                    }
+                }
+                x -= 20;
+            }
+            for (int x = centerX + totalWidth + 9; x >= 3; x--)
+            {
+                for (int y = centerY - totalHeight + 6; y <= centerY + totalHeight + 7; y++)
+                {
+                    if ((x - centerX >= -120 && x - centerX <= -90) || (x - centerX >= 90 && x - centerX <= 120))
+                    {
+                        if (y - centerY >= 0 && y - centerY <= 70)
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseChest>(), true, true);//箱子
+                    }
+                }
+            }
+            //主舱（其实是更大范围内,所有的灯光，除了NPC住房的）
+            for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
+            {
+                for (int y = centerY - totalHeight; y <= centerY + totalHeight; y++)
+                {
+                    if (Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) <= 30)
+                    {
+                        if (!((x - centerX >= -totalWidth + 26 && x - centerX < -75) || (x - centerX > 75 && x - centerX <= totalWidth - 26) && (y - centerY > bottom - 28 && y - centerY <= bottom - 3)))
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseLantern>(), true, true);//顶灯
+                        WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseLamp>(), true, true);//地灯
+                    }
+                }
+                x += 5;
+            }
             //NPC住房隔间
+            for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
+            {
+                for (int y = centerY - totalHeight + 6; y <= centerY + totalHeight + 7; y++)
+                {
+                    if ((x - centerX >= -totalWidth + 26 && x - centerX < -75) || (x - centerX > 75 && x - centerX <= totalWidth - 26))
+                    {
+                        if (y - centerY > bottom - 28 && y - centerY <= bottom - 3)
+                        {
+                            if ((y - centerY >= bottom - 22 && y - centerY <= bottom - 20) || (y - centerY >= bottom - 14 && y - centerY <= bottom - 12) || (y - centerY >= bottom - 6 && y - centerY <= bottom - 4))
+                            {
+                                WorldGen.KillTile(x, y, false, false, true); // 移除现有瓷砖
+                                WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseDoorClosed>(), true, true);//NPC住房门                                            
+                            }
+                        }
+                    }
+                }
+            }
             for (int x = centerX - totalWidth - 7; x <= centerX + totalWidth - 7; x++)
             {
                 for (int y = centerY - totalHeight; y <= centerY + totalHeight + 1; y++)//灯要比方块往下一格
@@ -388,125 +971,62 @@ namespace AncientGod.System
                 x -= 12;
             }
 
-            for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
-            {
-                for (int y = centerY - totalHeight + 6; y <= centerY + totalHeight + 7; y++)
-                {
-                    if (x - centerX >= -totalWidth + 26 && x - centerX < -75)
-                    {
-                        if (y - centerY > bottom - 28 && y - centerY <= bottom - 4)
-                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseDoorClosed>(), true, true);//NPC住房门
-                    }
-                    y += 7;
-                }
-                x += 12;
-            }
+
+            
 
 
 
 
-            // 创建墙
-            int a = 0;//用于分割墙壁图案X轴的变量
-            int b = 0;//用于分割墙壁图案Y轴的变量
-
-            for (int x = centerX - totalWidth + 26; x <= centerX + totalWidth - 26; x++)
-            {
-                
-                for (int y = centerY + bottom - 27; y <= centerY + bottom - 3; y++)
-                {
-                    if (b == 7 || b == 6 || b == 8)
-                    {
-                        if (a == 12 || a == 11 || a == 13)
-                        {
-                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);//NPC住房淡蓝色墙
-                        }
-                        if (a == 13)
-                            a = 1;
-                        if (b == 8)
-                            b = 1;
-                    }
-                    else
-                    {
-                        WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);//NPC住房粉色墙
-                    }                                                                            
-                    b += 1;
-                }
-                a += 1;
-            }
-            a = 0;
-            b = 0;
-            /*for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
-            {
-                //if (a == 12 || a == 11 || a == 13)
-                //break;
-                for (int y = centerY - totalHeight; y <= centerY + totalHeight; y++)
-                {
-                    if (b == 7 || b == 6 || b == 8)
-                    {
-                        WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseLightBlueBlockWall>(), true);//NPC住房淡蓝色墙
-                        b = 0;
-                    }
-                    else
-                    {
-                        if ((x - centerX >= -totalWidth + 26 && x - centerX < -75) || (x - centerX > 75 && x - centerX <= totalWidth - 26))
-                        {
-                            if (y - centerY > bottom - 28 && y - centerY <= bottom - 3)
-                                WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BasePinkBlockWall>(), true);//NPC住房粉色墙
-                        }
-                    }
-                    b += 1;
-                }
-                //a += 1;
-            }*/
-
-
-            for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
-            {
-                for (int y = centerY - totalHeight; y <= centerY + totalHeight; y++)
-                {                   
-                    if (Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) <= 1)
-                    {
-                        if (Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY), 2) / Math.Pow(minorAxis1, 2) <= 0.5 && y - centerY < 0)
-                        {
-                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseGlassWall>(), true);//中央驾驶台周围玻璃舱盖
-                        }
-                        WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseEnclosureWall>(), true);//主舱外墙
-                    }
-                    if (y - centerY >= -slope2 * (x - centerX) + intercept2 && y - centerY >= slope2 * (x - centerX) + intercept2)
-                    {
-                        if (y - centerY <= bottom - 2 && (x - centerX >= -totalWidth + 2 && x - centerX <= totalWidth - 2))
-                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseEnclosureWall>(), true);//旋翼外墙
-                    }
-                    if ((y - centerY < -slope3 * (x - centerX) + intercept3 - 3 && y - centerY < slope3 * (x - centerX) + intercept3 - 3) && y - centerY > bottom - 4 && y - centerY <= bottom2 - 6)
-                    {
-                        WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseEnclosureWall>(), true);//腹舱外墙
-                    }
-                    if (y - centerY > bottom2 - 4)
-                    {
-                        if (Math.Pow((x - centerX), 2) / Math.Pow(majorAxis1, 2) + Math.Pow((y - centerY - bottom - 5), 2) / Math.Pow(minorAxis1, 2) <= 1.1)
-                        {
-                            WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<Items.Tiles.SpaceBase.Walls.BaseEnclosureWall>(), true);//底舱外墙
-                        }
-                    }                   
-                }
-            }
-
-            // 创建屋顶
-            /*for (int x = centerX; x < centerX + buildingWidth; x++)
-            {
-                int roofY = centerY;
-                if (roofY >= 0 && roofY < Main.maxTilesY)
-                {
-                    WorldGen.PlaceTile(x, roofY, (ushort)ModContent.TileType<Items.Tiles.SpaceBase.BasePanel>(), true, true);
-                }
-            }*/
-
-            // Create a door
-            /*int doorY = centerY + 1;
-            if (doorY >= 0 && doorY < 3)
-            {
-                WorldGen.KillTile(centerX, doorY, false, false, true); // 移除现有瓷砖
-            }*/
         }
+        
     }
 }
+
+/*
+ 泰拉瑞亚提供了强大的世界生成工具，通过使用 WorldGen 类，你可以生成各种形状和结构。
+以下是一些常用的 WorldGen 方法，可以帮助你生成不同的结构：
+
+WorldGen.PlaceTile(int x, int y, int type, bool style = 0, bool frame = true, int? forced = null)
+这个方法可以用于在指定的坐标 (x, y) 处放置一个瓷砖。你可以指定瓷砖的类型 (type)，样式 (style)，是否显示边框 (frame) 等。
+
+WorldGen.PlaceWall(int x, int y, int type, bool mute = false)
+与 PlaceTile 类似，这个方法用于放置墙壁。
+
+WorldGen.KillTile(int x, int y, bool fail = false, bool effectOnly = false, bool noItem = false)
+这个方法用于移除指定坐标 (x, y) 处的瓷砖。你可以选择是否失败 (fail)，只有效果而不实际移除 (effectOnly)，以及是否不掉落物品 (noItem)。
+
+WorldGen.SmoothSlope(int x1, int x2, int y)
+这个方法用于在指定的 y 坐标上创建一个平滑的坡道。
+
+WorldGen.TileRunner(int x, int y, double strength, int steps, int type)
+这个方法用于创建从 (x, y) 开始的一系列相同类型的瓷砖，形成一个长方形结构，类似于挖掘或填充。
+
+WorldGen.TileRunner 的变体方法，如 WorldGen.TileRunnerRandom 和 WorldGen.TileRunnerWithYVar，
+提供了更多的参数，以便生成不同形状的结构。
+
+WorldGen.TileRunner 方法：
+这个方法允许你在世界上生成一个方块的"通道"，用于模拟地下洞穴或其他结构。可以设置通道的宽度、高度和长度。
+
+WorldGen.OreRunner 方法：
+用于在地下生成矿物的方法，可以设置矿层的深度、大小和其他参数。
+
+WorldGen.PlaceTile 和 WorldGen.KillTile 方法：
+这两个方法允许你在指定位置放置或移除方块。
+
+WorldGen.PlaceWall 和 WorldGen.KillWall 方法：
+用于放置或移除墙壁的方法。
+
+WorldGen.PlaceChest 方法：
+允许你在世界上放置宝箱。
+
+WorldGen.PlacePump 方法：
+允许你放置液体泵。
+
+WorldGen.PlaceStatue 方法：
+允许你放置雕像。
+
+WorldGen.TreeGrow 方法：
+用于模拟树木生长的方法。
+
+这只是 WorldGen 类的一小部分功能，你可以根据你的需求查看官方文档或探索该类的其他方法。通过这些方法，你可以创建各种各样的地形和结构。
+ */

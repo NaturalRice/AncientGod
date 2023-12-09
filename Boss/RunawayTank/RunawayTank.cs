@@ -412,7 +412,7 @@ namespace AncientGod.Boss.RunawayTank
             {
                 return 0;
             }
-            return SpawnCondition.Overworld.Chance * 0.5f;//全天候有概率生成
+            return SpawnCondition.Overworld.Chance * 1f;//全天候有概率生成
         }
 
         public override bool CanGoToStatue(bool toKingStatue)
