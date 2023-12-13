@@ -20,6 +20,8 @@ Mods: {
 			// TrackingCentralBeam.DisplayName: Tracking Central Beam
 			// SmallBug.DisplayName: Small Bug
 			// InsectBomb.DisplayName: Insect Bomb
+			// MinionBossEye.DisplayName: Minion Boss Eye
+			// MinionBossPetProjectile.DisplayName: Minion Boss Pet Projectile
 		}
 
 		NPCs: {
@@ -48,6 +50,9 @@ Mods: {
 			}
 
 			// RunawayMecha.DisplayName: Runaway Mecha
+			// MinionBossBody.DisplayName: Minion Boss Body
+			// MinionBossMinion.DisplayName: Minion Boss Minion
+			// RunawayMechaBody.DisplayName: Runaway Mecha Body
 		}
 
 		Items: {
@@ -340,6 +345,91 @@ Mods: {
 				// DisplayName: Base Lamp
 				// Tooltip: ""
 			}
+
+			BaseBlueprint: {
+				// DisplayName: Base Blueprint
+				// Tooltip: ""
+			}
+
+			RubbishWallItem: {
+				// DisplayName: Rubbish Wall Item
+				// Tooltip: ""
+			}
+
+			WasteConcreteWallItem: {
+				// DisplayName: Waste Concrete Wall Item
+				// Tooltip: ""
+			}
+
+			WasteMetalWallItem: {
+				// DisplayName: Waste Metal Wall Item
+				// Tooltip: ""
+			}
+
+			RunawayTankKey: {
+				// DisplayName: Runaway Tank Key
+				// Tooltip: ""
+			}
+
+			MinionBossMask: {
+				// DisplayName: Minion Boss Mask
+				// Tooltip: ""
+			}
+
+			MinionBossBag: {
+				// DisplayName: Minion Boss Bag
+				// Tooltip: ""
+			}
+
+			MinionBossSummonItem: {
+				// DisplayName: Minion Boss Summon Item
+				// Tooltip: ""
+			}
+
+			ExampleItem: {
+				// DisplayName: Example Item
+				// Tooltip: ""
+			}
+
+			MinionBossRelic: {
+				// DisplayName: Minion Boss Relic
+				// Tooltip: ""
+			}
+
+			MinionBossTrophy: {
+				// DisplayName: Minion Boss Trophy
+				// Tooltip: ""
+			}
+
+			MinionBossPetItem: {
+				// DisplayName: Minion Boss Pet Item
+				// Tooltip: ""
+			}
+
+			RunawayMechaMask: {
+				// DisplayName: Runaway Mecha Mask
+				// Tooltip: ""
+			}
+
+			RunawayMechaBag: {
+				// DisplayName: Runaway Mecha Bag
+				// Tooltip: ""
+			}
+
+			RunawayMechaSummonItem: {
+				// DisplayName: Runaway Mecha Summon Item
+				// Tooltip: ""
+			}
+
+			RunawayMechaRelic: {
+				// DisplayName: Runaway Mecha Relic
+				// Tooltip: ""
+			}
+
+			RunawayMechaTrophy: {
+				// DisplayName: Runaway Mecha Trophy
+				// Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -391,6 +481,11 @@ Mods: {
 			SmallBugBuff: {
 				// DisplayName: Small Bug Buff
 				// Description: Mods.AncientGod.Buffs.SmallBugBuff.Description
+			}
+
+			MinionBossPetBuff: {
+				// DisplayName: Minion Boss Pet Buff
+				// Description: Mods.AncientGod.Buffs.MinionBossPetBuff.Description
 			}
 		}
 
@@ -515,6 +610,7 @@ Mods: {
 			// BaseDoorOpen.MapEntry: Base Door Open
 			// BaseLantern.MapEntry: Base Lantern
 			// BaseLamp.MapEntry: Base Lamp
+			// BaseBlueprint.MapEntry: Base Blueprint
 		}
 	}
 }

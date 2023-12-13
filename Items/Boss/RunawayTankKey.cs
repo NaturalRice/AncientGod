@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using AncientGod.Boss.RunawayTank;
+using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria;
 using Terraria.ID;
@@ -6,8 +7,7 @@ using Terraria.ModLoader;
 
 namespace AncientGod.Items.Boss
 {
-    [LegacyName("FogG")]
-    public class RunawayMechaKey : ModItem
+    public class RunawayTankKey : ModItem
     {
         public override void SetStaticDefaults()
         {
@@ -19,9 +19,8 @@ namespace AncientGod.Items.Boss
         {
             Item.CloneDefaults(ItemID.ZephyrFish);
             Item.UseSound = SoundID.NPCHit57;
-            Item.shoot = ModContent.ProjectileType<Projectiles.Pets.RunawayMecha.RunawayMechaBody>();
+            Item.makeNPC = ModContent.NPCType<RunawayTank>();
             Item.rare = 11;
-            Item.buffType = ModContent.BuffType<Buffs.Pets.RunawayMechaPetBuff>();
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -43,14 +42,6 @@ namespace AncientGod.Items.Boss
                 }
             }
         }
-
-        /*public override void UseStyle(Player player, Microsoft.Xna.Framework.Rectangle heldItemFrame)
-        {
-            if (player.whoAmI == Main.myPlayer && player.itemTime == 0)
-            {
-                player.AddBuff(Item.buffType, 3600, true);
-            }
-        }*/
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();//创建一个配方

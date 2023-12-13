@@ -135,6 +135,7 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
 
             PetBehaviour();
 
+
             if (ArmPositions != null)
             {
                 for (int i = 0; i < ArmPositions.Count; i++)
@@ -160,7 +161,10 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
 
 
 
+
         }
+
+
 
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {

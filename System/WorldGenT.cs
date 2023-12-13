@@ -82,9 +82,17 @@ namespace AncientGod.System
                         {
                             t.TileType = (ushort)ModContent.TileType<Rubbish>();
                         }
+                        if (t.WallType == WallID.Dirt)
+                        {
+                            t.WallType = (ushort)ModContent.WallType<RubbishWall>();
+                        }
                         if (t.TileType == TileID.Stone)
                         {
-                            t.TileType = (ushort)ModContent.TileType<WasteConcrete>();
+                            t.TileType = (ushort)ModContent.TileType<WasteMetal>();
+                        }
+                        if (t.WallType == WallID.Stone)
+                        {
+                            t.WallType = (ushort)ModContent.WallType<WasteConcreteWall>();
                         }
                     }
                 }
@@ -113,6 +121,9 @@ namespace AncientGod.System
             {
                 int houseX = Main.maxTilesX / 2;
                 int houseY = Main.maxTilesY / 10;
+
+                int wasteX = Main.maxTilesX / 2;
+                int wasteY = Main.maxTilesY / 5;
 
                 AncientGod.getlog().Info($"Generating house at: {houseX}, {houseY}");
                 //创建基础建筑结构
@@ -154,9 +165,9 @@ namespace AncientGod.System
 
 
                 GenerateHouse(houseX, houseY);
-                
 
-                
+                GenerateWasteBuilding(wasteX, wasteY);
+
             }
         }
 
@@ -859,6 +870,18 @@ namespace AncientGod.System
                     }
                 }
             }
+            for (int x = centerX + totalWidth + 9; x >= 3; x--)
+            {
+                for (int y = centerY - totalHeight + 6; y <= centerY + totalHeight + 7; y++)
+                {
+                    if (x - centerX >= -20 && x - centerX <= 20)
+                    {
+                        if (y - centerY >= -10 && y - centerY <= 0)
+                            WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<Items.Tiles.Furniture.BaseBlueprint>(), true, true);//箱子
+                    }
+                }
+                x -= 10;
+            }
             //主舱（其实是更大范围内,所有的灯光，除了NPC住房的）
             for (int x = centerX - totalWidth; x <= centerX + totalWidth; x++)
             {
@@ -978,7 +1001,59 @@ namespace AncientGod.System
 
 
         }
-        
+
+
+
+
+        //下面的函数很奇怪，一开始可以运行，后面无论怎么简化，生成世界时始终会卡住
+        private void GenerateWasteBuilding(int centerX, int centerY)//废墟建筑生成逻辑
+        {
+            int x = WorldGen.genRand.Next(0, Main.maxTilesX);
+            int y = WorldGen.genRand.Next(Main.maxTilesY / 4 - 50, Main.maxTilesY / 4);
+            int w = WorldGen.genRand.Next(5, 20);
+            int h = WorldGen.genRand.Next(60, 100);
+            //创建断壁残垣和废铜烂铁
+            for (int a = 0; a <= 300; a++)
+            {
+                WasteBuilding(x, y, w, h);
+                x = WorldGen.genRand.Next(100, Main.maxTilesX - 100);
+                y = WorldGen.genRand.Next(Main.maxTilesY / 4 - 50, Main.maxTilesY / 4);
+                w = WorldGen.genRand.Next(5, 20);
+                h = WorldGen.genRand.Next(60, 100);
+            }
+            for (int a = 0; a <= 300; a++)
+            {
+                WasteMetal(x, y, w, h);
+                x = WorldGen.genRand.Next(100, Main.maxTilesX - 100);
+                y = WorldGen.genRand.Next(Main.maxTilesY / 4 - 50, Main.maxTilesY / 4);
+                w = WorldGen.genRand.Next(3, 5);
+                h = WorldGen.genRand.Next(60, 90);
+            }
+        }
+
+            private void WasteBuilding(int centerX, int centerY, int width, int height)
+        {
+            for (int x = centerX - width / 2; x <= centerX + width / 2; x++)
+            {
+                for (int y = centerY - height / 2; y <= centerY + height / 2; y++)
+                {
+                    WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<WasteConcrete>(), true, true);
+                    WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<WasteConcreteWall>(), true);
+                }
+            }
+        }
+        private void WasteMetal(int centerX, int centerY, int width, int height)
+        {
+            for (int x = centerX - width / 2; x <= centerX + width / 2; x++)
+            {
+                for (int y = centerY - height / 2; y <= centerY + height / 2; y++)
+                {
+                    WorldGen.PlaceTile(x, y, (ushort)ModContent.TileType<WasteMetal>(), true, true);
+                    WorldGen.PlaceWall(x, y, (ushort)ModContent.WallType<WasteMetalWall>(), true);
+                }
+            }
+        }
+
     }
 }
 
@@ -998,8 +1073,21 @@ WorldGen.KillTile(int x, int y, bool fail = false, bool effectOnly = false, bool
 WorldGen.SmoothSlope(int x1, int x2, int y)
 这个方法用于在指定的 y 坐标上创建一个平滑的坡道。
 
+
+
 WorldGen.TileRunner(int x, int y, double strength, int steps, int type)
 这个方法用于创建从 (x, y) 开始的一系列相同类型的瓷砖，形成一个长方形结构，类似于挖掘或填充。
+x, y： 这是你想要开始创建平坦结构的坐标。x 表示横坐标，y 表示纵坐标。
+
+strength： 这是平坦结构的强度。它通常是一个小数，控制平坦结构的"光滑程度"。更高的值将导致更平坦的结构。典型的使用值范围在 0.0 到 1.0 之间。
+
+steps： 这是平坦结构生成的步数。步数越多，平坦结构越大。
+
+type： 这是你想要生成的平坦结构的瓦片类型（方块类型）。你应该传递一个瓦片类型的整数值，例如 TileID.Dirt。
+
+这个函数通常用于创建各种地形特征，如平台、平坦区域等。例如，在世界生成或事件触发时，你可能会使用 WorldGen.TileRunner 来创建一个长长的平台。
+
+
 
 WorldGen.TileRunner 的变体方法，如 WorldGen.TileRunnerRandom 和 WorldGen.TileRunnerWithYVar，
 提供了更多的参数，以便生成不同形状的结构。

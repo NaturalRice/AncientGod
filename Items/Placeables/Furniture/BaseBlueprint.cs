@@ -1,27 +1,35 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using Terraria;
-using Terraria.ID;
 using Terraria.ModLoader;
+using AncientGod.Items.Tiles.Furniture;
+using Terraria.ID;
+using Terraria;
 
-namespace AncientGod.Items.Boss
+namespace AncientGod.Items.Placeables.Furniture
 {
-    [LegacyName("FogG")]
-    public class RunawayMechaKey : ModItem
+    public class BaseBlueprint : ModItem
     {
         public override void SetStaticDefaults()
         {
-            ItemID.Sets.ItemNoGravity[Item.type] = true;
+            // DisplayName.SetDefault("Aged Blueprint");
+            /* Tooltip
+                .SetDefault("Do Not Distribute?"); */
             Item.ResearchUnlockCount = 1;
         }
 
         public override void SetDefaults()
         {
-            Item.CloneDefaults(ItemID.ZephyrFish);
-            Item.UseSound = SoundID.NPCHit57;
-            Item.shoot = ModContent.ProjectileType<Projectiles.Pets.RunawayMecha.RunawayMechaBody>();
-            Item.rare = 11;
-            Item.buffType = ModContent.BuffType<Buffs.Pets.RunawayMechaPetBuff>();
+            Item.useStyle = 1;
+            Item.useTurn = true;
+            Item.useAnimation = 15;
+            Item.useTime = 10;
+            Item.autoReuse = true;
+            Item.maxStack = 99;
+            Item.consumable = true;
+            Item.createTile = ModContent.TileType<Tiles.Furniture.BaseBlueprint>();
+            Item.width = 56;
+            Item.height = 40;
+            Item.rare = 1;
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -39,19 +47,24 @@ namespace AncientGod.Items.Boss
             {
                 if (tooltipLine.Mod == "Terraria" && tooltipLine.Name == "ItemName")
                 {
-                    tooltipLine.OverrideColor = new Color(107, 240, 255); //change the color accordingly to above
+                    tooltipLine.OverrideColor = new Color(204, 71, 35); //change the color accordingly to above
                 }
             }
         }
 
-        /*public override void UseStyle(Player player, Microsoft.Xna.Framework.Rectangle heldItemFrame)
+        /*public override void AddRecipes()
         {
-            if (player.whoAmI == Main.myPlayer && player.itemTime == 0)
+            Mod CalValEX = ModLoader.GetMod("CalamityMod");
             {
-                player.AddBuff(Item.buffType, 3600, true);
+                ModRecipe recipe = new ModRecipe(mod);
+                recipe.AddIngredient(ModLoader.GetMod("CalamityMod").ItemType("PowerCell"), 10);
+                recipe.AddTile(ModLoader.GetMod("CalamityMod").TileType("LaboratoryConsole"));
+                recipe.SetResult(this);
+                recipe.AddRecipe();
             }
         }*/
-        public override void AddRecipes()
+
+        public override void AddRecipes()//测试用,正常玩时注解掉
         {
             Recipe recipe = CreateRecipe();//创建一个配方
             recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
