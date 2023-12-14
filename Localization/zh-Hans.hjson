@@ -22,6 +22,8 @@ Mods: {
 			// InsectBomb.DisplayName: Insect Bomb
 			// MinionBossEye.DisplayName: Minion Boss Eye
 			// MinionBossPetProjectile.DisplayName: Minion Boss Pet Projectile
+			// ExampleHomingProjectile.DisplayName: Example Homing Projectile
+			// RunawayMechaBullet.DisplayName: Runaway Mecha Bullet
 		}
 
 		NPCs: {
@@ -53,6 +55,7 @@ Mods: {
 			// MinionBossBody.DisplayName: Minion Boss Body
 			// MinionBossMinion.DisplayName: Minion Boss Minion
 			// RunawayMechaBody.DisplayName: Runaway Mecha Body
+			// TheKingOfReasonBody.DisplayName: The King Of Reason Body
 		}
 
 		Items: {
@@ -430,6 +433,11 @@ Mods: {
 				// DisplayName: Runaway Mecha Trophy
 				// Tooltip: ""
 			}
+
+			ExampleCustomAmmoGun: {
+				// DisplayName: Example Custom Ammo Gun
+				// Tooltip: ""
+			}
 		}
 
 		Buffs: {
@@ -611,6 +619,12 @@ Mods: {
 			// BaseLantern.MapEntry: Base Lantern
 			// BaseLamp.MapEntry: Base Lamp
 			// BaseBlueprint.MapEntry: Base Blueprint
+		}
+
+		Emotes: {
+			// ExampleTravellingMerchantEmote.Command: exampletravellingmerchantemote
+			// ExamplePersonEmote.Command: examplepersonemote
+			// ExampleBoneMerchantEmote.Command: examplebonemerchantemote
 		}
 	}
 }

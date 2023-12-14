@@ -22,6 +22,7 @@
     <Folder Include="Assets\Bestiary\" />
     <Folder Include="Boss\MinionBoss\Gores\" />
     <Folder Include="Boss\RunawayMecha\Gores\" />
+    <Folder Include="Boss\MoonLordHimself\" />
     <Folder Include="Items\Mounts\InfiniteFlight\AncientMecha\" />
     <Folder Include="Projectiles\Mounts\InfiniteFlight\AncientMecha\" />
   </ItemGroup>

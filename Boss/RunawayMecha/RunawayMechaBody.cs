@@ -24,18 +24,29 @@ using AncientGod.Projectiles;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.Graphics.CameraModifiers;
 using AncientGod.Items.Boss;
+using System.Security.Cryptography.X509Certificates;
+using AncientGod.Projectiles.Ammo;
+using Mono.Cecil;
+using AncientGod.Projectiles.Pets.RunawayMecha;
 //using Terraria.World.Generation;
 
 namespace AncientGod.Boss.RunawayMecha
 {
-    [AutoloadBossHead]
+    [AutoloadBossHead]//显示Boss血条以及在大地图中显示Boss头像
     public class RunawayMechaBody : ModNPC
     {
         //public override float TeleportThreshold => 1200f;
         //public override Vector2 FlyingOffset => new Vector2(0f, 0f);//这里决定了飞行目标
 
+        public int owner; // 自定义字段，用于存储投射物的源
+
+        private const float TargetDistance = 1000f; // 设置寻找敌人的最大距离
+        private int target = -1; // 记录当前目标敌人的索引
+        private float fireCooldown = 240f; // 弹药冷却时间
+
         bool isInfernumActive;//用于标记Infernum模式是否激活
         Mod infern;//Mod类型的变量，用于引用Infernum模组
+       
         //A list of the ideal positions for each arm. The first 2 variables of the Vector2 represent the relative position of the arm to the body and the last variable represents the rotation of the hand
         internal readonly List<Vector3> IdealPositions = new List<Vector3>()//一个列表，其中包含了四个Vector3元素，每个元素表示一个机械臂的理想位置。这些位置包括相对于机械臂中心的X和Y偏移，以及手的旋转角度
         {
@@ -244,6 +255,22 @@ namespace AncientGod.Boss.RunawayMecha
             }
         }
 
+        private void FindTarget()
+        {
+            target = -1; // 默认值，表示没有找到目标
+            float maxDistance = TargetDistance; // 设置最大寻找距离
+
+            for (int i = 0; i < Main.player.Length; i++)
+            {
+                // 检查敌人是否活着、活跃，并且在最大寻找范围内
+                if (player.active && Vector2.Distance(player.Center, NPC.Center) < maxDistance)
+                {
+                    maxDistance = Vector2.Distance(player.Center, NPC.Center);
+                    target = i; // 更新目标索引
+                }
+            }
+        }
+
         public override void AI()
         {
             // This should almost always be the first code in AI() as it is responsible for finding the proper player target
@@ -295,6 +322,113 @@ namespace AncientGod.Boss.RunawayMecha
                     armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - player.position).ToRotation(), 1 - MathHelper.Clamp((player.position - vector2position).Length() / 300f, 0, 1));
 
                     ArmPositions[i] = new Vector3(vector2position, armPosition.Z);
+
+                    // 寻找附近的敌人
+                    FindTarget(); // 调用FindTarget方法来更新target值
+
+                    if (target != -1)
+                    {
+
+                        //手部瞄准敌人                        
+                        Vector2 direction = player.Center - NPC.position;
+
+
+                        armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - direction).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 300f, 0, 1));
+
+                        direction.Normalize();
+
+                        NPC.velocity = direction * 16f;
+
+
+
+                        // 设置投射物的旋转角度
+                        //armPosition.Z = direction.ToRotation();
+
+                        if (fireCooldown <= 0f)
+                        {
+                            // 发射子弹
+                            if (NPC.localAI[0] == 0f)
+                            {
+                                NPC.localAI[0] = 1f;//Projectile.localAI[0] 设置为1，表示已经发射过，以避免连续的发射。
+
+                                // 计算发射角度，这里示例为向下发射
+                                float shootAngle = direction.ToRotation();
+
+                                // 发射弹药
+                                for (int j = 0; j < 1; j++) // 你可以根据需要发射多个弹药（这里不是间隔的连射，而是一次性射多少弹药）
+                                {
+                                    direction = player.Center - (NPC.position + Vector2.UnitX * 170 + Vector2.UnitY * 150);
+                                    shootAngle = direction.ToRotation();
+                                    Vector2 shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f; // 这里示例为向右发射(底下是发射源的定义），瞄准方向
+                                    int newProjectile11 = Projectile.NewProjectile(null, NPC.position + Vector2.UnitX * 170 + Vector2.UnitY * 150, shotVelocity, ModContent.ProjectileType<RunawayMechaBullet>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//右下
+                                    //int newProjectile12 = Projectile.NewProjectile(null, NPC.position + Vector2.UnitX * 170 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<BigBangMechaBulletSide>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//右下
+                                    //int newProjectile13 = Projectile.NewProjectile(null, NPC.position + Vector2.UnitX * 170 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<BigBangMechaBulletSide>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//右下
+                                    direction = player.Center - (NPC.position - Vector2.UnitX * 140 + Vector2.UnitY * 50);
+                                    shootAngle = direction.ToRotation();
+                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
+                                    int newProjectile21 = Projectile.NewProjectile(null, NPC.position - Vector2.UnitX * 140 + Vector2.UnitY * 50, shotVelocity, ModContent.ProjectileType<RunawayMechaBullet>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//左上
+                                    //int newProjectile22 = Projectile.NewProjectile(null, NPC.position - Vector2.UnitX * 140 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<BigBangMechaBulletSide>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//左上
+                                    //int newProjectile23 = Projectile.NewProjectile(null, NPC.position - Vector2.UnitX * 140 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<BigBangMechaBulletSide>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//左上
+                                    direction = player.Center - (NPC.position + Vector2.UnitX * 195 + Vector2.UnitY * 50);
+                                    shootAngle = direction.ToRotation();
+                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
+                                    int newProjectile31 = Projectile.NewProjectile(null, NPC.position + Vector2.UnitX * 195 + Vector2.UnitY * 50, shotVelocity, ModContent.ProjectileType<RunawayMechaBullet>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//右上
+                                    //int newProjectile32 = Projectile.NewProjectile(null, NPC.position + Vector2.UnitX * 195 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<BigBangMechaBulletSide>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//右上
+                                    //int newProjectile33 = Projectile.NewProjectile(null, NPC.position + Vector2.UnitX * 195 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<BigBangMechaBulletSide>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//右上
+                                    direction = player.Center - (NPC.position - Vector2.UnitX * 120 + Vector2.UnitY * 150);
+                                    shootAngle = direction.ToRotation();
+                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
+                                    int newProjectile41 = Projectile.NewProjectile(null, NPC.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, shotVelocity, ModContent.ProjectileType<RunawayMechaBullet>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//左下
+                                    //int newProjectile42 = Projectile.NewProjectile(null, NPC.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<BigBangMechaBulletSide>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//左下
+                                    //int newProjectile43 = Projectile.NewProjectile(null, NPC.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<BigBangMechaBulletSide>(), (int)(NPC.damage * 0.5f), 0, Main.myPlayer);//左下
+                                    //这里四个机关炮的准心有一定差别
+                                    Main.projectile[newProjectile11].timeLeft = 1000;//弹药存活时间
+                                    //Main.projectile[newProjectile12].timeLeft = 1000;//弹药存活时间
+                                    //Main.projectile[newProjectile13].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile21].timeLeft = 1000;//弹药存活时间
+                                    //Main.projectile[newProjectile22].timeLeft = 1000;//弹药存活时间
+                                    //Main.projectile[newProjectile23].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile31].timeLeft = 1000;//弹药存活时间
+                                    //Main.projectile[newProjectile32].timeLeft = 1000;//弹药存活时间
+                                    //Main.projectile[newProjectile33].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile41].timeLeft = 1000;//弹药存活时间
+                                    //Main.projectile[newProjectile42].timeLeft = 1000;//弹药存活时间
+                                    //Main.projectile[newProjectile43].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile11].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    //Main.projectile[newProjectile12].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    //Main.projectile[newProjectile13].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile21].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    //Main.projectile[newProjectile22].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    //Main.projectile[newProjectile23].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile31].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    //Main.projectile[newProjectile32].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    //Main.projectile[newProjectile33].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile41].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    //Main.projectile[newProjectile42].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    //Main.projectile[newProjectile43].netUpdate = true;//是否将投射物的信息同步到其他客户端
+
+
+                                    shootAngle += MathHelper.PiOver4; // 增加弹药之间的间隔角度
+                                }
+
+                                NPC.localAI[0] = 0f;//为了连射
+
+                                // 重置冷却计时器
+                                fireCooldown = 30f; // 设置为你想要的冷却时间（间隔时间0.5秒）
+                            }
+                        }
+                        else
+                        {
+                            // 更新冷却计时器
+                            fireCooldown--;
+                        }
+                    }
+                    else
+                    {
+                        // 当没有目标时，保持静止
+                        NPC.velocity = Vector2.Zero;
+                        NPC.localAI[0] = 0f; // 重置发射标记
+                    }
                 }
             }
 
