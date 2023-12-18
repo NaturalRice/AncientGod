@@ -104,7 +104,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.FutureMecha
                 player.runAcceleration = 20f;
 
             }
-            else if (player.controlDown && !player.mount._abilityCharging) // 如果玩家按下：下键
+            else if (player.controlDown) // 如果玩家按下：下键
             {
                 player.velocity.Y += 17f; // 增加垂直下降速度
                 player.runAcceleration = 20f;

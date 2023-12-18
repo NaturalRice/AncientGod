@@ -24,6 +24,13 @@ Mods: {
 			MinionBossPetProjectile.DisplayName: Minion Boss Pet Projectile
 			ExampleHomingProjectile.DisplayName: Example Homing Projectile
 			RunawayMechaBullet.DisplayName: Runaway Mecha Bullet
+			AncientMechaBullet.DisplayName: Ancient Mecha Bullet
+			FutureMechaBullet.DisplayName: Future Mecha Bullet
+			ModernMechaBullet.DisplayName: Modern Mecha Bullet
+			TheMadKingOfReasonEye.DisplayName: The Mad King Of Reason Eye
+			AncientMechaBulletSide.DisplayName: Ancient Mecha Bullet Side
+			FutureMechaBulletSide.DisplayName: Future Mecha Bullet Side
+			ModernMechaBulletSide.DisplayName: Modern Mecha Bullet Side
 		}
 
 		NPCs: {
@@ -56,6 +63,8 @@ Mods: {
 			MinionBossMinion.DisplayName: Minion Boss Minion
 			RunawayMechaBody.DisplayName: Runaway Mecha Body
 			TheKingOfReasonBody.DisplayName: The King Of Reason Body
+			TheMadKingOfReasonBody.DisplayName: The Mad King Of Reason Body
+			TheMadKingOfReasonMinion.DisplayName: The Mad King Of Reason Minion
 		}
 
 		Items: {
@@ -436,6 +445,31 @@ Mods: {
 
 			ExampleCustomAmmoGun: {
 				DisplayName: Example Custom Ammo Gun
+				Tooltip: ""
+			}
+
+			TheMadKingOfReasonMask: {
+				DisplayName: The Mad King Of Reason Mask
+				Tooltip: ""
+			}
+
+			TheMadKingOfReasonBodyBag: {
+				DisplayName: The Mad King Of Reason Body Bag
+				Tooltip: ""
+			}
+
+			TheMadKingOfReasonSummonItem: {
+				DisplayName: The Mad King Of Reason Summon Item
+				Tooltip: ""
+			}
+
+			TheMadKingOfReasonRelic: {
+				DisplayName: The Mad King Of Reason Relic
+				Tooltip: ""
+			}
+
+			TheMadKingOfReasonTrophy: {
+				DisplayName: The Mad King Of Reason Trophy
 				Tooltip: ""
 			}
 		}

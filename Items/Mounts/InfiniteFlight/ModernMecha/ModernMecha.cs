@@ -15,6 +15,8 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.ModernMecha
     {
         private int horizontalDirection = 1; // 默认为向右
 
+        private int lastMoveKeyPressed; // 记录上一次按下移动键的时间戳
+        private const int DoubleTapThreshold = 5; // 定义两次按键之间的最大时间间隔（以帧数为单位，这里设定为20帧）
 
 
         public override void SetStaticDefaults()
@@ -104,9 +106,9 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.ModernMecha
                 player.runAcceleration = 20f;
 
             }
-            else if (player.controlDown && !player.mount._abilityCharging) // 如果玩家按下：下键
+            else if (player.controlDown) // 如果玩家按下：下键
             {
-                player.velocity.Y += 17f; // 增加垂直下降速度
+                player.velocity.Y = 17f; // 增加垂直下降速度
                 player.runAcceleration = 20f;
             }
             else
@@ -132,7 +134,50 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.ModernMecha
             {
                 player.velocity.X = 0;
             }
+            // 检查左右移动键
+            CheckHorizontalMovement(player);
+        }
 
+        private void CheckHorizontalMovement(Player player)
+        {
+            // 如果按下左键
+            if (player.controlLeft)
+            {
+                AccelerateHorizontalMovement(player, -1);
+            }
+            // 如果按下右键
+            else if (player.controlRight)
+            {
+                AccelerateHorizontalMovement(player, 1);
+            }
+            // 如果没有按下左右键
+            else
+            {
+                player.velocity.X = 0;
+            }
+        }
+
+        private void AccelerateHorizontalMovement(Player player, int direction)
+        {
+            // 如果这次按键和上一次按键之间的时间间隔小于阈值，加速坐骑的水平速度
+            if (Environment.TickCount - lastMoveKeyPressed < DoubleTapThreshold)
+            {
+                player.velocity.X = 34f * direction; // 假设加速的速度为34
+            }
+            else
+            {
+                player.velocity.X = 17f * direction; // 否则使用正常速度
+            }
+
+            player.runAcceleration = 20f;
+            horizontalDirection = direction;
+            player.direction = horizontalDirection;
+
+            // 记录当前按键的时间戳
+            lastMoveKeyPressed = Environment.TickCount;
+         /*在这里，lastMoveKeyPressed 变量记录了上一次按下移动键的时间戳。当检测到按下左右键时，
+         通过比较这个时间戳和当前时间戳的差值，判断两次按键之间的时间间隔。如果时间间隔小于设
+         定的阈值，就表示是双击，加速坐骑的水平速度。*/
         }
     }
 }

@@ -23,6 +23,7 @@
     <Folder Include="Boss\MinionBoss\Gores\" />
     <Folder Include="Boss\RunawayMecha\Gores\" />
     <Folder Include="Boss\MoonLordHimself\" />
+    <Folder Include="Boss\TheKingOfReason\Gores\" />
     <Folder Include="Items\Mounts\InfiniteFlight\AncientMecha\" />
     <Folder Include="Projectiles\Mounts\InfiniteFlight\AncientMecha\" />
   </ItemGroup>

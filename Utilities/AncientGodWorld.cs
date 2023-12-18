@@ -10,6 +10,8 @@ using Terraria.Chat;
 using Terraria.Localization;
 using Microsoft.Xna.Framework;
 using Microsoft.VisualBasic;
+using Terraria.UI;
+using AncientGod.Utilities.UI;
 using static Terraria.GameContent.Bestiary.BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions;
 
 
@@ -26,6 +28,7 @@ using AncientGod.Items.Tiles.Plushies;*/
 
 namespace AncientGod
 {
+
     public class AncientGodWorld : ModSystem
     {
         public static bool CanNugsSpawn()
@@ -63,6 +66,13 @@ namespace AncientGod
         public static bool ninja;
         public static bool astro;
 
+        // properties
+        public static int MAX_CHAOS = 10000;
+        public static int MAX_SANITY = 10000;
+
+        public static int sanity;
+        public static int chaos;
+
         public override void OnWorldLoad()
         {
             rescuedjelly = false;
@@ -78,6 +88,9 @@ namespace AncientGod
             nugget = draco = folly = godnug = mammoth = shadow = isThereAHouse = false;
             ninja = false;
             astro = false;
+
+            sanity = 10000;
+            chaos = 0;
         }
 
         public override void OnWorldUnload()
@@ -144,6 +157,9 @@ namespace AncientGod
                 tag["ninja"] = true;
             if (astro)
                 tag["astro"] = true;
+
+            tag["sanity"] = sanity;
+            tag["chaos"] = chaos;
         }
 
         public override void LoadWorldData(TagCompound tag)
@@ -167,6 +183,37 @@ namespace AncientGod
 
             ninja = tag.ContainsKey("ninja");
             astro = tag.ContainsKey("astro");
+
+            sanity = tag.GetInt("sanity");
+            chaos = tag.GetInt("chaos");
+        }
+
+        public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
+        {
+            base.ModifyInterfaceLayers(layers);
+
+            ChaosAndSan.init();
+
+            for (int i = 0; i < layers.Count; i++)
+            {
+                var layer = layers[i];
+                // AncientGod.getlog().InfoFormat("Layer {0}: {1}", i, layer.Name);
+            }
+
+            int resourceBarIndex = layers.FindIndex(layer => layer.Name.Equals("Vanilla: Resource Bars"));
+            if (resourceBarIndex != -1)
+            {
+                layers.Insert(resourceBarIndex, new LegacyGameInterfaceLayer(
+                    "AncientGodMod: Sanity Bar",
+                    delegate
+                    {
+                        // Assuming you have your XXXBar instance created somewhere
+                        ChaosAndSan.INSTANCE.Draw(Main.spriteBatch);
+                        return true;
+                    },
+                    InterfaceScaleType.UI)
+                );
+            }
         }
 
         public override void NetSend(BinaryWriter writer)
