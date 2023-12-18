@@ -34,7 +34,7 @@ namespace AncientGod.System
         {
             // 移除所有不需要的生成任务
             tasks.RemoveAll(genpass => !genpass.Name.Equals("Reset") && !genpass.Name.Equals("Terrain") &&
-            !genpass.Name.Equals("Underworld") && !genpass.Name.Equals("Smooth World"));
+            !genpass.Name.Equals("Underworld") && !genpass.Name.Equals("Smooth World") && !genpass.Name.Equals("Dungeon") && !genpass.Name.Equals("Hellforge"));
 
             // 找到 Smooth World 任务的索引
             int resetIndex = tasks.FindIndex(genpass => genpass.Name.Equals("Smooth World"));

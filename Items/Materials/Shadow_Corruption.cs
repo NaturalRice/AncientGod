@@ -33,6 +33,34 @@ namespace AncientGod.Items.Materials
             new_recipe.AddIngredient<Shadow>(2);
             new_recipe.AddTile(TileID.WorkBenches);
             new_recipe.Register();
+            Recipe.Create(ItemID.EbonstoneBlock, 5)
+                .AddTile<Tiles.Shadow_Corruption>()
+                .AddIngredient<MoonDevoration>(20)
+                .Register();
+            Recipe.Create(ItemID.EbonsandBlock, 5)
+                .AddTile<Tiles.Shadow_Corruption>()
+                .AddIngredient<MoonDevoration>(20)
+                .Register();
+            Recipe.Create(ItemID.CorruptSeeds,1)
+                .AddTile(TileID.WorkBenches)
+                .AddIngredient<MoonDevoration>(20)
+                .AddIngredient<Shadow>(2)
+                .Register();
+            Recipe.Create(ItemID.SuspiciousLookingEye, 1)
+                .AddTile<Tiles.Shadow_Corruption>()
+                .AddIngredient<MoonDevoration>(10)
+                .AddIngredient(ItemID.Lens,6)
+                .Register();
+            Recipe.Create(ItemID.SuspiciousLookingEye, 1)
+                .AddTile<Tiles.Shadow_Corruption>()
+                .AddIngredient<MoonDevoration>(10)
+                .AddIngredient(ItemID.Lens, 6)
+                .Register();
+            Recipe.Create(ItemID.WormFood, 1)
+                .AddTile<Tiles.Shadow_Corruption>()
+                .AddIngredient<MoonDevoration>(10)
+                .AddIngredient(ItemID.Lens, 6)
+                .Register();
         }
     }
 }

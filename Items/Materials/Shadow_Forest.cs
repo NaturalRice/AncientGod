@@ -27,6 +27,15 @@ namespace AncientGod.Items.Materials
             new_recipe.AddIngredient<Shadow>(2);
             new_recipe.AddTile(TileID.WorkBenches);
             new_recipe.Register();
+            Recipe.Create(ItemID.DirtBlock, 5)
+                .AddTile<Tiles.Shadow_Forest>()
+                .AddIngredient<MoonDevoration>(20)
+                .Register();
+            Recipe.Create(ItemID.StoneBlock, 5)
+                .AddTile<Tiles.Shadow_Forest>()
+                .AddIngredient<MoonDevoration>(20)
+                .Register();
+
         }
     }
 }
