@@ -258,7 +258,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.ModernMecha
         }
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
-            DrawChain();
+            //DrawChain();//暂不使用
 
 
             if (ArmPositions == null)

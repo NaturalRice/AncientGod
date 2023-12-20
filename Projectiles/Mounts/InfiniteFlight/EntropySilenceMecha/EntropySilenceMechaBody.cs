@@ -342,7 +342,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.EntropySilenceMecha
 
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
-            //DrawChain();
+            //DrawChain();//暂不使用
             // 添加光影效果
             //DrawImpact(Projectile.Center, Projectile.rotation, Projectile.scale);
 

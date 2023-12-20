@@ -31,6 +31,8 @@ Mods: {
 			// AncientMechaBulletSide.DisplayName: Ancient Mecha Bullet Side
 			// FutureMechaBulletSide.DisplayName: Future Mecha Bullet Side
 			// ModernMechaBulletSide.DisplayName: Modern Mecha Bullet Side
+			// FutureMechaCirclingBullet.DisplayName: Future Mecha Circling Bullet
+			// AncientMechaCirclingBullet.DisplayName: Ancient Mecha Circling Bullet
 		}
 
 		NPCs: {
@@ -84,38 +86,38 @@ Mods: {
 			}
 
 			WasteConcrete: {
-				// Tooltip: ""
+				// Tooltip: 曾经灯火通明地高楼大厦早已不在，如今只剩下这些断壁残垣
 				// DisplayName: 废弃混凝土
 			}
 
 			Rubbish: {
-				// Tooltip: ""
+				// Tooltip: 城市里各种生活垃圾被回收厂压缩成的方块
 				// DisplayName: 垃圾
 			}
 
 			BasePanel: {
 				// Tooltip: ""
-				// DisplayName: Base Panel
+				// DisplayName: 太空基地镶板
 			}
 
 			BaseEnclosure: {
 				// Tooltip: ""
-				// DisplayName: Base Enclosure
+				// DisplayName: 太空基地外墙
 			}
 
 			MechaNo2Key: {
 				// Tooltip: ""
-				// DisplayName: Mecha No2 Key
+				// DisplayName: 2号机甲钥匙
 			}
 
 			MechaNo1Key: {
 				// Tooltip: ""
-				// DisplayName: Mecha No1 Key
+				// DisplayName: 1号机甲钥匙
 			}
 
 			AncientMechaKey: {
 				// Tooltip: ""
-				// DisplayName: Ancient Mecha Key
+				// DisplayName: 远古机甲钥匙
 			}
 
 			Shadow_Jungle: {

@@ -84,7 +84,7 @@ namespace AncientGod.Boss.RunawayTank
                 return 1;
             }
 
-            return SpawnCondition.Overworld.Chance * 0.6f;
+            return SpawnCondition.Overworld.Chance * 0f;//目前暂不使用
         }
         public override void OnKill()
         {

@@ -15,6 +15,8 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AncientMecha
     {
         private int horizontalDirection = 1; // 默认为向右
 
+        private int lastMoveKeyPressed; // 记录上一次按下移动键的时间戳
+        private const int DoubleTapThreshold = 20; // 定义两次按键之间的最大时间间隔（以帧数为单位，这里设定为20帧）
 
 
         public override void SetStaticDefaults()
@@ -94,9 +96,13 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AncientMecha
             return false;
         }
 
-
         public override void UpdateEffects(Player player)//通过以下代码已经几乎达到了星流飞椅的效果，唯一遗憾的是向下移动似乎最高只能到51mph？
         {
+            if (Main.dedServ)
+            {
+                return;
+            }
+
             // 在这里检查玩家的输入并根据需要修改垂直方向的速度
             if (player.controlUp || Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space)) // 如果玩家按下：上键或空格键
             {
@@ -106,7 +112,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AncientMecha
             }
             else if (player.controlDown) // 如果玩家按下：下键
             {
-                player.velocity.Y += 17f; // 增加垂直下降速度
+                player.velocity.Y = 17f; // 增加垂直下降速度
                 player.runAcceleration = 20f;
             }
             else
@@ -132,7 +138,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AncientMecha
             {
                 player.velocity.X = 0;
             }
-
         }
+
     }
 }

@@ -9,6 +9,10 @@ using AncientGod.Projectiles.Ammo;
 using AncientGod.Projectiles;
 using Mono.Cecil;
 using AncientGod.Projectiles.Pets.RunawayMecha;
+using Terraria.ID;
+using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
+using Microsoft.CodeAnalysis;
 
 namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FutureMecha
 {
@@ -83,8 +87,15 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FutureMecha
         }
 
 
-        public override void AI()
+        public override void AI()//未来机甲具有使敌人慢慢变静止的属性
         {
+
+            // 弹药绕玩家旋转
+            float orbitTime = 60f; // 调整旋转周期
+            float orbitSpeed = MathHelper.TwoPi / orbitTime;
+            float angle = Main.GameUpdateCount * orbitSpeed;
+
+
             /*这是机械臂的主要逻辑部分。在这个方法中，机械臂的行为受到不同条件的控制，包括拥有者是否已死亡、是否激活了坐骑等。
             机械臂的位置、浮动效果和旋转角度等都在这个方法中计算和更新。
             此外，机械臂的位置也会受到鼠标光标的位置影响，使其能够朝向鼠标光标。*/
@@ -113,6 +124,38 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FutureMecha
                     ArmPositions.Add(new Vector3(GetIdealPosition(i), IdealPositions[i].Z));
                 }
                 Initialized = 1f;
+            }
+
+
+            foreach (Item item in Main.item)
+            {
+                if (item.Distance(Projectile.Center) < 1000f && !item.beingGrabbed)
+                {
+                    // 计算朝向玩家中心的矢量
+                    Vector2 toMecha = Owner.Center - item.Center;
+                    toMecha.Normalize();
+
+                    item.velocity.X = 0;
+                    item.velocity.Y = 0;
+
+                    // 如果需要，可以在这里添加其他吸引效果
+                }
+            }
+
+            foreach (Projectile projectile in Main.projectile)
+            {
+                if (!projectile.friendly && projectile.Distance(Projectile.Center) < 1000f)
+                {
+                    // 计算朝向玩家中心的矢量
+                    Vector2 toMecha = Owner.Center - projectile.Center;
+                    toMecha.Normalize();
+
+                    projectile.velocity.X = 0;
+                    projectile.velocity.Y = 0;
+
+
+                    // 如果需要，可以在这里添加其他吸引效果
+                }
             }
 
             Vector2 idealPosition = Owner.Center + Vector2.UnitY * -60;
@@ -160,7 +203,19 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FutureMecha
 
                         Projectile.velocity = direction * 16f;
 
+                        // 遍历所有敌方NPC
+                        foreach (NPC npc in Main.npc)
+                        {
+                            // 判断敌方NPC是否活着且在一定范围内
+                            if (!npc.friendly && Vector2.Distance(npc.Center, Projectile.Center) < 1000f)
+                            {
+                                // 计算朝向玩家的方向向量
+                                Vector2 directionToMech = Owner.Center - npc.Center;
 
+                                npc.velocity.X = 0;
+                                npc.velocity.Y = 0;
+                            }
+                        }
 
                         // 设置投射物的旋转角度
                         //armPosition.Z = direction.ToRotation();
@@ -202,6 +257,10 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FutureMecha
                                     int newProjectile41 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, shotVelocity, ModContent.ProjectileType<FutureMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
                                     int newProjectile42 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<FutureMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
                                     int newProjectile43 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<FutureMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
+
+                                    shootAngle = WorldGen.genRand.Next(0, 360);//瞎几把乱射
+                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
+                                    int newProjectile51 = Projectile.NewProjectile(null, Owner.position, shotVelocity, ModContent.ProjectileType<FutureMechaCirclingBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//转圈弹药
                                     //这里四个机关炮的准心有一定差别
                                     Main.projectile[newProjectile11].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile12].timeLeft = 1000;//弹药存活时间
@@ -215,6 +274,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FutureMecha
                                     Main.projectile[newProjectile41].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile42].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile43].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile51].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile11].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile12].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile13].netUpdate = true;//是否将投射物的信息同步到其他客户端
@@ -227,6 +287,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FutureMecha
                                     Main.projectile[newProjectile41].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile42].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile43].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile51].netUpdate = true;//是否将投射物的信息同步到其他客户端
 
 
                                     shootAngle += MathHelper.PiOver4; // 增加弹药之间的间隔角度
@@ -258,7 +319,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FutureMecha
         }
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
-            DrawChain();
+            //DrawChain();//暂不使用
 
 
             if (ArmPositions == null)

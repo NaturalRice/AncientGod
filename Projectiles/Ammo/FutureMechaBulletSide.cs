@@ -56,7 +56,7 @@ namespace AncientGod.Projectiles.Ammo
             {
                 if (npc.active && !npc.friendly && Vector2.Distance(npc.Center, Projectile.Center) < explosionRadius)
                 {
-                    npc.SimpleStrikeNPC(20, 0, true, 0f);
+                    npc.SimpleStrikeNPC(10, 0, true, 0f);
                     // 如果需要，可以在这里添加更多效果或逻辑。
                 }
             }
@@ -75,7 +75,7 @@ namespace AncientGod.Projectiles.Ammo
                 {
                     // 对NPC造成伤害,伤害为100
                     Explode();
-                    npc.SimpleStrikeNPC(20, 0, true, 0f);
+                    npc.SimpleStrikeNPC(10, 0, true, 0f);
                     // 如果需要，可以在此添加更多效果或逻辑。
                 }
             }

@@ -9,6 +9,9 @@ using AncientGod.Projectiles.Ammo;
 using AncientGod.Projectiles;
 using Mono.Cecil;
 using AncientGod.Projectiles.Pets.RunawayMecha;
+using Terraria.ID;
+using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 
 namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
 {
@@ -83,8 +86,13 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
         }
 
 
-        public override void AI()
+        public override void AI()//远古机甲具有使敌方弹幕围着玩家顺时针旋转的属性
         {
+            // 弹药绕玩家旋转
+            float orbitTime = 60f; // 调整旋转周期
+            float orbitSpeed = MathHelper.TwoPi / orbitTime;
+            float angle = Main.GameUpdateCount * orbitSpeed;
+
             /*这是机械臂的主要逻辑部分。在这个方法中，机械臂的行为受到不同条件的控制，包括拥有者是否已死亡、是否激活了坐骑等。
             机械臂的位置、浮动效果和旋转角度等都在这个方法中计算和更新。
             此外，机械臂的位置也会受到鼠标光标的位置影响，使其能够朝向鼠标光标。*/
@@ -113,6 +121,26 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
                     ArmPositions.Add(new Vector3(GetIdealPosition(i), IdealPositions[i].Z));
                 }
                 Initialized = 1f;
+            }
+
+
+            foreach (Projectile projectile in Main.projectile)
+            {
+                if (!projectile.friendly && projectile.Distance(Projectile.Center) < 2000f)
+                {
+                    // 计算弹药的新位置
+                    float x = Main.player[Projectile.owner].Center.X + (float)Math.Cos(angle) * 400f;
+                    float y = Main.player[Projectile.owner].Center.Y + (float)Math.Sin(angle) * 400f;
+
+                    // 设置弹药的新位置
+                    projectile.position = new Vector2(x - Projectile.width * 0.5f, y - Projectile.height * 0.5f);
+
+                    // 设置弹药的旋转角度
+                    float velocityAngle = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
+                    projectile.rotation = velocityAngle + MathHelper.PiOver2; // 添加 MathHelper.PiOver2 以便进行适当的旋转
+
+                    // 如果需要，可以在这里添加其他吸引效果
+                }
             }
 
             Vector2 idealPosition = Owner.Center + Vector2.UnitY * -60;
@@ -158,8 +186,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
 
                         direction.Normalize();
 
-                        Projectile.velocity = direction * 16f;
-
+                        Projectile.velocity = direction * 16f;                        
 
 
                         // 设置投射物的旋转角度
@@ -202,6 +229,10 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
                                     int newProjectile41 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, shotVelocity, ModContent.ProjectileType<AncientMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
                                     int newProjectile42 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<AncientMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
                                     int newProjectile43 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<AncientMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
+
+                                    shootAngle = WorldGen.genRand.Next(0, 360);//瞎几把乱射
+                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
+                                    int newProjectile51 = Projectile.NewProjectile(null, Owner.position, shotVelocity, ModContent.ProjectileType<AncientMechaCirclingBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//转圈弹药
                                     //这里四个机关炮的准心有一定差别
                                     Main.projectile[newProjectile11].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile12].timeLeft = 1000;//弹药存活时间
@@ -215,6 +246,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
                                     Main.projectile[newProjectile41].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile42].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile43].timeLeft = 1000;//弹药存活时间
+                                    Main.projectile[newProjectile51].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile11].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile12].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile13].netUpdate = true;//是否将投射物的信息同步到其他客户端
@@ -227,6 +259,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
                                     Main.projectile[newProjectile41].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile42].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile43].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                                    Main.projectile[newProjectile51].netUpdate = true;//是否将投射物的信息同步到其他客户端
 
 
                                     shootAngle += MathHelper.PiOver4; // 增加弹药之间的间隔角度
@@ -258,7 +291,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
         }
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
-            DrawChain();
+            //DrawChain();//暂不使用
 
 
             if (ArmPositions == null)

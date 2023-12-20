@@ -9,8 +9,10 @@ using Terraria.ModLoader;
 
 namespace AncientGod.Projectiles.Ammo
 {
-    public class FutureMechaBullet : ModProjectile
+    public class AncientMechaCirclingBullet : ModProjectile
     {
+        private bool isRotating = false;
+
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // 记录旧位置的长度
@@ -19,14 +21,14 @@ namespace AncientGod.Projectiles.Ammo
 
         public override void SetDefaults()
         {
-            Projectile.width = 16; // 投射物碰撞盒的宽度
-            Projectile.height = 48; // 投射物碰撞盒的高度
+            Projectile.width = 60; // 投射物碰撞盒的宽度
+            Projectile.height = 60; // 投射物碰撞盒的高度
             Projectile.aiStyle = 1; // 投射物的AI风格，请参考Terraria源代码
             Projectile.friendly = true; // 投射物能对敌人造成伤害吗？
             Projectile.hostile = false; // 投射物能对玩家造成伤害吗？
             Projectile.DamageType = DamageClass.Ranged; // 投射物的伤害类型，是由远程武器发射的吗？
             Projectile.penetrate = 5; // 投射物能穿透多少个敌怪。（OnTileCollide方法也会减少穿透次数）
-            Projectile.timeLeft = 600; // 投射物的生存时间（60 = 1秒，所以600是10秒）
+            Projectile.timeLeft = 200; // 投射物的生存时间（60 = 1秒，所以600是10秒）
             Projectile.alpha = 255; // 投射物的透明度，255为完全透明。（aiStyle 1会快速使投射物变透明。如果不使用逐渐变透明的aiStyle，请删除这一行，否则你的投射物会变得看不见）
             Projectile.light = 1f; // 投射物周围的光照强度
             Projectile.ignoreWater = false; // 投射物的速度是否受水影响？
@@ -89,7 +91,7 @@ namespace AncientGod.Projectiles.Ammo
             {
                 if (npc.active && !npc.friendly && Vector2.Distance(npc.Center, Projectile.Center) < explosionRadius)
                 {
-                    npc.SimpleStrikeNPC(10, 0, true, 0f);
+                    npc.SimpleStrikeNPC(20, 0, true, 0f);
                     // 如果需要，可以在这里添加更多效果或逻辑。
                 }
             }
@@ -111,6 +113,46 @@ namespace AncientGod.Projectiles.Ammo
                     npc.SimpleStrikeNPC(10, 0, true, 0f);
                     // 如果需要，可以在此添加更多效果或逻辑。
                 }
+            }
+
+
+            // 弹药与玩家的距离
+            float distanceToPlayer = Vector2.Distance(Projectile.Center, Main.player[Projectile.owner].Center);
+
+            // 判断是否需要开始旋转
+            if (distanceToPlayer > 400f && !isRotating)
+            {
+                isRotating = true;
+            }
+
+            if (isRotating)
+            {
+                // 弹药绕玩家旋转
+                float orbitTime = 400f; // 调整旋转周期
+                float orbitSpeed = MathHelper.TwoPi / orbitTime;
+                float angle = Projectile.ai[0]; // 使用ai[0]存储弹药的旋转角度
+                float distance = 400;
+                //float distance = WorldGen.genRand.Next(400, 700);
+
+                // 计算弹药的新位置
+                float x = Main.player[Projectile.owner].Center.X + (float)Math.Cos(angle) * distance;
+                float y = Main.player[Projectile.owner].Center.Y + (float)Math.Sin(angle) * distance;
+
+                // 设置弹药的新位置
+                Projectile.position = new Vector2(x - Projectile.width * 0.5f, y - Projectile.height * 0.5f);
+                Projectile.timeLeft = 5; // 重置生存时间
+
+                // 设置弹药的旋转角度
+                float velocityAngle = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
+                Projectile.rotation = velocityAngle + MathHelper.PiOver2; // 添加 MathHelper.PiOver2 以便进行适当的旋转
+
+                // 更新弹药的旋转角度
+                Projectile.ai[0] += orbitSpeed;
+            }
+
+            if(Projectile.velocity.X == 0 && Projectile.velocity.Y == 0)
+            {
+                Projectile.active = false;
             }
 
             // 其余现有的AI代码

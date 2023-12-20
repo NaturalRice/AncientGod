@@ -9,8 +9,10 @@ using Terraria.ModLoader;
 
 namespace AncientGod.Projectiles.Ammo
 {
-    public class FutureMechaBullet : ModProjectile
+    public class FutureMechaCirclingBullet : ModProjectile
     {
+        private bool isRotating = false;
+
         public override void SetStaticDefaults()
         {
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // 记录旧位置的长度
@@ -19,8 +21,8 @@ namespace AncientGod.Projectiles.Ammo
 
         public override void SetDefaults()
         {
-            Projectile.width = 16; // 投射物碰撞盒的宽度
-            Projectile.height = 48; // 投射物碰撞盒的高度
+            Projectile.width = 60; // 投射物碰撞盒的宽度
+            Projectile.height = 60; // 投射物碰撞盒的高度
             Projectile.aiStyle = 1; // 投射物的AI风格，请参考Terraria源代码
             Projectile.friendly = true; // 投射物能对敌人造成伤害吗？
             Projectile.hostile = false; // 投射物能对玩家造成伤害吗？
@@ -112,6 +114,39 @@ namespace AncientGod.Projectiles.Ammo
                     // 如果需要，可以在此添加更多效果或逻辑。
                 }
             }
+
+
+            /*// 弹药与玩家的距离
+            float distanceToPlayer = Vector2.Distance(Projectile.Center, Main.player[Projectile.owner].Center);
+
+            // 判断是否需要开始旋转
+            if (distanceToPlayer > 400f && !isRotating)
+            {
+                isRotating = true;
+            }
+
+            if (isRotating)
+            {
+                // 弹药绕玩家旋转
+                float orbitTime = 60f; // 调整旋转周期
+                float orbitSpeed = MathHelper.TwoPi / orbitTime;
+                float angle = Projectile.ai[0]; // 使用ai[0]存储弹药的旋转角度
+
+                // 计算弹药的新位置
+                float x = Main.player[Projectile.owner].Center.X + (float)Math.Cos(angle) * 400f;
+                float y = Main.player[Projectile.owner].Center.Y + (float)Math.Sin(angle) * 400f;
+
+                // 设置弹药的新位置
+                Projectile.position = new Vector2(x - Projectile.width * 0.5f, y - Projectile.height * 0.5f);
+                Projectile.timeLeft = 600; // 重置生存时间
+
+                // 设置弹药的旋转角度
+                float velocityAngle = (float)Math.Atan2(Projectile.velocity.Y, Projectile.velocity.X);
+                Projectile.rotation = velocityAngle + MathHelper.PiOver2; // 添加 MathHelper.PiOver2 以便进行适当的旋转
+
+                // 更新弹药的旋转角度
+                Projectile.ai[0] += orbitSpeed;
+            }*/
 
             // 其余现有的AI代码
             // ...

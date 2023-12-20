@@ -9,6 +9,9 @@ using AncientGod.Projectiles.Ammo;
 using AncientGod.Projectiles;
 using Mono.Cecil;
 using AncientGod.Projectiles.Pets.RunawayMecha;
+using Terraria.ID;
+using Terraria.DataStructures;
+using Terraria.Graphics.Shaders;
 
 namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
 {
@@ -83,7 +86,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
         }
 
 
-        public override void AI()
+        public override void AI()//大爆炸机甲能把敌人冲击开，与熵寂机甲正好相反
         {
             /*这是机械臂的主要逻辑部分。在这个方法中，机械臂的行为受到不同条件的控制，包括拥有者是否已死亡、是否激活了坐骑等。
             机械臂的位置、浮动效果和旋转角度等都在这个方法中计算和更新。
@@ -113,6 +116,39 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
                     ArmPositions.Add(new Vector3(GetIdealPosition(i), IdealPositions[i].Z));
                 }
                 Initialized = 1f;
+            }
+
+
+            foreach (Item item in Main.item)
+            {
+                if (item.Distance(Projectile.Center) < 3000f && !item.beingGrabbed)
+                {
+                    // 计算朝向玩家中心的矢量
+                    Vector2 toMecha = Owner.Center - item.Center;
+                    toMecha.Normalize();
+
+                    // 缓慢冲开掉落物
+                    float speed = 0.4f; // 调整这个速度
+                    item.velocity += -toMecha * speed / toMecha.Length();
+
+                    // 如果需要，可以在这里添加其他吸引效果
+                }
+            }
+
+            foreach (Projectile projectile in Main.projectile)
+            {
+                if (!projectile.friendly && projectile.Distance(Projectile.Center) < 3000f)
+                {
+                    // 计算朝向玩家中心的矢量
+                    Vector2 toMecha = Owner.Center - projectile.Center;
+                    toMecha.Normalize();
+
+                    // 缓慢冲开敌方敌方投射物
+                    float speed = 0.4f; // 调整这个速度
+                    projectile.velocity += -toMecha * speed / toMecha.Length();
+
+                    // 如果需要，可以在这里添加其他吸引效果
+                }
             }
 
             Vector2 idealPosition = Owner.Center + Vector2.UnitY * -60;
@@ -160,6 +196,20 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
 
                         Projectile.velocity = direction * 16f;
 
+                        // 遍历所有敌方NPC
+                        foreach (NPC npc in Main.npc)
+                        {
+                            // 判断敌方NPC是否活着且在一定范围内
+                            if (!npc.friendly && Vector2.Distance(npc.Center, Projectile.Center) < 3000f)
+                            {
+                                // 计算朝向玩家的方向向量
+                                Vector2 directionToMech = Owner.Center - npc.Center;
+
+                                // 缓慢冲开敌方NPC
+                                float speed = 0.2f; // 调整这个速度
+                                npc.velocity += -directionToMech * speed / directionToMech.Length();
+                            }
+                        }
 
 
                         // 设置投射物的旋转角度
@@ -258,7 +308,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.BigBangMecha
         }
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
-            DrawChain();
+            //DrawChain();//暂不使用
 
 
             if (ArmPositions == null)

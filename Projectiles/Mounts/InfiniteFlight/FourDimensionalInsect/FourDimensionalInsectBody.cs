@@ -879,13 +879,13 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.FourDimensionalInsect
         public Color OrangeRibbonTrailColorFunction(float completionRatio)
         {
             Color startingColor = RibbonStartColor;
-            Color endColor = new Color(219, 82, 28);
+            Color endColor = new Color(78, 0, 78);
             return Color.Lerp(startingColor, endColor, (float)Math.Pow(1 - completionRatio, 1.5D)) * 0.7f;
         }
         public Color GreenRibbonTrailColorFunction(float completionRatio)
         {
             Color startingColor = RibbonStartColor;
-            Color endColor = new Color(40, 160, 32);
+            Color endColor = new Color(78, 78, 0);
             return Color.Lerp(startingColor, endColor, (float)Math.Pow(1 - completionRatio, 1.5D)) * 0.7f;
         }
         public override bool PreDraw(ref Color lightColor)
