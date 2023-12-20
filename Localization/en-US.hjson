@@ -474,6 +474,21 @@ Mods: {
 				DisplayName: The Mad King Of Reason Trophy
 				Tooltip: ""
 			}
+
+			Refrigerant: {
+				DisplayName: Refrigerant
+				Tooltip: ""
+			}
+
+			Shadow_Corruption: {
+				DisplayName: Shadow_ Corruption
+				Tooltip: ""
+			}
+
+			Shadow_Iceland: {
+				DisplayName: Shadow_ Iceland
+				Tooltip: ""
+			}
 		}
 
 		Buffs: {
