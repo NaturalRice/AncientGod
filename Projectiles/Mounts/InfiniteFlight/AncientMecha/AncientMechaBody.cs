@@ -99,12 +99,12 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AncientMecha
             AncientGodPlayer modPlayer = Owner.GetModPlayer<AncientGodPlayer>();
             if (Owner.dead || !Owner.mount.Active)//此处添加了一个条件用来保证坐骑消失时这些投射物也会消失
                 Projectile.timeLeft = 0;
-            if (!modPlayer.BigBangMecha)
+            if (!modPlayer.AncientMecha)
             {
                 Projectile.timeLeft = 0;
                 Projectile.active = false;
             }
-            if (modPlayer.BigBangMecha && Owner.mount.Active)//当然，还要再在这里强调一遍才能达到效果
+            if (modPlayer.AncientMecha && Owner.mount.Active)//当然，还要再在这里强调一遍才能达到效果
             {
                 Projectile.timeLeft = 2;
 

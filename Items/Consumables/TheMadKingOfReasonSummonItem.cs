@@ -67,12 +67,12 @@ namespace AncientGod.Items.Consumables
             return true;
         }
 
-        public override void AddRecipes()
+        /*public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();//创建一个配方
             recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
             recipe.AddTile(TileID.Campfire);//加入合成站（这里为了有趣我改成了篝火）
             recipe.Register();
-        }
+        }*/
     }
 }

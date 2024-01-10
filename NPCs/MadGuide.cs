@@ -76,7 +76,8 @@ namespace AncientGod.NPCs
             {
                 return 0;
             }
-            return SpawnCondition.OverworldNight.Chance * 0.1f;
+            //return SpawnCondition.OverworldNight.Chance * 0.1f;
+            return SpawnCondition.OverworldNight.Chance * 1f;
         }
 
         public override void OnKill()

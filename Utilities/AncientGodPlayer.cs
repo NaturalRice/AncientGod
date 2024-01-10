@@ -269,6 +269,7 @@ namespace AncientGod
         public bool SmallBug;//这里为四维虫子的布尔值
         public bool RunawayMecha;//这里为Boss失控机甲的布尔值
         public bool RunawayTank;//这里为Boss失控坦克的布尔值
+        public bool AlmightyMecha;//这里为万能机甲的布尔值
         public bool nurex;
         public bool nreyeball;
         public float pongballposx;

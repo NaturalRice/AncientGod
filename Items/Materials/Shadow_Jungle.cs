@@ -50,7 +50,7 @@ namespace AncientGod.Items.Materials
             Recipe.Create(ItemID.LihzahrdAltar, 1)
                 .AddTile<Tiles.Shadow_Jungle>()
                 .AddIngredient<MoonDevoration>(5)
-                .AddIngredient(ItemID.BottledHoney,5)
+                .AddIngredient(ItemID.BottledHoney, 5)
                 .AddCondition(Condition.DownedQueenBee)
                 .Register();
             Recipe.Create(ItemID.LihzahrdBrick, 5)
@@ -64,5 +64,13 @@ namespace AncientGod.Items.Materials
                 .AddCondition(Condition.DownedPlantera)
                 .Register();
         }
+
+        /*public override void AddRecipes()//测试用,正常玩时注解掉
+        {
+            Recipe recipe = CreateRecipe();//创建一个配方
+            recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
+            recipe.AddTile(TileID.Campfire);//加入合成站（这里为了有趣我改成了篝火）
+            recipe.Register();
+        }*/
     }
 }

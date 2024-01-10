@@ -172,7 +172,7 @@ namespace AncientGod.Boss.RunawayMecha
             // This part is not required for a boss and is just showcasing some advanced stuff you can do with drop rules to control how items spawn
             // We make 12-15 ExampleItems spawn randomly in all directions, like the lunar pillar fragments. Hereby we need the DropOneByOne rule,
             // which requires these parameters to be defined
-            int itemType = ModContent.ItemType<ExampleItem>();
+            int itemType = ModContent.ItemType<Nanomaterial>();
             var parameters = new DropOneByOne.Parameters()
             {
                 ChanceNumerator = 1,
@@ -484,7 +484,7 @@ namespace AncientGod.Boss.RunawayMecha
             Vector2 toDestination = FirstStageDestination - NPC.Center;
             Vector2 toDestinationNormalized = toDestination.SafeNormalize(Vector2.UnitY);
             float speed = Math.Min(distance, toDestination.Length());
-            NPC.velocity = toDestinationNormalized * speed / 30;
+            NPC.velocity = toDestinationNormalized * speed / 10;
 
             if (FirstStageDestination != LastFirstStageDestination)
             {
@@ -643,9 +643,9 @@ namespace AncientGod.Boss.RunawayMecha
             {
                 return 0;
             }
-            if (NPC.AnyNPCs(ModContent.NPCType<RunawayMechaBody>()))
+            if (spawnInfo.Player.InModBiome(ModContent.GetInstance<SpaceBase>()))
             {
-                return 0;
+                return 0.2f;
             }
             //return SpawnCondition.OverworldNight.Chance * 0.9f;
             return SpawnCondition.Overworld.Chance * 0.01f;//全天候有概率生成

@@ -22,12 +22,12 @@ namespace AncientGod.Items.Mounts.InfiniteFlight
             Item.mountType = ModContent.MountType<MechaNo2>();
         }
 
-        public override void AddRecipes()
+        /*public override void AddRecipes()//暂不使用
         {
             Recipe recipe = CreateRecipe();//创建一个配方
             recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
             recipe.AddTile(TileID.Campfire);//加入合成站（这里为了有趣我改成了篝火）
             recipe.Register();
-        }
+        }*/
     }
 }

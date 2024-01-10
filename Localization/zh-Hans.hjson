@@ -33,6 +33,7 @@ Mods: {
 			// ModernMechaBulletSide.DisplayName: Modern Mecha Bullet Side
 			// FutureMechaCirclingBullet.DisplayName: Future Mecha Circling Bullet
 			// AncientMechaCirclingBullet.DisplayName: Ancient Mecha Circling Bullet
+			// AlmightyMechaBody.DisplayName: Almighty Mecha Body
 		}
 
 		NPCs: {
@@ -71,13 +72,13 @@ Mods: {
 
 		Items: {
 			SwordOfAG: {
-				// Tooltip: ""
-				// DisplayName: Sword Of A G
+				// Tooltip: 之前一直随手携带，忘了什么时候丢的，现在又捡回来了
+				// DisplayName: 远古之神的一把小破剑🗡
 			}
 
 			AncientGodAnimatedGlowmaskTileItem: {
-				// Tooltip: ""
-				// DisplayName: Ancient God Animated Glowmask Tile Item
+				// Tooltip: 月噬天塔柱
+				// DisplayName: 现在的技术力还不能使它产生什么炫酷的背景，建议你还是别浪费材料造这玩意
 			}
 
 			WasteMetal: {
@@ -92,7 +93,7 @@ Mods: {
 
 			Rubbish: {
 				// Tooltip: 城市里各种生活垃圾被回收厂压缩成的方块
-				// DisplayName: 垃圾
+				// DisplayName: 垃圾块
 			}
 
 			BasePanel: {
@@ -101,7 +102,7 @@ Mods: {
 			}
 
 			BaseEnclosure: {
-				// Tooltip: ""
+				// Tooltip: 合成太空基地家具的材料
 				// DisplayName: 太空基地外墙
 			}
 
@@ -116,53 +117,53 @@ Mods: {
 			}
 
 			AncientMechaKey: {
-				// Tooltip: ""
+				// Tooltip: 蕴含着远古时期的神力，可以使敌人发射的弹幕在接近时围绕着你旋转
 				// DisplayName: 远古机甲钥匙
 			}
 
 			Shadow_Jungle: {
-				// Tooltip: ""
-				// DisplayName: Shadow_ Jungle
+				// Tooltip: 大灾难发生前丛林地带的缩影，我们可以回到原来的美好生活......对吧？
+				// DisplayName: 丛林记忆
 			}
 
 			Shadow_Forest: {
-				// Tooltip: ""
-				// DisplayName: Shadow_ Forest
+				// Tooltip: 大灾难发生前森林地带的缩影，我们可以回到原来的美好生活......对吧？
+				// DisplayName: 森林记忆
 			}
 
 			Shadow_Desert: {
-				// Tooltip: ""
-				// DisplayName: Shadow_ Desert
+				// Tooltip: 大灾难发生前沙漠地带的缩影，我们可以回到原来的美好生活......对吧？
+				// DisplayName: 沙漠记忆
 			}
 
 			Shadow: {
-				// Tooltip: ""
-				// DisplayName: Shadow
+				// Tooltip: 大灾难发生前众多人类灵魂的残影，耳朵靠近点似乎能听见凄厉的哭声，大晚上就别把它放床头了
+				// DisplayName: 影子
 			}
 
 			MoonDevoration: {
-				// Tooltip: ""
-				// DisplayName: Moon Devoration
+				// Tooltip: 来自天界的神秘力量，有人发现发现这种东西可以启发灵智（可以增加人的智慧，也可以赋予机器AI）
+				// DisplayName: 月噬碎片
 			}
 
 			BigBangMechaKey: {
-				// DisplayName: Big Bang Mecha Key
-				// Tooltip: ""
+				// DisplayName: 大爆炸机甲钥匙
+				// Tooltip: 收集了宇宙诞生之初的爆炸力，发射出高速基本粒子，可以使敌人本身及其弹幕和掉落物在接近时被冲击到远处
 			}
 
 			EntropySilenceMechaKey: {
-				// DisplayName: Entropy Silence Mecha Key
-				// Tooltip: ""
+				// DisplayName: 熵寂机甲钥匙
+				// Tooltip: 子宇宙即将到达终点时的神秘力量，终极黑洞中不断逃逸出光子，强大的引力将吸附那些靠近的敌人本身及其弹幕和掉落物
 			}
 
 			FutureMechaKey: {
-				// DisplayName: Future Mecha Key
-				// Tooltip: ""
+				// DisplayName: 未来机甲钥匙
+				// Tooltip: 未来技术下的产物，可以使敌人本身及其弹幕和掉落物在接近时极大可能静止
 			}
 
 			ModernMechaKey: {
-				// DisplayName: Modern Mecha Key
-				// Tooltip: ""
+				// DisplayName: 现代机甲钥匙
+				// Tooltip: 恭喜你拿到了第一台机甲的钥匙，移动时同时按下F键可以加速
 			}
 
 			BigBangMechaBullet: {
@@ -176,8 +177,8 @@ Mods: {
 			}
 
 			RunawayMechaKey: {
-				// DisplayName: Runaway Mecha Key
-				// Tooltip: ""
+				// DisplayName: 失控机甲钥匙
+				// Tooltip: 在做好心理准备之前，不要轻易使用它，你不知道这会带来什么后果
 			}
 
 			BigBangMechaBulletSide: {
@@ -186,8 +187,8 @@ Mods: {
 			}
 
 			FourDimensionalInsectKey: {
-				// DisplayName: Four Dimensional Insect Key
-				// Tooltip: ""
+				// DisplayName: 四维虫子钥匙
+				// Tooltip: 穿梭于时空间的小虫子，目前似乎并未发挥出最大的潜力
 			}
 
 			SmallBugKey: {
@@ -196,192 +197,192 @@ Mods: {
 			}
 
 			NanometerFurnace: {
-				// DisplayName: Nanometer Furnace
-				// Tooltip: ""
+				// DisplayName: 纳米熔炉
+				// Tooltip: 将纳米材料熔炼成太空基地的建筑方块
 			}
 
 			BasePlatform: {
-				// DisplayName: Base Platform
+				// DisplayName: 基地平台
 				// Tooltip: ""
 			}
 
 			BaseManufacturer: {
-				// DisplayName: Base Manufacturer
+				// DisplayName: 基地工作台
 				// Tooltip: ""
 			}
 
 			BaseBathtub: {
-				// DisplayName: Base Bathtub
+				// DisplayName: 基地无菌浴盆
 				// Tooltip: ""
 			}
 
 			BaseChair: {
-				// DisplayName: Base Chair
+				// DisplayName: 基地椅子
 				// Tooltip: ""
 			}
 
 			BaseChandelier: {
-				// DisplayName: Base Chandelier
+				// DisplayName: 基地大灯
 				// Tooltip: ""
 			}
 
 			BaseChest: {
-				// DisplayName: Base Chest
+				// DisplayName: 基地箱子
 				// Tooltip: ""
 			}
 
 			BaseTable: {
-				// DisplayName: Base Table
+				// DisplayName: 基地桌子
 				// Tooltip: ""
 			}
 
 			BaseBed: {
-				// DisplayName: Base Bed
-				// Tooltip: ""
+				// DisplayName: 基地床
+				// Tooltip: 做个好梦
 			}
 
 			BaseBookshelf: {
-				// DisplayName: Base Bookshelf
-				// Tooltip: ""
+				// DisplayName: 基地书架
+				// Tooltip: 看！这里有面镜子，似乎伸手进去可以拿到书呢！
 			}
 
 			BaseDoor: {
-				// DisplayName: Base Door
+				// DisplayName: 基地门
 				// Tooltip: ""
 			}
 
 			BaseEnclosureWall: {
-				// DisplayName: Base Enclosure Wall
+				// DisplayName: 基地外壳墙
 				// Tooltip: ""
 			}
 
 			BaseEnclosureWallItem: {
-				// DisplayName: Base Enclosure Wall Item
+				// DisplayName: 基地外壳
 				// Tooltip: ""
 			}
 
 			BaseBaffle: {
-				// DisplayName: Base Baffle
+				// DisplayName: 基地挡板
 				// Tooltip: ""
 			}
 
 			BaseArmor: {
-				// DisplayName: Base Armor
+				// DisplayName: 基地护甲
 				// Tooltip: ""
 			}
 
 			BasePinkBlock: {
-				// DisplayName: Base Pink Block
+				// DisplayName: 基地粉色方块
 				// Tooltip: ""
 			}
 
 			BaseLightBlueBlock: {
-				// DisplayName: Base Light Blue Block
+				// DisplayName: 基地淡蓝色方块
 				// Tooltip: ""
 			}
 
 			BaseYellowBlock: {
-				// DisplayName: Base Yellow Block
+				// DisplayName: 基地黄色方块
 				// Tooltip: ""
 			}
 
 			BaseBracket: {
-				// DisplayName: Base Bracket
+				// DisplayName: 基地支架
 				// Tooltip: ""
 			}
 
 			BaseDarkPanel: {
-				// DisplayName: Base Dark Panel
+				// DisplayName: 基地暗色镶板
 				// Tooltip: ""
 			}
 
 			BaseGlass: {
-				// DisplayName: Base Glass
+				// DisplayName: 基地镶板
 				// Tooltip: ""
 			}
 
 			BaseSkeleton: {
-				// DisplayName: Base Skeleton
+				// DisplayName: 基地承重架
 				// Tooltip: ""
 			}
 
 			BaseArmorWallItem: {
-				// DisplayName: Base Armor Wall Item
+				// DisplayName: 基地护甲墙
 				// Tooltip: ""
 			}
 
 			BaseBaffleWall: {
-				// DisplayName: Base Baffle Wall
+				// DisplayName: 基地挡板墙
 				// Tooltip: ""
 			}
 
 			BaseDarkPanelWallItem: {
-				// DisplayName: Base Dark Panel Wall Item
+				// DisplayName: 基地暗色镶板墙
 				// Tooltip: ""
 			}
 
 			BaseGlassWallItem: {
-				// DisplayName: Base Glass Wall Item
+				// DisplayName: 基地玻璃墙
 				// Tooltip: ""
 			}
 
 			BaseLightBlueBlockWallItem: {
-				// DisplayName: Base Light Blue Block Wall Item
+				// DisplayName: 基地淡蓝色方块墙
 				// Tooltip: ""
 			}
 
 			BasePanelWallItem: {
-				// DisplayName: Base Panel Wall Item
+				// DisplayName: 基地镶板墙
 				// Tooltip: ""
 			}
 
 			BasePinkBlockWallItem: {
-				// DisplayName: Base Pink Block Wall Item
+				// DisplayName: 基地粉色方块墙
 				// Tooltip: ""
 			}
 
 			BaseSkeletonWallItem: {
-				// DisplayName: Base Skeleton Wall Item
+				// DisplayName: 基地承重架墙
 				// Tooltip: ""
 			}
 
 			BaseYellowBlockWallItem: {
-				// DisplayName: Base Yellow Block Wall Item
+				// DisplayName: 基地黄色方块墙
 				// Tooltip: ""
 			}
 
 			BaseLantern: {
-				// DisplayName: Base Lantern
+				// DisplayName: 基地顶灯
 				// Tooltip: ""
 			}
 
 			BaseLamp: {
-				// DisplayName: Base Lamp
+				// DisplayName: 基地地灯
 				// Tooltip: ""
 			}
 
 			BaseBlueprint: {
-				// DisplayName: Base Blueprint
-				// Tooltip: ""
+				// DisplayName: 基地显示屏
+				// Tooltip: 里面是什么B动静？
 			}
 
 			RubbishWallItem: {
-				// DisplayName: Rubbish Wall Item
+				// DisplayName: 垃圾块墙
 				// Tooltip: ""
 			}
 
 			WasteConcreteWallItem: {
-				// DisplayName: Waste Concrete Wall Item
+				// DisplayName: 废弃混凝土墙
 				// Tooltip: ""
 			}
 
 			WasteMetalWallItem: {
-				// DisplayName: Waste Metal Wall Item
+				// DisplayName: 废铜烂铁墙
 				// Tooltip: ""
 			}
 
 			RunawayTankKey: {
-				// DisplayName: Runaway Tank Key
+				// DisplayName: 失控坦克钥匙
 				// Tooltip: ""
 			}
 
@@ -421,27 +422,27 @@ Mods: {
 			}
 
 			RunawayMechaMask: {
-				// DisplayName: Runaway Mecha Mask
+				// DisplayName: 失控机甲面具
 				// Tooltip: ""
 			}
 
 			RunawayMechaBag: {
-				// DisplayName: Runaway Mecha Bag
+				// DisplayName: 失控机甲礼包
 				// Tooltip: ""
 			}
 
 			RunawayMechaSummonItem: {
-				// DisplayName: Runaway Mecha Summon Item
+				// DisplayName: 失控机甲钥匙
 				// Tooltip: ""
 			}
 
 			RunawayMechaRelic: {
-				// DisplayName: Runaway Mecha Relic
+				// DisplayName: 失控机甲圣物
 				// Tooltip: ""
 			}
 
 			RunawayMechaTrophy: {
-				// DisplayName: Runaway Mecha Trophy
+				// DisplayName: 失控机甲纪念章
 				// Tooltip: ""
 			}
 
@@ -476,17 +477,32 @@ Mods: {
 			}
 
 			Refrigerant: {
-				// DisplayName: Refrigerant
+				// DisplayName: 制冷剂
 				// Tooltip: ""
 			}
 
 			Shadow_Corruption: {
-				// DisplayName: Shadow_ Corruption
-				// Tooltip: ""
+				// DisplayName: 腐化之地记忆
+				// Tooltip: 大灾难发生前森林地带的缩影，我们可以回到原来的...呃，这个确定也要回来吗？😓
 			}
 
 			Shadow_Iceland: {
-				// DisplayName: Shadow_ Iceland
+				// DisplayName: 冰原记忆
+				// Tooltip: 大灾难发生前丛林地带的缩影，我们可以回到原来的美好生活......对吧？
+			}
+
+			Nanomaterial: {
+				// DisplayName: 纳米材料
+				// Tooltip: 合成机甲和太空基地建材的重要材料
+			}
+
+			BaseBaffleWallItem: {
+				// DisplayName: 基地挡板墙
+				// Tooltip: ""
+			}
+
+			AlmightyMechaKey: {
+				// DisplayName: Almighty Mecha Key
 				// Tooltip: ""
 			}
 		}
@@ -503,28 +519,28 @@ Mods: {
 			}
 
 			AncientMechaBuff: {
-				// Description: Mods.AncientGod.Buffs.AncientMechaBuff.Description
-				// DisplayName: Ancient Mecha Buff
+				// Description: 受到了远古的神力赋予，周围攻击你的弹幕将如同星系般围绕着你
+				// DisplayName: 远古机甲
 			}
 
 			BigBangMechaBuff: {
-				// DisplayName: Big Bang Mecha Buff
-				// Description: Mods.AncientGod.Buffs.BigBangMechaBuff.Description
+				// DisplayName: 大爆炸机甲
+				// Description: 我们是谁？我们从哪里来？我们要到哪里去？
 			}
 
 			EntropySilenceMechaBuff: {
-				// DisplayName: Entropy Silence Mecha Buff
-				// Description: Mods.AncientGod.Buffs.EntropySilenceMechaBuff.Description
+				// DisplayName: 熵寂机甲
+				// Description: 万物皆奇迹，乃至黑暗与寂静...我已懂得，无论境遇，泰然处之
 			}
 
 			FutureMechaBuff: {
-				// DisplayName: Future Mecha Buff
-				// Description: Mods.AncientGod.Buffs.FutureMechaBuff.Description
+				// DisplayName: 未来机甲
+				// Description: 未来深不可测，或许明天可以
 			}
 
 			ModernMechaBuff: {
-				// DisplayName: Modern Mecha Buff
-				// Description: Mods.AncientGod.Buffs.ModernMechaBuff.Description
+				// DisplayName: 现代机甲
+				// Description: 现在，闭上眼睛回想一下昔日原本还很弱小的你成天被那些怪物打得遍体鳞伤的日子，然后，驾驶这台机甲去大杀四方吧！看着那些杂碎在你的狂轰滥炸下血肉横飞，到处充满着残肢断臂，那一定很爽！对吧？
 			}
 
 			RunawayMechaPetBuff: {
@@ -533,8 +549,8 @@ Mods: {
 			}
 
 			FourDimensionalInsectBuff: {
-				// DisplayName: Four Dimensional Insect Buff
-				// Description: Mods.AncientGod.Buffs.FourDimensionalInsectBuff.Description
+				// DisplayName: 四维虫子
+				// Description: 事情逐渐变得抽象起来
 			}
 
 			SmallBugBuff: {
@@ -546,19 +562,24 @@ Mods: {
 				// DisplayName: Minion Boss Pet Buff
 				// Description: Mods.AncientGod.Buffs.MinionBossPetBuff.Description
 			}
+
+			AlmightyMechaBuff: {
+				// DisplayName: Almighty Mecha Buff
+				// Description: Mods.AncientGod.Buffs.AlmightyMechaBuff.Description
+			}
 		}
 
 		// WorldGen.WorldGenTMessage: Mods.AncientGod.WorldGen.WorldGenTMessage
 
 		Biomes: {
 			WasteLand: {
-				// TownNPCDialogueName: the Waste Land
-				// DisplayName: Waste Land
+				// TownNPCDialogueName: 废墟
+				// DisplayName: 废墟
 			}
 
 			SpaceBase: {
-				// DisplayName: Space Base
-				// TownNPCDialogueName: the Space Base
+				// DisplayName: 太空基地
+				// TownNPCDialogueName: 太空基地
 			}
 		}
 

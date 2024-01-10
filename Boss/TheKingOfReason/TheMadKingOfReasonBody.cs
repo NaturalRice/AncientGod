@@ -210,7 +210,7 @@ namespace AncientGod.Boss.TheKingOfReason
             // This part is not required for a boss and is just showcasing some advanced stuff you can do with drop rules to control how items spawn
             // We make 12-15 ExampleItems spawn randomly in all directions, like the lunar pillar fragments. Hereby we need the DropOneByOne rule,
             // which requires these parameters to be defined
-            int itemType = ModContent.ItemType<ExampleItem>();
+            int itemType = ModContent.ItemType<Nanomaterial>();
             var parameters = new DropOneByOne.Parameters()
             {
                 ChanceNumerator = 1,

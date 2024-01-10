@@ -41,7 +41,7 @@ namespace AncientGod.Items.Materials
                 .AddTile<Tiles.Shadow_Corruption>()
                 .AddIngredient<MoonDevoration>(20)
                 .Register();
-            Recipe.Create(ItemID.CorruptSeeds,1)
+            Recipe.Create(ItemID.CorruptSeeds, 1)
                 .AddTile(TileID.WorkBenches)
                 .AddIngredient<MoonDevoration>(20)
                 .AddIngredient<Shadow>(2)
@@ -49,7 +49,7 @@ namespace AncientGod.Items.Materials
             Recipe.Create(ItemID.SuspiciousLookingEye, 1)
                 .AddTile<Tiles.Shadow_Corruption>()
                 .AddIngredient<MoonDevoration>(10)
-                .AddIngredient(ItemID.Lens,6)
+                .AddIngredient(ItemID.Lens, 6)
                 .Register();
             Recipe.Create(ItemID.SuspiciousLookingEye, 1)
                 .AddTile<Tiles.Shadow_Corruption>()
@@ -62,5 +62,13 @@ namespace AncientGod.Items.Materials
                 .AddIngredient(ItemID.Lens, 6)
                 .Register();
         }
+
+        /*public override void AddRecipes()//测试用,正常玩时注解掉
+        {
+            Recipe recipe = CreateRecipe();//创建一个配方
+            recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
+            recipe.AddTile(TileID.Campfire);//加入合成站（这里为了有趣我改成了篝火）
+            recipe.Register();
+        }*/
     }
 }

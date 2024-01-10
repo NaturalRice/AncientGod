@@ -115,7 +115,7 @@ namespace AncientGod.Projectiles.Ammo
             // 循环遍历所有NPC
             foreach (NPC npc in Main.npc)
             {
-                // 检查NPC是否活跃、非友好，并且与投射物的碰撞框相交
+                // 检查NPC是否活跃、友好，并且与投射物的碰撞框相交
                 if (npc.active && !npc.friendly && npc.Hitbox.Intersects(Projectile.Hitbox))
                 {
                     // 对NPC造成伤害,伤害为100

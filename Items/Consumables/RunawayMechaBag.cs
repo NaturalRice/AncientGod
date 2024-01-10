@@ -1,6 +1,7 @@
 ﻿using AncientGod.Boss.MinionBoss;
 using AncientGod.Boss.RunawayMecha;
 using AncientGod.Items.Armor.Vanity;
+using AncientGod.Items.Mounts.InfiniteFlight.ModernMecha;
 using Terraria;
 using Terraria.GameContent.ItemDropRules;
 using Terraria.ID;
@@ -42,7 +43,8 @@ namespace AncientGod.Items.Consumables
             // We have to replicate the expert drops from MinionBossBody here
 
             itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<RunawayMechaMask>(), 7));
-            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ExampleItem>(), 1, 12, 16));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Nanomaterial>(), 1, 100, 150));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ModernMechaKey>(), 100, 1, 1));
             itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<RunawayMechaBody>()));
         }
     }

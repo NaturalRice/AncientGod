@@ -4,6 +4,7 @@ using Terraria.ModLoader;
 using AncientGod;
 using AncientGod.Items.Tiles;
 
+
 namespace AncientGod.Items.Placeables.SpaceBase.Walls
 {
     public class BaseArmorWallItem : ModItem
@@ -30,16 +31,17 @@ namespace AncientGod.Items.Placeables.SpaceBase.Walls
         /*public override void AddRecipes()
         {
             ModRecipe recipe = new ModRecipe(mod);
-            recipe.AddIngredient(ModContent.ItemType<PhantowaxBlock>());
+            recipe.AddIngredient(ModContent.ItemType<BaseArmor>(), 1);
             recipe.AddTile(TileID.WorkBenches);
-            recipe.SetResult(this, 4);
+            recipe.SetResult(this, 4);//目前不知道如何将结果设置为4个
             recipe.AddRecipe();
         }*/
+
         public override void AddRecipes()//测试用,正常玩时注解掉
         {
             Recipe recipe = CreateRecipe();//创建一个配方
-            recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
-            recipe.AddTile(TileID.Campfire);//加入合成站（这里为了有趣我改成了篝火）
+            recipe.AddIngredient(ModContent.ItemType<BaseArmor>(), 1);//加入材料
+            recipe.AddTile(ModContent.TileType<Tiles.Furniture.BaseManufacturer>());//加入合成站：基地工作台
             recipe.Register();
         }
     }

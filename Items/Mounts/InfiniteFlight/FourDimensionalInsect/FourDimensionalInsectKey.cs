@@ -4,6 +4,12 @@ using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria.DataStructures;
+using AncientGod.Items.Mounts.InfiniteFlight.BigBangMecha;
+using AncientGod.Items.Mounts.InfiniteFlight.AncientMecha;
+using AncientGod.Items.Mounts.InfiniteFlight.ModernMecha;
+using AncientGod.Items.Mounts.InfiniteFlight.FutureMecha;
+using AncientGod.Items.Mounts.InfiniteFlight.EntropySilenceMecha;
+using AncientGod.Items.Weapons;
 
 namespace AncientGod.Items.Mounts.InfiniteFlight.FourDimensionalInsect
 {
@@ -61,8 +67,14 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.FourDimensionalInsect
         public override void AddRecipes()
         {
             Recipe recipe = CreateRecipe();//创建一个配方
-            recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
-            recipe.AddTile(TileID.Campfire);//加入合成站（这里为了有趣我改成了篝火）
+            recipe.AddIngredient(ModContent.ItemType<BigBangMechaKey>(), 1);//加入材料
+            recipe.AddIngredient(ModContent.ItemType<AncientMechaKey>(), 1);//加入材料
+            recipe.AddIngredient(ModContent.ItemType<ModernMechaKey>(), 1);//加入材料
+            recipe.AddIngredient(ModContent.ItemType<FutureMechaKey>(), 1);//加入材料
+            recipe.AddIngredient(ModContent.ItemType<EntropySilenceMechaKey>(), 1);//加入材料
+            recipe.AddIngredient(ModContent.ItemType<Nanomaterial>(), 9999);//加入材料
+            recipe.AddIngredient(ModContent.ItemType<SwordOfAG>(), 1);//加入材料
+            recipe.AddTile(ModContent.TileType<Tiles.Furniture.BaseManufacturer>());//加入合成站：基地工作台
             recipe.Register();
         }
     }

@@ -41,7 +41,7 @@ namespace AncientGod.Items.Consumables
             // We have to replicate the expert drops from MinionBossBody here
 
             itemLoot.Add(ItemDropRule.NotScalingWithLuck(ModContent.ItemType<TheMadKingOfReasonMask>(), 7));
-            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<ExampleItem>(), 1, 12, 16));
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<Nanomaterial>(), 1, 12, 16));
             itemLoot.Add(ItemDropRule.CoinsBasedOnNPCValue(ModContent.NPCType<TheMadKingOfReasonBody>()));
         }
     }

@@ -84,8 +84,8 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
             if (distanceSquared < distanceThresholdSquared || distanceSquared1 < distanceThresholdSquared || distanceSquared2 < distanceThresholdSquared)
             //Math.Pow 接受两个参数，第一个是底数，第二个是指数，返回底数的指数次幂
             {
-                // 这里可以根据需要调整伤害值
-                int damage = 50;
+                // 这里可以根据需要调整伤害值(目前暂无伤害）
+                int damage = 0;
                 // 在这里扣除玩家的生命值
                 Owner.Hurt(PlayerDeathReason.ByCustomReason(Owner.name + " 被失控机甲整自闭了,十分甚至九分地自闭 "), damage, -10);
             }
@@ -168,7 +168,7 @@ namespace AncientGod.Projectiles.Pets.RunawayMecha
 
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
-            DrawChain();//链条暂时未使用
+            //DrawChain();//链条暂时未使用
 
 
             if (ArmPositions == null)

@@ -1,4 +1,5 @@
-﻿using AncientGod.Content.Dusts;
+﻿using AncientGod.Biomes;
+using AncientGod.Content.Dusts;
 using AncientGod.Content.EmoteBubbles;
 using AncientGod.Items;
 using AncientGod.Items.Weapons;
@@ -166,7 +167,11 @@ namespace AncientGod.Boss.TheKingOfReason
             }*/
 
             //Else, the example bone merchant will not spawn if the above conditions are not met.
-            return 1f;
+            if (spawnInfo.Player.InModBiome(ModContent.GetInstance<SpaceBase>()))
+            {
+                return 1f;
+            }
+            return 0f;
         }
 
         public override string GetChat()
@@ -196,7 +201,9 @@ namespace AncientGod.Boss.TheKingOfReason
         public override void AddShops()
         {
             new NPCShop(Type)
-                .Add<ExampleItem>()
+                .Add<Nanomaterial>()
+                .Add<Items.Placeables.Furniture.NanometerFurnace>()
+                .Add<Items.Placeables.Furniture.BaseManufacturer>()
                 .Register();
         }
 

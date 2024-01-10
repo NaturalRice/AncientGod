@@ -37,7 +37,7 @@ namespace AncientGod.Biomes
 		b3: 检查玩家是否在天空高度或地表高度上。这可能是为了确保生态群系主要活跃在地表和天空。*/
         public override bool IsBiomeActive(Player player)
         {
-            bool b1 = ModContent.GetInstance<BaseTileCounts>().BaseTileCount >= 50;
+            bool b1 = ModContent.GetInstance<BaseTileCounts>().BaseTileCount >= 100;
 
             return b1;
         }

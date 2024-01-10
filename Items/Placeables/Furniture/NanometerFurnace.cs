@@ -29,6 +29,7 @@ namespace AncientGod.Items.Placeables.Furniture
             Item.width = 48;
             Item.height = 32;
             Item.rare = 2;
+            Item.value = Item.buyPrice(10, 0, 0, 0);
         }
 
         public override void ModifyTooltips(List<TooltipLine> tooltips)
@@ -50,12 +51,12 @@ namespace AncientGod.Items.Placeables.Furniture
                 }
             }
         }
-        public override void AddRecipes()//测试用,正常玩时注解掉
+        /*public override void AddRecipes()//测试用,正常玩时注解掉
         {
             Recipe recipe = CreateRecipe();//创建一个配方
             recipe.AddIngredient(ItemID.Torch, 1);//加入材料（1火把）
             recipe.AddTile(TileID.Campfire);//加入合成站（这里为了有趣我改成了篝火）
             recipe.Register();
-        }
+        }*/
     }
 }
