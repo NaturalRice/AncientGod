@@ -138,6 +138,103 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             {
                 player.velocity.X = 0;
             }
+            // 检查左右移动键和上下移动键
+            CheckHorizontalMovement1(player);
+            CheckHorizontalMovement2(player);
+        }
+        private void CheckHorizontalMovement1(Player player)
+        {
+            int direction = 0;
+
+            if (player.controlLeft)
+            {
+                direction = -1;
+            }
+            else if (player.controlRight)
+            {
+                direction = 1;
+            }
+
+            if (direction != 0)
+            {
+                // 如果这次按键和上一次按键之间的时间间隔小于阈值，加速坐骑的水平速度
+                /*if (Environment.TickCount - lastMoveKeyPressed < DoubleTapThreshold)
+                {
+                    player.velocity.X = 34f * direction; // 假设加速的速度为34
+                }
+                else
+                {
+                    player.velocity.X = 17f * direction; // 否则使用正常速度
+                }*/
+
+                if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F))//目前条件为按下F即可加速
+                {
+                    player.velocity.X = 34f * direction; // 假设加速的速度为34
+                }
+                else
+                {
+                    player.velocity.X = 17f * direction; // 否则使用正常速度
+                }
+
+                player.runAcceleration = 20f;
+                horizontalDirection = direction;
+                player.direction = horizontalDirection;
+
+                // 记录当前按键的时间戳
+                lastMoveKeyPressed = Environment.TickCount;
+            }
+            else
+            {
+                // 如果没有按下左右键，减小水平速度
+                player.velocity.X *= 0.85f;
+            }
+        }
+        private void CheckHorizontalMovement2(Player player)
+        {
+            int direction = 0;
+
+            if (player.controlUp || Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space))
+            {
+                direction = -1;
+            }
+            else if (player.controlDown)
+            {
+                direction = 1;
+            }
+
+            if (direction != 0)
+            {
+                // 如果这次按键和上一次按键之间的时间间隔小于阈值，加速坐骑的水平速度
+                /*if (Environment.TickCount - lastMoveKeyPressed < DoubleTapThreshold)
+                {
+                    player.velocity.Y = 34f * direction; // 假设加速的速度为34
+                }
+                else
+                {
+                    player.velocity.Y = 17f * direction; // 否则使用正常速度
+                }*/
+
+                if (Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F))//目前条件为按下F即可加速
+                {
+                    player.velocity.Y = 34f * direction; // 假设加速的速度为34
+                }
+                else
+                {
+                    player.velocity.Y = 17f * direction; // 否则使用正常速度
+                }
+
+                player.runAcceleration = 20f;
+                horizontalDirection = direction;
+                player.direction = horizontalDirection;
+
+                // 记录当前按键的时间戳
+                lastMoveKeyPressed = Environment.TickCount;
+            }
+            else
+            {
+                // 如果没有按下左右键，减小垂直速度
+                player.velocity.Y *= 0.85f;
+            }
         }
     }
 }

@@ -25,11 +25,11 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
         //A list of the ideal positions for each arm. The first 2 variables of the Vector2 represent the relative position of the arm to the body and the last variable represents the rotation of the hand
         internal readonly List<Vector3> IdealPositions = new List<Vector3>()//一个列表，其中包含了四个Vector3元素，每个元素表示一个机械臂的理想位置。这些位置包括相对于机械臂中心的X和Y偏移，以及手的旋转角度
         {
-            new Vector3(-170f, 50f, MathHelper.ToRadians(240)), //Top left arm  此处调整四个大臂的位置
-            new Vector3(-260f, 260f, MathHelper.ToRadians(270)), //Bottom left arm
+            new Vector3(-460f, -100f, MathHelper.ToRadians(240)), //Top left arm  此处调整四个大臂的位置,所有机械臂零件的位置若需变动，从此处开始调整
+            new Vector3(-400f, 90f, MathHelper.ToRadians(270)), //Bottom left arm
             
-            new Vector3(260f, 260f, MathHelper.ToRadians(270)), //Bottom right arm
-            new Vector3(170f, 50f, MathHelper.ToRadians(300)) //Top right arm
+            new Vector3(400f, 90f, MathHelper.ToRadians(270)), //Bottom right arm
+            new Vector3(460f, -100f, MathHelper.ToRadians(300)) //Top right arm
         };
 
         private Vector2 GetIdealPosition(int i) => Projectile.Center + new Vector2(IdealPositions[i].X, IdealPositions[i].Y);
@@ -129,16 +129,22 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                     //vector2position 用于确定机械臂的位置，即机械臂的上部（臂部）的位置。这个位置是根据理想位置、浮动效果和其他变化因素计算出来的。
                     //vector2position 在接下来的计算中用于控制机械臂的位置，并使其在上下浮动以及跟踪鼠标光标时具有平滑的运动效果。这有助于模拟机械臂的运动和定位。
 
+                    //这里Lerp方法的第一个变量表示机械臂朝向目标坐标,并且加入了鼠标位置作为影响机械臂位置的又一因素
+                    if (Main.mouseLeft)
+                    {
+                        //这个效果要不要加，会不会过于夸张？
+                        /*if((Main.MouseWorld - Owner.position).Length() <= 600f)
+                        {
+                            vector2position = Main.MouseWorld + BobVector;
+                        }*/
+                        vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f) + (Main.MouseWorld - Projectile.Center) * 0.05f + BobVector;
+                    }
+                    else
+                    {
+                        vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f) + (Main.MouseWorld - Projectile.Center) * 0.01f + BobVector;
+                    }                   
 
-                    //vector2position = Vector2.Lerp(vector2position, idealArmPosition, 0.2f) + BobVector;//如果机械臂相对位置摆动得太逆天，可能要禁用这个动画效果
-                    vector2position = Vector2.Lerp(vector2position, idealArmPosition, 1f);//手部位置鬼畜的问题出在这里的Lerp函数；经过多次测试，目前此数值0.6最适合
-
-                    //Make the cannon look at the mouse cursor if its close enough
-
-                    //armPosition.Z = Utils.AngleLerp(armPosition.Z, IdealPositions[i].Z, MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 1000f, 0, 1));
-
-                    armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Main.MouseWorld).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 1000f, 0, 1));
-                    //两个armPosition.Z都是必要的，后者用于在鼠标靠近时瞄准鼠标，前者用于鼠标远离时重新指向地面
+                    armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Main.MouseWorld).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 2000f, 0, 1));
 
                     ArmPositions[i] = new Vector3(vector2position, armPosition.Z);
 
@@ -154,7 +160,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                         Vector2 direction = targetNPC.Center - Projectile.position;
 
                         //这里是否加入手部摆动效果？或许要改良一下
-                        armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - direction).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 1000f, 0, 1));
+                        armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - direction).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 2000f, 0, 1));
 
                         direction.Normalize();
 
@@ -179,56 +185,20 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                                 // 发射弹药
                                 for (int j = 0; j < 1; j++) // 你可以根据需要发射多个弹药（这里不是间隔的连射，而是一次性射多少弹药）
                                 {
-                                    direction = targetNPC.Center - (Projectile.position + Vector2.UnitX * 170 + Vector2.UnitY * 150);
+                                    direction = Main.MouseWorld - new Vector2(ArmPositions[i].X, ArmPositions[i].Y);
                                     shootAngle = direction.ToRotation();
                                     Vector2 shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f; // 这里示例为向右发射(底下是发射源的定义），瞄准方向
-                                    int newProjectile11 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 170 + Vector2.UnitY * 150, shotVelocity, ModContent.ProjectileType<ModernMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
-                                    int newProjectile12 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 170 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
-                                    int newProjectile13 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 170 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
-                                    direction = targetNPC.Center - (Projectile.position - Vector2.UnitX * 140 + Vector2.UnitY * 50);
-                                    shootAngle = direction.ToRotation();
-                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
-                                    int newProjectile21 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 140 + Vector2.UnitY * 50, shotVelocity, ModContent.ProjectileType<ModernMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左上
-                                    int newProjectile22 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 140 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左上
-                                    int newProjectile23 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 140 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左上
-                                    direction = targetNPC.Center - (Projectile.position + Vector2.UnitX * 195 + Vector2.UnitY * 50);
-                                    shootAngle = direction.ToRotation();
-                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
-                                    int newProjectile31 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 195 + Vector2.UnitY * 50, shotVelocity, ModContent.ProjectileType<ModernMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右上
-                                    int newProjectile32 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 195 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右上
-                                    int newProjectile33 = Projectile.NewProjectile(null, Projectile.position + Vector2.UnitX * 195 + Vector2.UnitY * 50, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右上
-                                    direction = targetNPC.Center - (Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150);
-                                    shootAngle = direction.ToRotation();
-                                    shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f;
-                                    int newProjectile41 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, shotVelocity, ModContent.ProjectileType<ModernMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
-                                    int newProjectile42 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
-                                    int newProjectile43 = Projectile.NewProjectile(null, Projectile.position - Vector2.UnitX * 120 + Vector2.UnitY * 150, Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//左下
+                                    int newProjectile11 = Projectile.NewProjectile(null, new Vector2(ArmPositions[i].X, ArmPositions[i].Y), shotVelocity, ModContent.ProjectileType<ModernMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
+                                    int newProjectile12 = Projectile.NewProjectile(null, new Vector2(ArmPositions[i].X, ArmPositions[i].Y), Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
+                                    int newProjectile13 = Projectile.NewProjectile(null, new Vector2(ArmPositions[i].X, ArmPositions[i].Y), Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
+
                                     //这里四个机关炮的准心有一定差别
                                     Main.projectile[newProjectile11].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile12].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile13].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile21].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile22].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile23].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile31].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile32].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile33].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile41].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile42].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile43].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile11].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile12].netUpdate = true;//是否将投射物的信息同步到其他客户端
                                     Main.projectile[newProjectile13].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile21].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile22].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile23].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile31].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile32].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile33].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile41].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile42].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile43].netUpdate = true;//是否将投射物的信息同步到其他客户端
-
 
                                     shootAngle += MathHelper.PiOver4; // 增加弹药之间的间隔角度
                                 }
@@ -236,7 +206,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                                 Projectile.localAI[0] = 0f;//为了连射
 
                                 // 重置冷却计时器
-                                fireCooldown = 30f; // 设置为你想要的冷却时间（间隔时间0.5秒）
+                                fireCooldown = 10f; // 设置为你想要的冷却时间（间隔时间0.5秒）
                             }
                         }
                         else
@@ -247,7 +217,9 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                     }
                     else
                     {
-                        // 当没有目标时，保持静止
+                        // 当没有目标时，保持静止且瞄准鼠标
+                        armPosition.Z = Utils.AngleLerp(armPosition.Z, (vector2position - Main.MouseWorld).ToRotation(), 1 - MathHelper.Clamp((Main.MouseWorld - vector2position).Length() / 2000f, 0, 1));
+
                         Projectile.velocity = Vector2.Zero;
                         Projectile.localAI[0] = 0f; // 重置发射标记
                     }
@@ -259,9 +231,6 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
         }
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
-            //DrawChain();//暂不使用
-
-
             if (ArmPositions == null)
                 return true;
 
@@ -296,6 +265,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
         public void DrawSingleArm(Texture2D handTex, Vector2 handPosition, float rotation, Vector2 offset, bool top, bool infernum = false)
         {
+            
             //用于绘制机械臂的各个部分，包括上臂、下臂和手部。
             //这里，handPosition 是通过 Projectile.Center（机械臂的中心）加上 position 乘以一个缩放系数来确定的。
             //handPosition 用于确定机械臂的手部位置，也就是机械臂的手部的坐标。
@@ -303,7 +273,8 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             这个值的改变可以影响手部的距离，使它更接近或更远离机械臂中心。*/
             Vector2 position = handPosition - Projectile.Center;
             bool flipped = Math.Sign(position.X) != -1;
-
+            //绘制贴图
+            Texture2D chainTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaChain").Value;
             Texture2D armTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaArm").Value;//大臂
             Texture2D forearmTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaForearm").Value;//小臂
             Texture2D elbowTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaElbow").Value;//肘部
@@ -311,55 +282,45 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             Texture2D wristTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaWrist").Value;//肩膀
             Texture2D thrusterTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaThruster").Value;//推进器
 
+            //Frame后缀表示贴图起始的绘制坐标与宽高，不同部位共用同一贴图的才需要此变量
             Rectangle armFrame = new Rectangle(0, top ? 0 : 80, armTex.Width, 80);
             Rectangle handFrame = new Rectangle(0, infernum ? 40 : 0, 90, 56);
 
-            Vector2 armOrigin = new Vector2(flipped ? 0 : armFrame.Width, armFrame.Height / 3);//这里由除2改成除3
-            Vector2 forearmOrigin = new Vector2(flipped ? 0 : forearmTex.Width, forearmTex.Height);//这里去掉除2
-            Vector2 elbowOrigin = new Vector2(flipped ? 0 : elbowTex.Width, elbowTex.Height);
-            Vector2 shoulderOrigin = new Vector2(flipped ? 0 : shoulderTex.Width, shoulderTex.Height);
+            //Origin后缀表示旋转中心
+            Vector2 armOrigin = new Vector2(flipped ? 0 : armFrame.Width, armFrame.Height / 2);
+            Vector2 forearmOrigin = new Vector2(flipped ? 0 : forearmTex.Width, forearmTex.Height / 2);
+            Vector2 elbowOrigin = new Vector2(elbowTex.Width / 2, elbowTex.Height / 2);
+            Vector2 shoulderOrigin = new Vector2(shoulderTex.Width / 2, shoulderTex.Height / 2);
             Vector2 wristOrigin = new Vector2(flipped ? 0 : wristTex.Width, wristTex.Height);
             Vector2 thrusterOrigin = new Vector2(thrusterTex.Width / 2, thrusterTex.Height / 2);
             Vector2 handOrigin = new Vector2(flipped ? 50 : 40, 28); //手部旋转中心
 
-            Vector2 armPosition = Projectile.Center + position * 0.1f;
-
+            //Position后缀表示贴图位置
+            Vector2 armPosition = top ? Projectile.Center + position * 0.2f + (flipped ? Vector2.UnitX * 10 : -Vector2.UnitX * 10) + Vector2.UnitY * 10 : Projectile.Center + position * 0.2f
+                    + (flipped ? Vector2.UnitX * 10 : -Vector2.UnitX * 10) + Vector2.UnitY * 50;//上下方大臂是不同的摆放逻辑
+            Vector2 shoulderPosition = top ? Projectile.Center + position * 0.2f + (flipped ? Vector2.UnitX * 30 : -Vector2.UnitX * 30) - Vector2.UnitY * 30 : Projectile.Center + position * 0.2f 
+                    + (flipped ? Vector2.UnitX * 20 : -Vector2.UnitX * 20) + Vector2.UnitY * 50;//上下方肩膀也是不同的摆放逻辑;
             //Do some trigonometry to get the elbow position
-
-            float armLenght = 175;
+            float armLenght = 275;
             float directLenght = MathHelper.Clamp((handPosition - armPosition).Length(), 0, armLenght); //Clamp the direct lenght to avoid getting an error from trying to calculate the square root of a negative number
             float elbowElevation = (float)Math.Sqrt(Math.Pow(armLenght / 2f, 2) - Math.Pow(directLenght / 2f, 2));
-            Vector2 elbowPosition = Vector2.Lerp(handPosition, armPosition, 0.5f) + Utils.SafeNormalize(position, Vector2.Zero).RotatedBy(-MathHelper.PiOver2 * Math.Sign(position.X)) * elbowElevation;
+            //Pow函数：返回指定数字的倒数的估计值。
+            Vector2 elbowPosition = Vector2.Lerp(handPosition, armPosition, 0.7f) + Utils.SafeNormalize(position, Vector2.Zero).RotatedBy(-MathHelper.PiOver2 * Math.Sign(position.X)) * elbowElevation;
+            //上面Lerp函数中第三个浮点数越大，小臂越靠近大臂
 
-            float armAngle = top ? (elbowPosition - armPosition).ToRotation() : (elbowPosition - armPosition + Vector2.UnitY * 80).ToRotation();
-            float forearmAngle = (handPosition - elbowPosition + Vector2.UnitY * 80).ToRotation();
-            float elbowAngle = (elbowPosition + Vector2.UnitY * 0).ToRotation();
-            float shoulderAngle = (elbowPosition + Vector2.UnitY * 0).ToRotation();
-            float wristAngle = 0;
-            float thrusterAngle = (elbowPosition + Vector2.UnitY * 0).ToRotation();
+            //Angle后缀表示贴图旋转角度
+            float armAngle = top ? (elbowPosition - armPosition - Vector2.UnitY * 20).ToRotation() : (elbowPosition - armPosition - Vector2.UnitY * 100).ToRotation();
+            float forearmAngle = top ? (handPosition - elbowPosition + Vector2.UnitY * 50).ToRotation() : (handPosition - elbowPosition + Vector2.UnitY * 50).ToRotation();
+            float elbowAngle = top ? forearmAngle * 2f + (flipped ? 0 : -0) : forearmAngle * -2f + (flipped ? -1 : 1);
+            float shoulderAngle = top ? armAngle * 2f + (flipped ? -0 : 0) : armAngle * -2f + (flipped ? -1 : 1);
+            float wristAngle = forearmAngle;
+            float thrusterAngle = top ? armAngle * 2f + (flipped ? -0 : 0) : armAngle * -2f + (flipped ? -0 : 0);
+
 
             /*这里，forearmPosition 是通过 elbowPosition 和 forearmAngle 计算得到的。首先，通过 elbowPosition 加上 forearmAngle 方向的矢量来确定下臂的位置。
             forearmAngle 是下臂与手部之间的角度，它是通过 (handPosition - elbowPosition).ToRotation() 计算的。*/
-            Vector2 forearmPosition = elbowPosition + forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition).Length() - 40) / 2f);
-
-            if (forearmPosition.Y < Owner.position.Y && forearmAngle > 200)
-            {
-                if (forearmPosition.X < Owner.position.X)
-                {
-                    forearmPosition = elbowPosition + forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition - Vector2.UnitX * 120 + Vector2.UnitY * 120).Length() - 40));
-                }
-                else
-                {
-                    forearmPosition = elbowPosition + forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition + Vector2.UnitX * 120 + Vector2.UnitY * 120).Length() - 40));
-                }
-            }
-
-            if (forearmPosition.Y > Owner.position.Y)//如果是下方的大臂则小臂用另一套相对位置
-            {
-                forearmPosition = elbowPosition - forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition).Length() - 40)) * 0.6f;
-            }
-
-
+            Vector2 forearmPosition = top ? elbowPosition + forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition).Length() - 40) / 16f) - Vector2.UnitX * 0 - Vector2.UnitY * 50
+                    : elbowPosition + forearmAngle.ToRotationVector2() * (((elbowPosition - handPosition).Length() - 40) / 16f) - Vector2.UnitX * 0 - Vector2.UnitY * 70;//上下方小臂也是不同的摆放逻辑
             armPosition += armAngle.ToRotationVector2() * (top ? 30 : 20);
 
             armAngle += flipped ? 0 : MathHelper.Pi;
@@ -369,117 +330,91 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             wristAngle += flipped ? 0 : MathHelper.Pi;
             thrusterAngle += flipped ? 0 : MathHelper.Pi;
 
-
+            //贴图的翻转逻辑
             SpriteEffects flip = flipped ? SpriteEffects.FlipHorizontally : SpriteEffects.None;
             SpriteEffects armFlip = flipped ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
             SpriteEffects upElbowFlip = flipped ? SpriteEffects.None : SpriteEffects.FlipVertically;
             SpriteEffects underElbowFlip = flipped ? SpriteEffects.FlipVertically : SpriteEffects.None;
 
-            //screenPosition 类似的变量用于将游戏中的虚拟世界坐标转换为屏幕上的像素坐标，offset 是一个用于微调绘制位置的向量，通常用于调整绘制对象在屏幕上的位置。
-            //Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition, armFrame, Color.White, armAngle, armOrigin, Projectile.scale, armFlip, 0);
-            //Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, null, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
 
 
-            if(armPosition.Y > Owner.position.Y - 10)//如果是下方的大臂
-            {
-                if (armPosition.X > Owner.position.X)//右下
-                {
-                    Main.EntitySpriteDraw(thrusterTex, armPosition + offset - Main.screenPosition + Vector2.UnitX * 60 + Vector2.UnitY * 100, null, Color.White * 1f, thrusterAngle + 1, thrusterOrigin, Projectile.scale, underElbowFlip, 0);//肘部
-                    Main.EntitySpriteDraw(elbowTex, armPosition + offset - Main.screenPosition + Vector2.UnitX * 65 + Vector2.UnitY * 100, null, Color.White, elbowAngle, elbowOrigin, Projectile.scale, underElbowFlip, 0);//肘部
-                    Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition + Vector2.UnitX * 40 + Vector2.UnitY * 30, armFrame, Color.White, armAngle + 5, armOrigin, Projectile.scale, armFlip, 0);//大臂
-                    Main.EntitySpriteDraw(shoulderTex, armPosition + offset - Main.screenPosition + Vector2.UnitX * 0 + Vector2.UnitY * 30, null, Color.White, shoulderAngle + 1, shoulderOrigin, Projectile.scale, underElbowFlip, 0);//肩膀
-                    
-                }
-                else//左下
-                {
-                    Main.EntitySpriteDraw(thrusterTex, armPosition + offset - Main.screenPosition - Vector2.UnitX * 70 + Vector2.UnitY * 85, null, Color.White * 1f, thrusterAngle - 1, thrusterOrigin, Projectile.scale, underElbowFlip, 0);
-                    Main.EntitySpriteDraw(elbowTex, armPosition + offset - Main.screenPosition - Vector2.UnitX * 170 + Vector2.UnitY * 0, null, Color.White, elbowAngle, elbowOrigin, Projectile.scale, underElbowFlip, 0);
-                    Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition - Vector2.UnitX * 40 + Vector2.UnitY * 30, armFrame, Color.White, armAngle - 5, armOrigin, Projectile.scale, armFlip, 0);
-                    Main.EntitySpriteDraw(shoulderTex, armPosition + offset - Main.screenPosition - Vector2.UnitX * 90 + Vector2.UnitY * 85, null, Color.White, shoulderAngle - 1, shoulderOrigin, Projectile.scale, underElbowFlip, 0);
-                    
-                }
-            }
-            else//上方
-            {
-                if (armPosition.X > Owner.position.X)//右上
-                {
-                    Main.EntitySpriteDraw(thrusterTex, armPosition + offset - Main.screenPosition + Vector2.UnitX * 70 - Vector2.UnitY * 80, null, Color.White * 1f, thrusterAngle - 1, thrusterOrigin, Projectile.scale, upElbowFlip, 0);
-                    Main.EntitySpriteDraw(elbowTex, armPosition + offset - Main.screenPosition + Vector2.UnitX * 65 - Vector2.UnitY * 10, null, Color.White, elbowAngle, elbowOrigin, Projectile.scale, upElbowFlip, 0);
-                    Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition + Vector2.UnitX * 40 - Vector2.UnitY * 20, armFrame, Color.White, armAngle, armOrigin, Projectile.scale, armFlip, 0);
-                    Main.EntitySpriteDraw(shoulderTex, armPosition + offset - Main.screenPosition + Vector2.UnitX * 30 + Vector2.UnitY * 30, null, Color.White, shoulderAngle - 1, shoulderOrigin, Projectile.scale, upElbowFlip, 0);
-                    
-                }
-                else//左上
-                {
-                    Main.EntitySpriteDraw(thrusterTex, armPosition + offset - Main.screenPosition - Vector2.UnitX * 50 - Vector2.UnitY * 75, null, Color.White * 1f, thrusterAngle + 1, thrusterOrigin, Projectile.scale, upElbowFlip, 0);
-                    Main.EntitySpriteDraw(elbowTex, armPosition + offset - Main.screenPosition - Vector2.UnitX * 180 - Vector2.UnitY * 110, null, Color.White, elbowAngle, elbowOrigin, Projectile.scale, upElbowFlip, 0);
-                    Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition - Vector2.UnitX * 40 - Vector2.UnitY * 20, armFrame, Color.White, armAngle, armOrigin, Projectile.scale, armFlip, 0);
-                    Main.EntitySpriteDraw(shoulderTex, armPosition + offset - Main.screenPosition - Vector2.UnitX * 40 - Vector2.UnitY * 75, null, Color.White, shoulderAngle + 1, shoulderOrigin, Projectile.scale, upElbowFlip, 0);
-                   
-                }
-            }
+            //此处用于定义链条的绘制方法
+            //链条使用贝塞尔曲线逻辑绘制
+            int numPoints = 10; //"Should make dynamic based on curve length, but I'm not sure how to smoothly do that while using a bezier curve" -Graydee, from the code i referenced. I do agree.
+            float curvature = MathHelper.Clamp(Math.Abs(shoulderPosition.X - Projectile.Center.X) / 50f * 80, 15, 80);
 
+            //关于链条的端点定义
+            Vector2 controlPoint1 = Projectile.Center - Vector2.UnitY * 50 + Vector2.UnitY * curvature; //端点1:机甲中心
+            Vector2 controlPoint2 = shoulderPosition + (flipped ? -Vector2.UnitX * 0 : Vector2.UnitX * 0) + (top ? Vector2.UnitY * 70 : Vector2.UnitY * 70) - Vector2.UnitY * curvature;//端点2:肩膀中心
+            Vector2 controlPoint3 = armPosition + (flipped ? (top ? Vector2.UnitX * 55 : Vector2.UnitX * 30) : (top ? -Vector2.UnitX * 55 : -Vector2.UnitX * 30)) + (top ? Vector2.UnitY * 60 : Vector2.UnitY * 60) - Vector2.UnitY * curvature;//端点3:大臂中心
+            Vector2 controlPoint4 = elbowPosition +(flipped ? Vector2.UnitX * 10 : -Vector2.UnitX * 10) + (top ? Vector2.UnitY * 0 : Vector2.UnitY * 0) - Vector2.UnitY * curvature;//端点4:手肘中心
+            Vector2 controlPoint5 = handPosition + (flipped ? -Vector2.UnitX * 0 : Vector2.UnitX * 0) + (top ? Vector2.UnitY * 60 : Vector2.UnitY * 65) - Vector2.UnitY * curvature;//端点5:手腕中心
+            Vector2 controlPoint6 = forearmPosition + (flipped ? -Vector2.UnitX * 0 : Vector2.UnitX * 0) + (top ? Vector2.UnitY * 90 : Vector2.UnitY * 90) - Vector2.UnitY * curvature;//端点6:小臂中心
+            //Vector2 controlPoint7 = (Projectile.Center * 2 - Forearmposition) * Vector2.UnitX + (Projectile.Center * 2 - Forearmposition) * Vector2.UnitY - Vector2.UnitY * curvature;//端点7
+            //Vector2 controlPoint8 = (Projectile.Center * 2 - Handposition) * Vector2.UnitX + (Projectile.Center * 2 - Handposition) * Vector2.UnitY + Vector2.UnitY * curvature;//端点8
 
-            if (forearmPosition.Y > Owner.position.Y)//如果是下方的小臂则手部用另一套相对位置（不然手部离得太远）
-            {
-                //再判断左右边
-                if (forearmPosition.X > Owner.position.X)//在右边则减去几个X轴和Y轴单位向量（Unit.X，Unit.Y)
-                {//右下
-                    Main.EntitySpriteDraw(wristTex, handPosition + offset - Main.screenPosition + Vector2.UnitX * 70 - Vector2.UnitY * 150, null, Color.White, wristAngle, wristOrigin, Projectile.scale, underElbowFlip, 0);                    
-                    Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition + Vector2.UnitX * 150 - Vector2.UnitY * 150, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);                    
-                    Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition + Vector2.UnitX * 80 + Vector2.UnitY * 30, null, Color.White, forearmAngle - 1, forearmOrigin, Projectile.scale, armFlip, 0);
-                }
-                else//在左边则加上几个X轴和Y轴单位向量（Unit.X，Unit.Y)，经过多次调整，目前这个数值应该最合适
-                {//左下
-                    Main.EntitySpriteDraw(wristTex, handPosition + offset - Main.screenPosition - Vector2.UnitX * 170 - Vector2.UnitY * 190, null, Color.White, wristAngle, wristOrigin, Projectile.scale, underElbowFlip, 0);                   
-                    Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition - Vector2.UnitX * 150 - Vector2.UnitY * 150, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);                   
-                    Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition - Vector2.UnitX * 80 + Vector2.UnitY * 30, null, Color.White, forearmAngle + 1, forearmOrigin, Projectile.scale, armFlip, 0);
-                }
-                         
-            }
-            else
-            {
-                if (forearmPosition.X > Owner.position.X)//在右边则减去几个X轴和Y轴单位向量（Unit.X，Unit.Y)
-                {//右上
-                    Main.EntitySpriteDraw(wristTex, handPosition + offset - Main.screenPosition + Vector2.UnitX * 160 - Vector2.UnitY * 30, null, Color.White, wristAngle, wristOrigin, Projectile.scale, upElbowFlip, 0);                   
-                    Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition + Vector2.UnitX * 250 - Vector2.UnitY * 50, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);                   
-                    Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition + Vector2.UnitX * 75 - Vector2.UnitY * 5, null, Color.White, forearmAngle - 1, forearmOrigin, Projectile.scale, armFlip, 0);
-                }
-                else//在左边则加上几个X轴和Y轴单位向量（Unit.X，Unit.Y)，经过多次调整，目前这个数值应该最合适
-                {//左上
-                    Main.EntitySpriteDraw(wristTex, handPosition + offset - Main.screenPosition - Vector2.UnitX * 260 - Vector2.UnitY * 70, null, Color.White, wristAngle, wristOrigin, Projectile.scale, upElbowFlip, 0);                    
-                    Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition - Vector2.UnitX * 250 - Vector2.UnitY * 50, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);                    
-                    Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition - Vector2.UnitX * 75 - Vector2.UnitY * 5, null, Color.White, forearmAngle + 1, forearmOrigin, Projectile.scale, armFlip, 0);
-                }
-            }
-        }
+            BezierCurve curve12 = new BezierCurve(new Vector2[] { controlPoint1, controlPoint2, controlPoint2, controlPoint2 });
+            BezierCurve curve13 = new BezierCurve(new Vector2[] { controlPoint1, controlPoint3, controlPoint3, controlPoint3 });
+            BezierCurve curve34 = new BezierCurve(new Vector2[] { controlPoint3, controlPoint4, controlPoint4, controlPoint4 });
+            BezierCurve curve56 = new BezierCurve(new Vector2[] { controlPoint5, controlPoint6, controlPoint6, controlPoint6 });
 
-        //[JITWhenModsEnabled("CalamityMod")]
-        private void DrawChain()//用于绘制链条效果，它使用贝塞尔曲线来模拟链条的曲线，然后绘制多个链条段。
-        {
-            Texture2D chainTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaChain").Value;
-
-            float curvature = MathHelper.Clamp(Math.Abs(Owner.Center.X - Projectile.Center.X) / 50f * 80, 15, 80);
-
-            Vector2 controlPoint1 = Owner.Center - Vector2.UnitY * curvature;
-            Vector2 controlPoint2 = Projectile.Center + Vector2.UnitY * curvature;
-
-            BezierCurve curve = new BezierCurve(new Vector2[] { Owner.Center, controlPoint1, controlPoint2, Projectile.Center });
-            int numPoints = 20; //"Should make dynamic based on curve length, but I'm not sure how to smoothly do that while using a bezier curve" -Graydee, from the code i referenced. I do agree.
-            Vector2[] chainPositions = curve.GetPoints(numPoints).ToArray();
+            Vector2[] chainPositions12 = curve12.GetPoints(numPoints).ToArray();
+            Vector2[] chainPositions13 = curve13.GetPoints(numPoints).ToArray();
+            Vector2[] chainPositions34 = curve34.GetPoints(numPoints).ToArray();
+            Vector2[] chainPositions56 = curve56.GetPoints(numPoints).ToArray();
 
             //Draw each chain segment bar the very first one
             for (int i = 1; i < numPoints; i++)
             {
-                Vector2 position = chainPositions[i];
-                float rotation = (chainPositions[i] - chainPositions[i - 1]).ToRotation() - MathHelper.PiOver2; //Calculate rotation based on direction from last point
-                float yScale = Vector2.Distance(chainPositions[i], chainPositions[i - 1]) / chainTex.Height; //Calculate how much to squash/stretch for smooth chain based on distance between points
-                Vector2 scale = new Vector2(1, yScale);
-                Color chainLightColor = Lighting.GetColor((int)position.X / 16, (int)position.Y / 16); //Lighting of the position of the chain segment
                 Vector2 origin = new Vector2(chainTex.Width / 2, chainTex.Height); //Draw from center bottom of texture
-                Main.EntitySpriteDraw(chainTex, position - Main.screenPosition, null, chainLightColor, rotation, origin, scale, SpriteEffects.None, 0);
+
+                Vector2 position12 = chainPositions12[i];
+                float rotation12 = (chainPositions12[i] - chainPositions12[i - 1]).ToRotation() - MathHelper.PiOver2; //Calculate rotation based on direction from last point
+                float yScale12 = Vector2.Distance(chainPositions12[i], chainPositions12[i - 1]) / chainTex.Height; //Calculate how much to squash/stretch for smooth chain based on distance between points
+                Vector2 scale12 = new Vector2(1, yScale12);
+                Color chainLightColor12 = Lighting.GetColor((int)position12.X / 16, (int)position12.Y / 16); //Lighting of the position of the chain segment                
+                Main.EntitySpriteDraw(chainTex, position12 - Main.screenPosition, null, chainLightColor12, rotation12, origin, scale12, SpriteEffects.None, 0);
+
+                Vector2 position13 = chainPositions13[i];
+                float rotation13 = (chainPositions13[i] - chainPositions13[i - 1]).ToRotation() - MathHelper.PiOver2; //Calculate rotation based on direction from last point
+                float yScale13 = Vector2.Distance(chainPositions13[i], chainPositions13[i - 1]) / chainTex.Height; //Calculate how much to squash/stretch for smooth chain based on distance between points
+                Vector2 scale13 = new Vector2(1, yScale13);
+                Color chainLightColor13 = Lighting.GetColor((int)position13.X / 16, (int)position13.Y / 16); //Lighting of the position of the chain segment
+                Main.EntitySpriteDraw(chainTex, position13 - Main.screenPosition, null, chainLightColor13, rotation13, origin, scale13, SpriteEffects.None, 0);
+
+                Vector2 position34 = chainPositions34[i];
+                float rotation34 = (chainPositions34[i] - chainPositions34[i - 1]).ToRotation() - MathHelper.PiOver2; //Calculate rotation based on direction from last point
+                float yScale34 = Vector2.Distance(chainPositions34[i], chainPositions34[i - 1]) / chainTex.Height; //Calculate how much to squash/stretch for smooth chain based on distance between points
+                Vector2 scale34 = new Vector2(1, yScale34);
+                Color chainLightColor34 = Lighting.GetColor((int)position34.X / 16, (int)position34.Y / 16); //Lighting of the position of the chain segment
+                Main.EntitySpriteDraw(chainTex, position34 - Main.screenPosition, null, chainLightColor34, rotation34, origin, scale34, SpriteEffects.None, 0);
+
+                Vector2 position56 = chainPositions56[i];
+                float rotation56 = (chainPositions56[i] - chainPositions56[i - 1]).ToRotation() - MathHelper.PiOver2; //Calculate rotation based on direction from last point
+                float yScale56 = Vector2.Distance(chainPositions56[i], chainPositions56[i - 1]) / chainTex.Height; //Calculate how much to squash/stretch for smooth chain based on distance between points
+                Vector2 scale56 = new Vector2(1, yScale56);
+                Color chainLightColor56 = Lighting.GetColor((int)position56.X / 16, (int)position56.Y / 16); //Lighting of the position of the chain segment
+                Main.EntitySpriteDraw(chainTex, position56 - Main.screenPosition, null, chainLightColor56, rotation56, origin, scale56, SpriteEffects.None, 0);
             }
+
+
+
+            //screenPosition 类似的变量用于将游戏中的虚拟世界坐标转换为屏幕上的像素坐标，offset 是一个用于微调绘制位置的向量，通常用于调整绘制对象在屏幕上的位置。
+            //显示贴图
+            Main.EntitySpriteDraw(thrusterTex, shoulderPosition + offset - Main.screenPosition + (flipped ? -Vector2.UnitX * 50 : Vector2.UnitX * 50) + (top ? Vector2.UnitY * 50 : -Vector2.UnitY * 0),
+                                    null, Color.White * 1f, thrusterAngle, thrusterOrigin, Projectile.scale, top ? upElbowFlip : underElbowFlip, 0);//推进器
+            Main.EntitySpriteDraw(elbowTex, elbowPosition + offset - Main.screenPosition + (flipped ? Vector2.UnitX * 10 : -Vector2.UnitX * 10) + (top ? -Vector2.UnitY * 70 : -Vector2.UnitY * 80), 
+                                    null, Color.White, elbowAngle, elbowOrigin, Projectile.scale, top ? upElbowFlip : underElbowFlip, 0);//肘部
+            Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition, armFrame, Color.White, armAngle, armOrigin, Projectile.scale, armFlip, 0);//大臂
+            Main.EntitySpriteDraw(shoulderTex, shoulderPosition + offset - Main.screenPosition, null, Color.White, shoulderAngle, shoulderOrigin, Projectile.scale, top ?  upElbowFlip : underElbowFlip, 0);;//肩膀
+                    
+            Main.EntitySpriteDraw(wristTex, handPosition + offset - Main.screenPosition + (flipped ? -Vector2.UnitX * 70 : Vector2.UnitX * 70) + (top ? Vector2.UnitY * 20 : -Vector2.UnitY * 10),
+                                    null, Color.White, wristAngle, wristOrigin, Projectile.scale, armFlip, 0);//手腕                   
+            Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);//手部                    
+            Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, null, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
+
         }
+
 
         public override void PostDraw(Color lightColor)//用于在绘制后执行额外的逻辑。在这里，它绘制了机械臂的眼睛和头部
         {
