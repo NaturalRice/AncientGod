@@ -24,11 +24,15 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
         Mod infern;//Mod类型的变量，用于引用Infernum模组
 
         //以下到SetStaticDefaults之前是尾焰的
-        public Vector2[] PositionsApollo;
-        public Vector2[] PositionsArtemis;
-        public float ApolloRotation;
-        public float ArtemisRotation;
-        public Color RibbonStartColor = new Color(34, 40, 48);
+        public Vector2[] PositionsThruster1;
+        public Vector2[] PositionsThruster2;
+        public Vector2[] PositionsThruster3;
+        public Vector2[] PositionsThruster4;
+        public float Thruster1Rotation;
+        public float Thruster2Rotation;
+        public float Thruster3Rotation;
+        public float Thruster4Rotation;
+        public Color RibbonStartColor = new Color(34, 17, 10);
         public ref float Behavior => ref Projectile.ai[1];
         public static int TrailLenght = 30;
 
@@ -117,13 +121,17 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             if (Initialized == 0)
             {
                 //Initialize the arm positions(SmallBug)
-                PositionsArtemis = new Vector2[TrailLenght];
-                PositionsApollo = new Vector2[TrailLenght];
+                PositionsThruster1 = new Vector2[TrailLenght];
+                PositionsThruster2 = new Vector2[TrailLenght];
+                PositionsThruster3 = new Vector2[TrailLenght];
+                PositionsThruster4 = new Vector2[TrailLenght];
 
                 for (int i = 0; i < TrailLenght; i++)
                 {
-                    PositionsApollo[i] = Projectile.Center;
-                    PositionsArtemis[i] = Projectile.Center;
+                    PositionsThruster1[i] = Projectile.Center;
+                    PositionsThruster2[i] = Projectile.Center;
+                    PositionsThruster3[i] = Projectile.Center;
+                    PositionsThruster4[i] = Projectile.Center;
                 }
                 //Initialize the arm positions
                 ArmPositions = new List<Vector3>(4);
@@ -247,63 +255,47 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
                 }
             }
-
-            //SmallBug
+            //推进器尾焰
             UpdateTwins();
         }
         public void UpdateTwins()
         {
-            Projectile.rotation += (MathHelper.Pi / (40f - (Owner.velocity.Length() / 20f) * 20f)) * (Owner.direction);//这里用于实现飞虫的环绕，或许还可用于实现翅膀的摆动
             //Projectile.Center = Owner.Center;
             //Shift down the previous positions
             for (int i = 0; i < TrailLenght - 1; i++)
             {
-                PositionsApollo[i] = PositionsApollo[i + 1];
-                PositionsArtemis[i] = PositionsArtemis[i + 1];
+                PositionsThruster1[i] = PositionsThruster1[i + 1];
+                PositionsThruster2[i] = PositionsThruster2[i + 1];
+                PositionsThruster3[i] = PositionsThruster3[i + 1];
+                PositionsThruster4[i] = PositionsThruster4[i + 1];
             }
-
-            //Give them a new position
-
-            //If the owner is going fast, place them at both sides of the player facing in the direction of the motion
             if (Owner.velocity.Length() > 10)
             {
-                PositionsApollo[TrailLenght - 1] = Vector2.Lerp(PositionsApollo[TrailLenght - 1], Owner.Center + Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) + Owner.velocity, 0.2f);
-                PositionsArtemis[TrailLenght - 1] = Vector2.Lerp(PositionsArtemis[TrailLenght - 1], Owner.Center - Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) + Owner.velocity, 0.2f);
+                //此处调整尾焰的位置变化规律
+                PositionsThruster1[TrailLenght - 1] = Vector2.Lerp(PositionsThruster1[TrailLenght - 1], Owner.Center + Vector2.UnitX * 50 + Vector2.UnitY * 40 + Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) + Owner.velocity, 0.5f);
+                PositionsThruster2[TrailLenght - 1] = Vector2.Lerp(PositionsThruster2[TrailLenght - 1], Owner.Center - Vector2.UnitX * 50 + Vector2.UnitY * 40 + Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) + Owner.velocity, 0.5f);
+                PositionsThruster3[TrailLenght - 1] = Vector2.Lerp(PositionsThruster3[TrailLenght - 1], Owner.Center + Vector2.UnitX * 80 - Vector2.UnitY * 70 + Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) + Owner.velocity, 0.5f);
+                PositionsThruster4[TrailLenght - 1] = Vector2.Lerp(PositionsThruster4[TrailLenght - 1], Owner.Center - Vector2.UnitX * 80 - Vector2.UnitY * 70 + Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) + Owner.velocity, 0.5f);
 
-                ApolloRotation = ApolloRotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
-                ArtemisRotation = ApolloRotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+                Thruster1Rotation = Thruster1Rotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+                Thruster2Rotation = Thruster2Rotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+                Thruster3Rotation = Thruster3Rotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+                Thruster4Rotation = Thruster4Rotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
             }
 
-            //If the owner is going slow make them rotate around the player
-            else
-            {
-                PositionsApollo[TrailLenght - 1] = Vector2.Lerp(PositionsApollo[TrailLenght - 1], Projectile.Center + Projectile.rotation.ToRotationVector2(), 0.2f);
-                PositionsArtemis[TrailLenght - 1] = Vector2.Lerp(PositionsArtemis[TrailLenght - 1], Projectile.Center - Projectile.rotation.ToRotationVector2(), 0.2f);
-
-                float idealApolloRotation = Projectile.rotation - MathHelper.Pi * (Owner.direction < 0 ? 0 : 1);
-                float idealArtemisRotation = Projectile.rotation - MathHelper.Pi * (Owner.direction < 0 ? 1 : 0);
-
-                //Snap them in place if they're close enough to their ideal rotation or else some funky stuff starts to happen
-                if (Math.Abs(ApolloRotation - idealApolloRotation) > MathHelper.PiOver4)
-                    ApolloRotation = ApolloRotation.AngleTowards(idealApolloRotation, 0.2f);
-                else
-                    ApolloRotation = idealApolloRotation;
-
-                if (Math.Abs(ArtemisRotation - idealArtemisRotation) > MathHelper.PiOver4)
-                    ArtemisRotation = ArtemisRotation.AngleTowards(idealArtemisRotation, 0.2f);
-                else
-                    ArtemisRotation = idealArtemisRotation;
-            }
-
-            //Ribbons go blue if you go fast, go back to gray if you go slow
-            //RibbonStartColor 用于表示轨迹的颜色，它会在快速移动时变为蓝色，慢速移动时恢复为灰色。
-            Color IdealColor = Color.Lerp(new Color(34, 40, 48), Color.DeepSkyBlue, MathHelper.Clamp(Owner.velocity.Length() - 5, 0, 20) / 10f);
+            float thrusterOpacity1 = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 2f, 0, 1)) * 1f + 0.1f;//闪耀光亮效果
+            float thrusterOpacity2 = (1 - MathHelper.Clamp((float)Math.Cos(Main.time % MathHelper.Pi) * 2f, 0, 1)) * 1f + 0.1f;//闪耀光亮效果
+            //RibbonStartColor 用于表示轨迹的颜色，它会在快速移动时变为由橙色到，慢速移动时恢复为灰色。
+            Color IdealColor = Color.Lerp(Color.LightSkyBlue * thrusterOpacity2, Color.Orange * thrusterOpacity1, MathHelper.Clamp(Owner.velocity.Length() - 5, 0, 20) / 10f);
             RibbonStartColor = Color.Lerp(RibbonStartColor, IdealColor, 0.2f);
         }
         public float RibbonTrailWidthFunction(float completionRatio)
         {
-            float tail = (float)Math.Pow(completionRatio, 2) * 7;
-            float bump = Utils.GetLerpValue(0.7f, 0.8f, 1 - completionRatio, true) * Utils.GetLerpValue(1f, 0.8f, 1 - completionRatio, true) * 4;
+            float thrusterOpacity1 = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 0.5f, 0, 1)) * 1f + 0.1f;//闪耀光亮效果
+            float thrusterOpacity2 = (1 - MathHelper.Clamp((float)Math.Cos(Main.time % MathHelper.Pi) * 0.5f, 0, 1)) * 1f + 0.1f;//闪耀光亮效果
+
+            float tail = (float)Math.Pow(completionRatio, 2) * 12 * thrusterOpacity1;//此处调整尾焰宽度和尖锐度
+            float bump = Utils.GetLerpValue(0.7f, 0.8f, 1 - completionRatio, true) * Utils.GetLerpValue(1f, 1f * thrusterOpacity2, 1 - completionRatio, true) * 4;
             return tail + bump;
         }
         public Color OrangeRibbonTrailColorFunction(float completionRatio)
@@ -317,55 +309,6 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             Color startingColor = RibbonStartColor;
             Color endColor = new Color(78, 78, 0);
             return Color.Lerp(startingColor, endColor, (float)Math.Pow(1 - completionRatio, 1.5D)) * 0.7f;
-        }
-        public override bool PreDraw(ref Color lightColor)
-        {
-            Texture2D tex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaBody")).Value;
-
-            bool secondPhase = false;
-            if (Owner.velocity.Length() > 10)
-                secondPhase = true;
-
-
-            Rectangle apolloFrame = new Rectangle(0, secondPhase ? 62 : 0, 74, 60);
-            Rectangle artemisFrame = new Rectangle(74, secondPhase ? 62 : 0, 74, 60);
-            Vector2 origin = new Vector2(31, 36);
-
-            if (Projectile.isAPreviewDummy)
-            {
-                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + Vector2.UnitX * 20, new Rectangle(0, 0, 74, 60), lightColor, MathHelper.PiOver2, origin, Projectile.scale, 0, 0);
-                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + Vector2.UnitX * 20 - Vector2.UnitY * 40, new Rectangle(74, 0, 74, 60), lightColor, MathHelper.PiOver2, origin, Projectile.scale, 0, 0);
-                return false;
-            }
-
-            float[] RotationsApollo = new float[PositionsApollo.Length];
-            float[] RotationsArtemis = new float[PositionsArtemis.Length];
-            for (int i = 1; i < PositionsApollo.Length; i++)
-            {
-                RotationsApollo[i] = PositionsApollo[i - 1].AngleTo(PositionsApollo[i]);
-                RotationsArtemis[i] = PositionsArtemis[i - 1].AngleTo(PositionsArtemis[i]);
-            }
-            RotationsApollo[0] = ApolloRotation;
-            RotationsArtemis[0] = ArtemisRotation;
-
-            Terraria.Graphics.VertexStrip apolloStrip = new Terraria.Graphics.VertexStrip();
-            Terraria.Graphics.VertexStrip artemisStrip = new Terraria.Graphics.VertexStrip();
-            apolloStrip.PrepareStripWithProceduralPadding(PositionsApollo, RotationsApollo, GreenRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
-            artemisStrip.PrepareStripWithProceduralPadding(PositionsArtemis, RotationsArtemis, OrangeRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
-            //使用 Effect 和自定义的着色方法实现了轨迹的颜色渐变效果。
-            Effect vertexShader = ModContent.Request<Effect>($"{nameof(AncientGod)}/Effects/VertexShader", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
-            vertexShader.Parameters["uColor"].SetValue(Vector4.One);
-            vertexShader.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
-            vertexShader.CurrentTechnique.Passes[0].Apply();
-
-            apolloStrip.DrawTrail();
-            artemisStrip.DrawTrail();
-
-            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
-
-            Main.EntitySpriteDraw(tex, PositionsApollo[TrailLenght - 1] - Main.screenPosition, apolloFrame, lightColor, ApolloRotation, origin, Projectile.scale, 0, 0);
-            Main.EntitySpriteDraw(tex, PositionsArtemis[TrailLenght - 1] - Main.screenPosition, artemisFrame, lightColor, ArtemisRotation, origin, Projectile.scale, 0, 0);
-            return false;
         }
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
@@ -536,7 +479,45 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             }
 
             //////////////////////////////////////////////////////////////////////////
-            
+            //此处设置尾焰                     
+            float[] RotationsThruster1 = new float[PositionsThruster1.Length];
+            float[] RotationsThruster2 = new float[PositionsThruster2.Length];
+            float[] RotationsThruster3 = new float[PositionsThruster3.Length];
+            float[] RotationsThruster4 = new float[PositionsThruster4.Length];
+            for (int i = 1; i < RotationsThruster1.Length; i++)
+            {
+                RotationsThruster1[i] = PositionsThruster1[i - 1].AngleTo(PositionsThruster1[i]);
+                RotationsThruster2[i] = PositionsThruster2[i - 1].AngleTo(PositionsThruster2[i]);
+                RotationsThruster3[i] = PositionsThruster3[i - 1].AngleTo(PositionsThruster3[i]);
+                RotationsThruster4[i] = PositionsThruster4[i - 1].AngleTo(PositionsThruster4[i]);
+            }
+            RotationsThruster1[0] = Thruster1Rotation;
+            RotationsThruster2[0] = Thruster2Rotation;
+            RotationsThruster3[0] = Thruster3Rotation;
+            RotationsThruster4[0] = Thruster4Rotation;
+
+            Terraria.Graphics.VertexStrip thruster1Strip = new Terraria.Graphics.VertexStrip();
+            Terraria.Graphics.VertexStrip thruster2Strip = new Terraria.Graphics.VertexStrip();
+            Terraria.Graphics.VertexStrip thruster3Strip = new Terraria.Graphics.VertexStrip();
+            Terraria.Graphics.VertexStrip thruster4Strip = new Terraria.Graphics.VertexStrip();
+            //此处用于显示尾焰效果
+            thruster1Strip.PrepareStripWithProceduralPadding(PositionsThruster1, RotationsThruster1, OrangeRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
+            thruster2Strip.PrepareStripWithProceduralPadding(PositionsThruster2, RotationsThruster2, OrangeRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
+            thruster3Strip.PrepareStripWithProceduralPadding(PositionsThruster3, RotationsThruster3, OrangeRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
+            thruster4Strip.PrepareStripWithProceduralPadding(PositionsThruster4, RotationsThruster4, OrangeRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
+            //使用 Effect 和自定义的着色方法实现了轨迹的颜色渐变效果。
+            Effect vertexShader = ModContent.Request<Effect>($"{nameof(AncientGod)}/Effects/VertexShader", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            vertexShader.Parameters["uColor"].SetValue(Vector4.One);
+            vertexShader.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+            vertexShader.CurrentTechnique.Passes[0].Apply();
+
+            thruster1Strip.DrawTrail();
+            thruster2Strip.DrawTrail();
+            thruster3Strip.DrawTrail();
+            thruster4Strip.DrawTrail();
+
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
 
             //screenPosition 类似的变量用于将游戏中的虚拟世界坐标转换为屏幕上的像素坐标，offset 是一个用于微调绘制位置的向量，通常用于调整绘制对象在屏幕上的位置。
             //显示贴图
