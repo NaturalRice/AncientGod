@@ -22,6 +22,16 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
         bool isInfernumActive;//用于标记Infernum模式是否激活
         Mod infern;//Mod类型的变量，用于引用Infernum模组
+
+        //以下到SetStaticDefaults之前是尾焰的
+        public Vector2[] PositionsApollo;
+        public Vector2[] PositionsArtemis;
+        public float ApolloRotation;
+        public float ArtemisRotation;
+        public Color RibbonStartColor = new Color(34, 40, 48);
+        public ref float Behavior => ref Projectile.ai[1];
+        public static int TrailLenght = 30;
+
         //A list of the ideal positions for each arm. The first 2 variables of the Vector2 represent the relative position of the arm to the body and the last variable represents the rotation of the hand
         internal readonly List<Vector3> IdealPositions = new List<Vector3>()//一个列表，其中包含了四个Vector3元素，每个元素表示一个机械臂的理想位置。这些位置包括相对于机械臂中心的X和Y偏移，以及手的旋转角度
         {
@@ -106,6 +116,15 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
             if (Initialized == 0)
             {
+                //Initialize the arm positions(SmallBug)
+                PositionsArtemis = new Vector2[TrailLenght];
+                PositionsApollo = new Vector2[TrailLenght];
+
+                for (int i = 0; i < TrailLenght; i++)
+                {
+                    PositionsApollo[i] = Projectile.Center;
+                    PositionsArtemis[i] = Projectile.Center;
+                }
                 //Initialize the arm positions
                 ArmPositions = new List<Vector3>(4);
                 for (int i = 0; i < 4; i++)
@@ -228,6 +247,125 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
                 }
             }
+
+            //SmallBug
+            UpdateTwins();
+        }
+        public void UpdateTwins()
+        {
+            Projectile.rotation += (MathHelper.Pi / (40f - (Owner.velocity.Length() / 20f) * 20f)) * (Owner.direction);//这里用于实现飞虫的环绕，或许还可用于实现翅膀的摆动
+            //Projectile.Center = Owner.Center;
+            //Shift down the previous positions
+            for (int i = 0; i < TrailLenght - 1; i++)
+            {
+                PositionsApollo[i] = PositionsApollo[i + 1];
+                PositionsArtemis[i] = PositionsArtemis[i + 1];
+            }
+
+            //Give them a new position
+
+            //If the owner is going fast, place them at both sides of the player facing in the direction of the motion
+            if (Owner.velocity.Length() > 10)
+            {
+                PositionsApollo[TrailLenght - 1] = Vector2.Lerp(PositionsApollo[TrailLenght - 1], Owner.Center + Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) + Owner.velocity, 0.2f);
+                PositionsArtemis[TrailLenght - 1] = Vector2.Lerp(PositionsArtemis[TrailLenght - 1], Owner.Center - Vector2.Normalize(Owner.velocity.RotatedBy(MathHelper.PiOver2)) + Owner.velocity, 0.2f);
+
+                ApolloRotation = ApolloRotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+                ArtemisRotation = ApolloRotation.AngleLerp(Owner.velocity.ToRotation() + MathHelper.PiOver2, 0.2f);
+            }
+
+            //If the owner is going slow make them rotate around the player
+            else
+            {
+                PositionsApollo[TrailLenght - 1] = Vector2.Lerp(PositionsApollo[TrailLenght - 1], Projectile.Center + Projectile.rotation.ToRotationVector2(), 0.2f);
+                PositionsArtemis[TrailLenght - 1] = Vector2.Lerp(PositionsArtemis[TrailLenght - 1], Projectile.Center - Projectile.rotation.ToRotationVector2(), 0.2f);
+
+                float idealApolloRotation = Projectile.rotation - MathHelper.Pi * (Owner.direction < 0 ? 0 : 1);
+                float idealArtemisRotation = Projectile.rotation - MathHelper.Pi * (Owner.direction < 0 ? 1 : 0);
+
+                //Snap them in place if they're close enough to their ideal rotation or else some funky stuff starts to happen
+                if (Math.Abs(ApolloRotation - idealApolloRotation) > MathHelper.PiOver4)
+                    ApolloRotation = ApolloRotation.AngleTowards(idealApolloRotation, 0.2f);
+                else
+                    ApolloRotation = idealApolloRotation;
+
+                if (Math.Abs(ArtemisRotation - idealArtemisRotation) > MathHelper.PiOver4)
+                    ArtemisRotation = ArtemisRotation.AngleTowards(idealArtemisRotation, 0.2f);
+                else
+                    ArtemisRotation = idealArtemisRotation;
+            }
+
+            //Ribbons go blue if you go fast, go back to gray if you go slow
+            //RibbonStartColor 用于表示轨迹的颜色，它会在快速移动时变为蓝色，慢速移动时恢复为灰色。
+            Color IdealColor = Color.Lerp(new Color(34, 40, 48), Color.DeepSkyBlue, MathHelper.Clamp(Owner.velocity.Length() - 5, 0, 20) / 10f);
+            RibbonStartColor = Color.Lerp(RibbonStartColor, IdealColor, 0.2f);
+        }
+        public float RibbonTrailWidthFunction(float completionRatio)
+        {
+            float tail = (float)Math.Pow(completionRatio, 2) * 7;
+            float bump = Utils.GetLerpValue(0.7f, 0.8f, 1 - completionRatio, true) * Utils.GetLerpValue(1f, 0.8f, 1 - completionRatio, true) * 4;
+            return tail + bump;
+        }
+        public Color OrangeRibbonTrailColorFunction(float completionRatio)
+        {
+            Color startingColor = RibbonStartColor;
+            Color endColor = new Color(78, 0, 78);
+            return Color.Lerp(startingColor, endColor, (float)Math.Pow(1 - completionRatio, 1.5D)) * 0.7f;
+        }
+        public Color GreenRibbonTrailColorFunction(float completionRatio)
+        {
+            Color startingColor = RibbonStartColor;
+            Color endColor = new Color(78, 78, 0);
+            return Color.Lerp(startingColor, endColor, (float)Math.Pow(1 - completionRatio, 1.5D)) * 0.7f;
+        }
+        public override bool PreDraw(ref Color lightColor)
+        {
+            Texture2D tex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaBody")).Value;
+
+            bool secondPhase = false;
+            if (Owner.velocity.Length() > 10)
+                secondPhase = true;
+
+
+            Rectangle apolloFrame = new Rectangle(0, secondPhase ? 62 : 0, 74, 60);
+            Rectangle artemisFrame = new Rectangle(74, secondPhase ? 62 : 0, 74, 60);
+            Vector2 origin = new Vector2(31, 36);
+
+            if (Projectile.isAPreviewDummy)
+            {
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + Vector2.UnitX * 20, new Rectangle(0, 0, 74, 60), lightColor, MathHelper.PiOver2, origin, Projectile.scale, 0, 0);
+                Main.EntitySpriteDraw(tex, Projectile.position - Main.screenPosition + Vector2.UnitX * 20 - Vector2.UnitY * 40, new Rectangle(74, 0, 74, 60), lightColor, MathHelper.PiOver2, origin, Projectile.scale, 0, 0);
+                return false;
+            }
+
+            float[] RotationsApollo = new float[PositionsApollo.Length];
+            float[] RotationsArtemis = new float[PositionsArtemis.Length];
+            for (int i = 1; i < PositionsApollo.Length; i++)
+            {
+                RotationsApollo[i] = PositionsApollo[i - 1].AngleTo(PositionsApollo[i]);
+                RotationsArtemis[i] = PositionsArtemis[i - 1].AngleTo(PositionsArtemis[i]);
+            }
+            RotationsApollo[0] = ApolloRotation;
+            RotationsArtemis[0] = ArtemisRotation;
+
+            Terraria.Graphics.VertexStrip apolloStrip = new Terraria.Graphics.VertexStrip();
+            Terraria.Graphics.VertexStrip artemisStrip = new Terraria.Graphics.VertexStrip();
+            apolloStrip.PrepareStripWithProceduralPadding(PositionsApollo, RotationsApollo, GreenRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
+            artemisStrip.PrepareStripWithProceduralPadding(PositionsArtemis, RotationsArtemis, OrangeRibbonTrailColorFunction, RibbonTrailWidthFunction, -Main.screenPosition, true);
+            //使用 Effect 和自定义的着色方法实现了轨迹的颜色渐变效果。
+            Effect vertexShader = ModContent.Request<Effect>($"{nameof(AncientGod)}/Effects/VertexShader", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value;
+            vertexShader.Parameters["uColor"].SetValue(Vector4.One);
+            vertexShader.Parameters["uTransformMatrix"].SetValue(Main.GameViewMatrix.NormalizedTransformationmatrix);
+            vertexShader.CurrentTechnique.Passes[0].Apply();
+
+            apolloStrip.DrawTrail();
+            artemisStrip.DrawTrail();
+
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+
+            Main.EntitySpriteDraw(tex, PositionsApollo[TrailLenght - 1] - Main.screenPosition, apolloFrame, lightColor, ApolloRotation, origin, Projectile.scale, 0, 0);
+            Main.EntitySpriteDraw(tex, PositionsArtemis[TrailLenght - 1] - Main.screenPosition, artemisFrame, lightColor, ArtemisRotation, origin, Projectile.scale, 0, 0);
+            return false;
         }
         public override bool PreDrawExtras()//用于在绘制前执行额外的逻辑。其中，DrawChain 方法用于绘制链条效果
         {
@@ -397,7 +535,8 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                 Main.EntitySpriteDraw(chainTex, position56 - Main.screenPosition, null, chainLightColor56, rotation56, origin, scale56, SpriteEffects.None, 0);
             }
 
-
+            //////////////////////////////////////////////////////////////////////////
+            
 
             //screenPosition 类似的变量用于将游戏中的虚拟世界坐标转换为屏幕上的像素坐标，offset 是一个用于微调绘制位置的向量，通常用于调整绘制对象在屏幕上的位置。
             //显示贴图
@@ -429,8 +568,8 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
             Vector2 offset2 = Utils.SafeNormalize(Main.MouseWorld - (Projectile.Center - Vector2.UnitY * 10), Vector2.Zero) * MathHelper.Clamp((Projectile.Center - Vector2.UnitY * 10 - Main.MouseWorld).Length(), 0, 1);
 
-            Main.EntitySpriteDraw(headTex, Projectile.Center + offset2 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, null, Color.White, Projectile.rotation, headTex.Size() / 2f, Projectile.scale, 0f, 0);
-            Main.EntitySpriteDraw(eyesTex, Projectile.Center + offset1 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, null, Color.White * eyeOpacity, Projectile.rotation, eyesTex.Size() / 2f, Projectile.scale, 0f, 0);
+            Main.EntitySpriteDraw(headTex, Projectile.Center + offset2 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, null, Color.White, 0, headTex.Size() / 2f, Projectile.scale, 0f, 0);
+            Main.EntitySpriteDraw(eyesTex, Projectile.Center + offset1 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, null, Color.White * eyeOpacity, 0, eyesTex.Size() / 2f, Projectile.scale, 0f, 0);
         }
 
         public bool summonedProjectile = false;
