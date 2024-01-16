@@ -1,4 +1,4 @@
-﻿using Microsoft.Xna.Framework;
+﻿/*using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using Terraria;
@@ -7,12 +7,13 @@ using Terraria.GameContent;
 using Terraria.ID;
 using Terraria.ModLoader;
 
-namespace AncientGod.Projectiles.Ammo
+namespace AncientGod.Projectiles.Ammo.AlmightyMechaBullet
 {
-    public class ModernMechaBullet : ModProjectile
+    public class AlmightyMechaBullet : ModProjectile
     {
         public override void SetStaticDefaults()
-        {           
+        {
+            Main.projFrames[Projectile.type] =8;
             ProjectileID.Sets.TrailCacheLength[Projectile.type] = 5; // 记录旧位置的长度
             ProjectileID.Sets.TrailingMode[Projectile.type] = 0; // 记录模式
         }
@@ -25,7 +26,7 @@ namespace AncientGod.Projectiles.Ammo
             Projectile.friendly = true; // 投射物能对敌人造成伤害吗？
             Projectile.hostile = false; // 投射物能对玩家造成伤害吗？
             Projectile.DamageType = DamageClass.Ranged; // 投射物的伤害类型，是由远程武器发射的吗？
-            Projectile.penetrate = 2; // 投射物能穿透多少个敌怪。（OnTileCollide方法也会减少穿透次数）
+            Projectile.penetrate = 5; // 投射物能穿透多少个敌怪。（OnTileCollide方法也会减少穿透次数）
             Projectile.timeLeft = 600; // 投射物的生存时间（60 = 1秒，所以600是10秒）
             Projectile.alpha = 255; // 投射物的透明度，255为完全透明。（aiStyle 1会快速使投射物变透明。如果不使用逐渐变透明的aiStyle，请删除这一行，否则你的投射物会变得看不见）
             Projectile.light = 1f; // 投射物周围的光照强度
@@ -36,6 +37,26 @@ namespace AncientGod.Projectiles.Ammo
 
             AIType = ProjectileID.Bullet; // 行为与默认子弹完全相同
 
+        }
+        public override void PostDraw(Color lightColor)
+        {
+            Texture2D glowMask = ModContent.Request<Texture2D>("NaturalRiceFirstMod/Projectiles/Pets/LightPets/DraWPet_Glow").Value;
+            Rectangle frame = glowMask.Frame(1, Main.projFrames[Projectile.type], 0, Projectile.frame);
+            frame.Height -= 1;
+            float originOffsetX = (glowMask.Width - Projectile.width) * 0.5f + Projectile.width * 0.5f + DrawOriginOffsetX;
+            Main.EntitySpriteDraw
+            (
+                glowMask,
+                Projectile.position,
+                frame,
+                Color.White,
+                Projectile.rotation = 0f,
+                //这样宠物确实不旋转了，但是光亮跟本体会不重合；我目前的方法是将本体图片变成空白的，光亮图片即原先的本体图片，这样只显示光亮
+                new Vector2(originOffsetX, Projectile.height / 2 - DrawOriginOffsetY),
+                Projectile.scale,
+                SpriteEffects.None,
+                0
+            );
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)
@@ -136,13 +157,12 @@ namespace AncientGod.Projectiles.Ammo
             return true;
         }
 
-        /*public override void OnKill(Projectile projectile, int timeLeft)
+        *//*public override void OnKill(Projectile projectile, int timeLeft)
         {
             // 这段代码和上面在OnTileCollide方法中的代码一样，从与之碰撞的地块上产生粒子效果。SoundID.Item10 是弹跳声音。
             Collision.HitTiles(Projectile.position + Projectile.velocity, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Item10, Projectile.position);
-        }*/
-
+        }*//*
         public void AnimateProjectile() // Call this every frame, for example in the AI method.
         {
             Projectile.frameCounter++;
@@ -155,3 +175,4 @@ namespace AncientGod.Projectiles.Ammo
         }
     }
 }
+*/

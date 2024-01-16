@@ -9,11 +9,49 @@ using AncientGod.Projectiles.Ammo;
 using AncientGod.Projectiles;
 using Mono.Cecil;
 using AncientGod.Projectiles.Pets.RunawayMecha;
+using Terraria.ID;
+using Terraria.Audio;
+using static Terraria.Utils;
+using System.Collections;
+using Terraria.ModLoader.Core;
+using AncientGod.Dusts;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
+using ReLogic.Content;
+using Terraria.Graphics.Shaders;
+using AncientGod.Items.Mounts.InfiniteFlight.ModernMecha;
+using AncientGod.Items.Dyes;
+using Terraria.GameContent.Creative;
+using Terraria.Graphics.Effects;
 
 namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 {
     public class AlmightyMechaBody : ModProjectile
     {
+        /*public override void Load()
+        {
+            // 在加载阶段注册你的着色器
+            RegisterShader();
+        }
+
+        private void RegisterShader()
+        {
+            // 替换 "YourShaderName" 为你在效果文件中定义的着色器名称
+            string shaderName = "DraedonHologramDye";
+
+            // 在这里加载你的着色器
+            Effect shader = ModContent.Request<Effect>($"{nameof(AncientGod)}/Effects/DraedonHologramDye", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value; // 替换为你的效果文件路径
+            Filters.Scene["DraedonHologramDye"] = new Filter(new ScreenShaderData(shaderName), EffectPriority.VeryHigh);
+            shader.CurrentTechnique.Passes[0].Apply();
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
+        }
+
+        public override void Unload()
+        {
+            // 在卸载 mod 时清理资源
+            Filters.Scene["DraedonHologramDye"].Deactivate();
+        }*/
+
+
         public int owner; // 自定义字段，用于存储投射物的源
 
         private const float TargetDistance = 1200f; // 设置寻找敌人的最大距离
@@ -75,7 +113,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             Projectile.timeLeft *= 5;
             Projectile.friendly = true;
             Projectile.tileCollide = false;
-            Projectile.aiStyle = -1;
+            Projectile.aiStyle = -1;           
         }
 
         private void FindTarget()
@@ -257,6 +295,22 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             }
             //推进器尾焰
             UpdateTwins();
+
+            // 获取Shader
+            /*MiscShaderData shader1 = GameShaders.Misc["DraedonHologramDye"];
+            // 将Shader应用于Projectile
+            shader1.Apply();            
+            // 绘制前还原Shader
+            GameShaders.Misc["Default"].Apply(null);*/
+
+            // 替换 "YourShaderName" 为你在效果文件中定义的着色器名称
+            string shaderName = "DraedonHologramDye";
+
+            // 在这里加载你的着色器
+            Effect shader = ModContent.Request<Effect>($"{nameof(AncientGod)}/Effects/DraedonHologramDye", ReLogic.Content.AssetRequestMode.ImmediateLoad).Value; // 替换为你的效果文件路径
+            Filters.Scene["DraedonHologramDye"] = new Filter(new ScreenShaderData(shaderName), EffectPriority.VeryHigh);
+            shader.CurrentTechnique.Passes[0].Apply();
+            Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }
         public void UpdateTwins()
         {
@@ -380,7 +434,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             Vector2 armPosition = top ? Projectile.Center + position * 0.2f + (flipped ? Vector2.UnitX * 10 : -Vector2.UnitX * 10) + Vector2.UnitY * 10 : Projectile.Center + position * 0.2f
                     + (flipped ? Vector2.UnitX * 10 : -Vector2.UnitX * 10) + Vector2.UnitY * 50;//上下方大臂是不同的摆放逻辑
             Vector2 shoulderPosition = top ? Projectile.Center + position * 0.2f + (flipped ? Vector2.UnitX * 30 : -Vector2.UnitX * 30) - Vector2.UnitY * 30 : Projectile.Center + position * 0.2f 
-                    + (flipped ? Vector2.UnitX * 20 : -Vector2.UnitX * 20) + Vector2.UnitY * 50;//上下方肩膀也是不同的摆放逻辑;
+                    + (flipped ? Vector2.UnitX * 20 : -Vector2.UnitX * 20) + Vector2.UnitY * 50;//上下方肩膀也是不同的摆放逻辑;            
             //Do some trigonometry to get the elbow position
             float armLenght = 275;
             float directLenght = MathHelper.Clamp((handPosition - armPosition).Length(), 0, armLenght); //Clamp the direct lenght to avoid getting an error from trying to calculate the square root of a negative number
@@ -476,6 +530,11 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                 Vector2 scale56 = new Vector2(1, yScale56);
                 Color chainLightColor56 = Lighting.GetColor((int)position56.X / 16, (int)position56.Y / 16); //Lighting of the position of the chain segment
                 Main.EntitySpriteDraw(chainTex, position56 - Main.screenPosition, null, chainLightColor56, rotation56, origin, scale56, SpriteEffects.None, 0);
+
+                DrawLightningEffect(Main.spriteBatch, chainTex, controlPoint1, controlPoint2, Color.LightSkyBlue, new Rectangle(0, 0, chainTex.Width, chainTex.Height), origin);
+                DrawLightningEffect(Main.spriteBatch, chainTex, controlPoint1, controlPoint3, Color.LightSkyBlue, new Rectangle(0, 0, chainTex.Width, chainTex.Height), origin);
+                DrawLightningEffect(Main.spriteBatch, chainTex, controlPoint3, controlPoint4, Color.LightSkyBlue, new Rectangle(0, 0, chainTex.Width, chainTex.Height), origin);
+                DrawLightningEffect(Main.spriteBatch, chainTex, controlPoint5, controlPoint6, Color.LightSkyBlue, new Rectangle(0, 0, chainTex.Width, chainTex.Height), origin);
             }
 
             //////////////////////////////////////////////////////////////////////////
@@ -533,6 +592,17 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);//手部                    
             Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, null, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
 
+
+            float thrusterOpacity1 = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 0.5f, 0, 1)) * 1f + 0.1f;//闪耀光亮效果
+            float thrusterOpacity2 = (1 - MathHelper.Clamp((float)Math.Cos(Main.time % MathHelper.Pi) * 0.5f, 0, 1)) * 1f + 0.1f;//闪耀光亮效果
+            if (Owner.velocity.Length() > 10)
+            {
+                Explode(shoulderPosition + offset + (flipped ? (top ? -Vector2.UnitX * 45 : -Vector2.UnitX * 60) : (top ? Vector2.UnitX * 15 : Vector2.UnitX * 35))
+                + (top ? Vector2.UnitY * 30 : Vector2.UnitY * 32), 25, 25);
+            }
+
+            //MechaLight(forearmPosition + offset, forearmTex.Width / 2, forearmTex.Height / 2, 308, 1, 1, 1, Color.LightGoldenrodYellow, 1f);           
+
         }
 
 
@@ -551,6 +621,44 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
             Main.EntitySpriteDraw(headTex, Projectile.Center + offset2 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, null, Color.White, 0, headTex.Size() / 2f, Projectile.scale, 0f, 0);
             Main.EntitySpriteDraw(eyesTex, Projectile.Center + offset1 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, null, Color.White * eyeOpacity, 0, eyesTex.Size() / 2f, Projectile.scale, 0f, 0);
+        }
+
+
+        //以下为各种特效 ////////////////////////////////////////////////////////////////////////////////////////////////
+        private void Explode(Vector2 position,int width, int height)
+        {//给推进器尾焰添加粒子效果
+            // 产生爆炸粒子。
+            for (int i = 0; i < 5; i++)
+            {
+                int dustIndex = Dust.NewDust(position, width, height, DustID.OrangeStainedGlass);
+                Main.dust[dustIndex].noGravity = true;
+                Main.dust[dustIndex].velocity *= 1.4f;
+            }
+            // 播放爆炸声音(是否需要什么声音？）
+            //SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
+        }
+
+        private void MechaLight(Vector2 Position, int Width, int Height, int Type, float SpeedX, float SpeedY, int Alpha, Color newColor = default(Color), float Scale = 1f)
+        {//给机甲添加光效
+            for (int i = 0; i < 5; i++)
+            {
+                int dustIndex = MechaDust.NewDust(Position, Width, Height, Type, SpeedX, SpeedY, Alpha, newColor = default(Color), Scale);
+                Main.dust[dustIndex].noGravity = true;
+                Main.dust[dustIndex].velocity *= 1.4f;
+            }
+            // 播放爆炸声音(是否需要什么声音？）
+            //SoundEngine.PlaySound(SoundID.Item14, Projectile.position);
+        }
+             
+        private void DrawLightningEffect(SpriteBatch spriteBatch, Texture2D texture, Vector2 start, Vector2 end, Color color, Rectangle rectangle, Vector2 origin)
+        {
+            Vector2 direction = end - start;
+            direction.Normalize();
+
+            float rotation = direction.ToRotation();
+            Vector2 scale = new Vector2(Vector2.Distance(start, end) / texture.Width, 1f);
+
+            spriteBatch.Draw(texture, start, rectangle, color, rotation, origin, scale, SpriteEffects.None, 0f);
         }
 
         public bool summonedProjectile = false;

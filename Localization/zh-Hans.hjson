@@ -505,6 +505,16 @@ Mods: {
 				// DisplayName: Almighty Mecha Key
 				// Tooltip: ""
 			}
+
+			AlmightyMechaDye: {
+				// DisplayName: Almighty Mecha Dye
+				// Tooltip: ""
+			}
+
+			DraedonHologramDye: {
+				// DisplayName: Draedon Hologram Dye
+				// Tooltip: ""
+			}
 		}
 
 		Buffs: {

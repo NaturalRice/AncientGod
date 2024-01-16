@@ -8,6 +8,7 @@ using ReLogic.Content;
 using System.Collections.Generic;
 using Terraria.DataStructures;
 using System;
+using Terraria.ID;
 
 namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
 {
@@ -22,7 +23,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
         public override void SetStaticDefaults()
         {
             MountData.acceleration = 0.7f;//加速度
-            MountData.runSpeed = 17f;//飞行速度
+            MountData.runSpeed = 117f;//飞行速度
             //MountData.dashSpeed = 14f;//坐骑的冲刺速度
 
             MountData.fatigueMax = int.MaxValue - 1;//坐骑的疲劳度上限(去除此处，上升速度会不可控，但下降速度仍为41mph)
@@ -50,7 +51,6 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             MountData.flyingFrameStart = MountData.inAirFrameStart = MountData.idleFrameStart = MountData.swimFrameStart = 0;
             //设置了坐骑在空闲状态下动画帧的起始索引。通常，空闲状态的动画会从第0帧开始播放
             MountData.idleFrameLoop = true;//设置了空闲状态下的动画是否循环播放。如果设置为 true，则动画将循环播放
-
 
             if (!Main.dedServ) // 检查是否在服务器端运行游戏。这段代码块只会在客户端运行时执行
             {
@@ -187,6 +187,22 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             {
                 // 如果没有按下左右键，减小水平速度
                 player.velocity.X *= 0.85f;
+
+                // 模拟穿越平台的逻辑
+                int tileX = (int)player.Center.X / 16;
+                int tileY = (int)player.Bottom.Y / 16 + 1; // 调整为玩家底部以下一格的砖块
+                Tile tileBelow = Main.tile[tileX, tileY];
+
+                //这段代码有奇效，使得玩家直接穿墙术
+                /*if (tileBelow != null)
+                {
+                    player.position = player.position + Vector2.UnitY * 10; // 向下移动一点，模拟穿越平台
+                }*/
+                //目前暂时设定向下同时按住F键可以穿过平台
+                if (tileBelow != null && player.controlDownHold && Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F))
+                {
+                    player.position = player.position + Vector2.UnitY * 1;
+                }
             }
         }
         private void CheckHorizontalMovement2(Player player)
