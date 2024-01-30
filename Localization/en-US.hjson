@@ -34,6 +34,8 @@ Mods: {
 			FutureMechaCirclingBullet.DisplayName: Future Mecha Circling Bullet
 			AncientMechaCirclingBullet.DisplayName: Ancient Mecha Circling Bullet
 			AlmightyMechaBody.DisplayName: Almighty Mecha Body
+			AlmightyMechaBullet.DisplayName: Almighty Mecha Bullet
+			AlmightlyMechaMissile.DisplayName: Almightly Mecha Missile
 		}
 
 		NPCs: {
@@ -502,8 +504,8 @@ Mods: {
 			}
 
 			AlmightyMechaKey: {
-				DisplayName: Almighty Mecha Key
-				Tooltip: ""
+				DisplayName: 万能机甲钥匙
+				Tooltip: 没想到你居然能造出这么个逆天玩意儿，好好享受吧！
 			}
 
 			AlmightyMechaDye: {
@@ -574,8 +576,8 @@ Mods: {
 			}
 
 			AlmightyMechaBuff: {
-				DisplayName: Almighty Mecha Buff
-				Description: Mods.AncientGod.Buffs.AlmightyMechaBuff.Description
+				DisplayName: 大道至简
+				Description: 包罗万象的产物，这台精密机械的用途远超想象且仍在开发中......
 			}
 		}
 

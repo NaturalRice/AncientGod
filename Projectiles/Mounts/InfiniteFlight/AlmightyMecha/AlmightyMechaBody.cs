@@ -23,6 +23,7 @@ using AncientGod.Items.Dyes;
 using Terraria.GameContent.Creative;
 using Terraria.Graphics.Effects;
 using Terraria.GameContent;
+using AncientGod.Projectiles.Ammo.AlmightyMechaBullet;
 
 namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 {
@@ -32,7 +33,9 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
         private const float TargetDistance = 1200f; // 设置寻找敌人的最大距离
         private int target = -1; // 记录当前目标敌人的索引
-        private float fireCooldown = 60f; // 弹药冷却时间
+        private float fireCooldown = 60f; // 机关炮冷却时间
+        private float missileCooldown = 120f; // 导弹冷却时间
+        bool missileLaunch = false;//是否发射导弹
 
         bool isInfernumActive;//用于标记Infernum模式是否激活
         Mod infern;//Mod类型的变量，用于引用Infernum模组
@@ -109,8 +112,17 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                 }
             }
         }
-
-
+        public void SimpleAnimation(int speed)//设置帧播放速度，数值越大，速度越慢
+        {
+            Projectile.frameCounter++;
+            if (Projectile.frameCounter > speed)
+            {
+                Projectile.frameCounter = 0;
+                Projectile.frame++;
+                if (Projectile.frame > 7)
+                    Projectile.frame = 0;
+            }
+        }
         public override void AI()
         {
             /*这是机械臂的主要逻辑部分。在这个方法中，机械臂的行为受到不同条件的控制，包括拥有者是否已死亡、是否激活了坐骑等。
@@ -226,18 +238,12 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                                 {
                                     direction = Main.MouseWorld - new Vector2(ArmPositions[i].X, ArmPositions[i].Y);
                                     shootAngle = direction.ToRotation();
-                                    Vector2 shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 8f; // 这里示例为向右发射(底下是发射源的定义），瞄准方向
-                                    int newProjectile11 = Projectile.NewProjectile(null, new Vector2(ArmPositions[i].X, ArmPositions[i].Y), shotVelocity, ModContent.ProjectileType<ModernMechaBullet>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
-                                    int newProjectile12 = Projectile.NewProjectile(null, new Vector2(ArmPositions[i].X, ArmPositions[i].Y), Vector2.UnitX.RotatedBy(shootAngle - 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
-                                    int newProjectile13 = Projectile.NewProjectile(null, new Vector2(ArmPositions[i].X, ArmPositions[i].Y), Vector2.UnitX.RotatedBy(shootAngle + 50) * 8f, ModContent.ProjectileType<ModernMechaBulletSide>(), (int)(Projectile.damage * 0.5f), 0, Main.myPlayer);//右下
+                                    Vector2 shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 16f; // 这里示例为向右发射(底下是发射源的定义），瞄准方向
+                                    int newProjectile11 = Projectile.NewProjectile(null, new Vector2(ArmPositions[i].X, ArmPositions[i].Y), shotVelocity, ModContent.ProjectileType<AlmightyMechaBullet>(), (int)(Projectile.damage * 1f), 0, Main.myPlayer);//右下
 
                                     //这里四个机关炮的准心有一定差别
                                     Main.projectile[newProjectile11].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile12].timeLeft = 1000;//弹药存活时间
-                                    Main.projectile[newProjectile13].timeLeft = 1000;//弹药存活时间
                                     Main.projectile[newProjectile11].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile12].netUpdate = true;//是否将投射物的信息同步到其他客户端
-                                    Main.projectile[newProjectile13].netUpdate = true;//是否将投射物的信息同步到其他客户端
 
                                     shootAngle += MathHelper.PiOver4; // 增加弹药之间的间隔角度
                                 }
@@ -245,7 +251,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                                 Projectile.localAI[0] = 0f;//为了连射
 
                                 // 重置冷却计时器
-                                fireCooldown = 10f; // 设置为你想要的冷却时间（间隔时间0.5秒）
+                                fireCooldown = 20f; // 设置为你想要的冷却时间（间隔时间0.5秒）
                             }
                         }
                         else
@@ -294,8 +300,8 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
             float thrusterOpacity1 = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 2f, 0, 1)) * 1f + 0.1f;//闪耀光亮效果
             float thrusterOpacity2 = (1 - MathHelper.Clamp((float)Math.Cos(Main.time % MathHelper.Pi) * 2f, 0, 1)) * 1f + 0.1f;//闪耀光亮效果
-            //RibbonStartColor 用于表示轨迹的颜色，它会在快速移动时变为由橙色到，慢速移动时恢复为灰色。
-            Color IdealColor = Color.Lerp(Color.LightSkyBlue * thrusterOpacity2, Color.Orange * thrusterOpacity1, MathHelper.Clamp(Owner.velocity.Length() - 5, 0, 20) / 10f);
+            //RibbonStartColor 用于表示轨迹的颜色，它会在按下F键快速移动时变为橙色，慢速移动时恢复为淡蓝色。
+            Color IdealColor = Color.Lerp(Color.LightSkyBlue * thrusterOpacity2, Color.Orange * thrusterOpacity1, MathHelper.Clamp(Owner.velocity.Length() - 5, 0, 20) / 20f);
             RibbonStartColor = Color.Lerp(RibbonStartColor, IdealColor, 0.2f);
         }
         public float RibbonTrailWidthFunction(float completionRatio)
@@ -324,10 +330,15 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             if (ArmPositions == null)
                 return true;
 
-            Texture2D teslaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaTesla")).Value;
-            Texture2D laserTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaLaser")).Value;
-            Texture2D nukeTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaNuke")).Value;
-            Texture2D plasmaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaPlasma")).Value;
+            Texture2D teslaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaMachineGun")).Value;
+            Texture2D laserTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaMachineGun")).Value;
+            Texture2D nukeTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaMachineGun")).Value;
+            Texture2D plasmaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaMachineGun")).Value;
+            if(target != -1)
+            {
+                teslaTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaMachineGunAttack")).Value;
+            }
+
             ModLoader.TryGetMod("InfernumMode", out infern);
             if (infern != null)
             {
@@ -342,13 +353,13 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             }
 
             //Upper arms
-            DrawSingleArm(laserTex, new Vector2(ArmPositions[0].X, ArmPositions[0].Y), ArmPositions[0].Z, new Vector2(0, -10), true);
-            DrawSingleArm(nukeTex, new Vector2(ArmPositions[3].X, ArmPositions[3].Y), ArmPositions[3].Z, new Vector2(0, -10), true, isInfernumActive);
+            DrawSingleArm(teslaTex, new Vector2(ArmPositions[0].X, ArmPositions[0].Y), ArmPositions[0].Z, new Vector2(0, -10), true);
+            DrawSingleArm(teslaTex, new Vector2(ArmPositions[3].X, ArmPositions[3].Y), ArmPositions[3].Z, new Vector2(0, -10), true, isInfernumActive);
 
 
             //Lower arms
             DrawSingleArm(teslaTex, new Vector2(ArmPositions[1].X, ArmPositions[1].Y), ArmPositions[1].Z, Vector2.Zero, false);
-            DrawSingleArm(plasmaTex, new Vector2(ArmPositions[2].X, ArmPositions[2].Y), ArmPositions[2].Z, Vector2.Zero, false);
+            DrawSingleArm(teslaTex, new Vector2(ArmPositions[2].X, ArmPositions[2].Y), ArmPositions[2].Z, Vector2.Zero, false);
 
             return true;
         }
@@ -365,24 +376,49 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             bool flipped = Math.Sign(position.X) != -1;
             //绘制贴图
             Texture2D chainTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaChain").Value;
-            Texture2D armTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaArm").Value;//大臂
+            Texture2D armUpTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaArmUp").Value;//上方大臂
+            Texture2D armDownTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaArmDown").Value;//下方大臂
             Texture2D forearmTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaForearm").Value;//小臂
             Texture2D elbowTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaElbow").Value;//肘部
             Texture2D shoulderTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaShoulder").Value;//肩膀
             Texture2D wristTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaWrist").Value;//肩膀
             Texture2D thrusterTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaThruster").Value;//推进器
+            if (Owner.controlUp || Owner.controlDown || Owner.controlLeft || Owner.controlRight || Main.keyState.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Space))
+            {//如果正在移动
+                thrusterTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaThrusterMove").Value;//移动时的推进器
+            }
+            if (target != -1)
+            {
+                shoulderTex = (ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaShoulderAttack")).Value;
+                missileLaunch = true;               
+            }
+            else
+            {
+                missileLaunch = false;
+            }
 
             //Frame后缀表示贴图起始的绘制坐标与宽高，不同部位共用同一贴图的才需要此变量
-            Rectangle armFrame = new Rectangle(0, top ? 0 : 80, armTex.Width, 80);
-            Rectangle handFrame = new Rectangle(0, infernum ? 40 : 0, 90, 56);
+            //Rectangle armFrame = new Rectangle(0, top ? 0 : 80, armTex.Width, 80);
+            Rectangle chainFrame = chainTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Rectangle armFrameUp = armUpTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Rectangle armFrameDown = armDownTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Rectangle forearmFrame = forearmTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Rectangle elbowFrame = elbowTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Rectangle shoulderFrame = shoulderTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Rectangle wristFrame = wristTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Rectangle thrusterFrame = thrusterTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Rectangle handFrame = handTex.Frame(1, 8, 0, Projectile.frame);
+            
+                                              
+            SimpleAnimation(15);//数值越高，帧速度越慢
 
             //Origin后缀表示旋转中心
-            Vector2 armOrigin = new Vector2(flipped ? 0 : armFrame.Width, armFrame.Height / 2);
-            Vector2 forearmOrigin = new Vector2(flipped ? 0 : forearmTex.Width, forearmTex.Height / 2);
-            Vector2 elbowOrigin = new Vector2(elbowTex.Width / 2, elbowTex.Height / 2);
-            Vector2 shoulderOrigin = new Vector2(shoulderTex.Width / 2, shoulderTex.Height / 2);
-            Vector2 wristOrigin = new Vector2(flipped ? 0 : wristTex.Width, wristTex.Height);
-            Vector2 thrusterOrigin = new Vector2(thrusterTex.Width / 2, thrusterTex.Height / 2);
+            Vector2 armOrigin = new Vector2(flipped ? 0 : armFrameUp.Width, armFrameUp.Height / 2);
+            Vector2 forearmOrigin = new Vector2(flipped ? 0 : forearmTex.Width, 32);
+            Vector2 elbowOrigin = new Vector2(elbowTex.Width / 2, 50);
+            Vector2 shoulderOrigin = new Vector2(shoulderTex.Width / 2, 25);
+            Vector2 wristOrigin = new Vector2(flipped ? wristTex.Width * 3 / 4 : wristTex.Width / 4, 25);
+            Vector2 thrusterOrigin = new Vector2(thrusterTex.Width / 2, 25);
             Vector2 handOrigin = new Vector2(flipped ? 50 : 40, 28); //手部旋转中心
 
             //Position后缀表示贴图位置
@@ -456,35 +492,35 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             //Draw each chain segment bar the very first one
             for (int i = 1; i < numPoints; i++)
             {
-                Vector2 origin = new Vector2(chainTex.Width / 2, chainTex.Height); //Draw from center bottom of texture
+                Vector2 origin = new Vector2(chainTex.Width / 2, 20); //Draw from center bottom of texture
 
                 Vector2 position12 = chainPositions12[i];
                 float rotation12 = (chainPositions12[i] - chainPositions12[i - 1]).ToRotation() - MathHelper.PiOver2; //Calculate rotation based on direction from last point
-                float yScale12 = Vector2.Distance(chainPositions12[i], chainPositions12[i - 1]) / chainTex.Height; //Calculate how much to squash/stretch for smooth chain based on distance between points
+                float yScale12 = Vector2.Distance(chainPositions12[i], chainPositions12[i - 1]) / 20; //Calculate how much to squash/stretch for smooth chain based on distance between points
                 Vector2 scale12 = new Vector2(1, yScale12);
                 Color chainLightColor12 = Lighting.GetColor((int)position12.X / 16, (int)position12.Y / 16); //Lighting of the position of the chain segment                
-                Main.EntitySpriteDraw(chainTex, position12 - Main.screenPosition, null, chainLightColor12, rotation12, origin, scale12, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(chainTex, position12 - Main.screenPosition, chainFrame, Color.GhostWhite, rotation12, origin, scale12, SpriteEffects.None, 0);
 
                 Vector2 position13 = chainPositions13[i];
                 float rotation13 = (chainPositions13[i] - chainPositions13[i - 1]).ToRotation() - MathHelper.PiOver2; //Calculate rotation based on direction from last point
-                float yScale13 = Vector2.Distance(chainPositions13[i], chainPositions13[i - 1]) / chainTex.Height; //Calculate how much to squash/stretch for smooth chain based on distance between points
+                float yScale13 = Vector2.Distance(chainPositions13[i], chainPositions13[i - 1]) / 20; //Calculate how much to squash/stretch for smooth chain based on distance between points
                 Vector2 scale13 = new Vector2(1, yScale13);
                 Color chainLightColor13 = Lighting.GetColor((int)position13.X / 16, (int)position13.Y / 16); //Lighting of the position of the chain segment
-                Main.EntitySpriteDraw(chainTex, position13 - Main.screenPosition, null, chainLightColor13, rotation13, origin, scale13, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(chainTex, position13 - Main.screenPosition, chainFrame, Color.GhostWhite, rotation13, origin, scale13, SpriteEffects.None, 0);
 
                 Vector2 position34 = chainPositions34[i];
                 float rotation34 = (chainPositions34[i] - chainPositions34[i - 1]).ToRotation() - MathHelper.PiOver2; //Calculate rotation based on direction from last point
-                float yScale34 = Vector2.Distance(chainPositions34[i], chainPositions34[i - 1]) / chainTex.Height; //Calculate how much to squash/stretch for smooth chain based on distance between points
+                float yScale34 = Vector2.Distance(chainPositions34[i], chainPositions34[i - 1]) / 20; //Calculate how much to squash/stretch for smooth chain based on distance between points
                 Vector2 scale34 = new Vector2(1, yScale34);
                 Color chainLightColor34 = Lighting.GetColor((int)position34.X / 16, (int)position34.Y / 16); //Lighting of the position of the chain segment
-                Main.EntitySpriteDraw(chainTex, position34 - Main.screenPosition, null, chainLightColor34, rotation34, origin, scale34, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(chainTex, position34 - Main.screenPosition, chainFrame, Color.GhostWhite, rotation34, origin, scale34, SpriteEffects.None, 0);
 
                 Vector2 position56 = chainPositions56[i];
                 float rotation56 = (chainPositions56[i] - chainPositions56[i - 1]).ToRotation() - MathHelper.PiOver2; //Calculate rotation based on direction from last point
-                float yScale56 = Vector2.Distance(chainPositions56[i], chainPositions56[i - 1]) / chainTex.Height; //Calculate how much to squash/stretch for smooth chain based on distance between points
+                float yScale56 = Vector2.Distance(chainPositions56[i], chainPositions56[i - 1]) / 20; //Calculate how much to squash/stretch for smooth chain based on distance between points
                 Vector2 scale56 = new Vector2(1, yScale56);
                 Color chainLightColor56 = Lighting.GetColor((int)position56.X / 16, (int)position56.Y / 16); //Lighting of the position of the chain segment
-                Main.EntitySpriteDraw(chainTex, position56 - Main.screenPosition, null, chainLightColor56, rotation56, origin, scale56, SpriteEffects.None, 0);
+                Main.EntitySpriteDraw(chainTex, position56 - Main.screenPosition, chainFrame, Color.GhostWhite, rotation56, origin, scale56, SpriteEffects.None, 0);
             }
 
             //////////////////////////////////////////////////////////////////////////
@@ -531,16 +567,16 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             //screenPosition 类似的变量用于将游戏中的虚拟世界坐标转换为屏幕上的像素坐标，offset 是一个用于微调绘制位置的向量，通常用于调整绘制对象在屏幕上的位置。
             //显示贴图
             Main.EntitySpriteDraw(thrusterTex, shoulderPosition + offset - Main.screenPosition + (flipped ? -Vector2.UnitX * 50 : Vector2.UnitX * 50) + (top ? Vector2.UnitY * 50 : -Vector2.UnitY * 0),
-                                    null, Color.White * 1f, thrusterAngle, thrusterOrigin, Projectile.scale, top ? upElbowFlip : underElbowFlip, 0);//推进器
-            Main.EntitySpriteDraw(elbowTex, elbowPosition + offset - Main.screenPosition + (flipped ? Vector2.UnitX * 10 : -Vector2.UnitX * 10) + (top ? -Vector2.UnitY * 70 : -Vector2.UnitY * 80), 
-                                    null, Color.White, elbowAngle, elbowOrigin, Projectile.scale, top ? upElbowFlip : underElbowFlip, 0);//肘部
-            Main.EntitySpriteDraw(armTex, armPosition + offset - Main.screenPosition, armFrame, Color.White, armAngle, armOrigin, Projectile.scale, armFlip, 0);//大臂
-            Main.EntitySpriteDraw(shoulderTex, shoulderPosition + offset - Main.screenPosition, null, Color.White, shoulderAngle, shoulderOrigin, Projectile.scale, top ?  upElbowFlip : underElbowFlip, 0);;//肩膀
+                                    thrusterFrame, Color.White * 1f, thrusterAngle, thrusterOrigin, Projectile.scale, top ? upElbowFlip : underElbowFlip, 0);//推进器
+            Main.EntitySpriteDraw(elbowTex, elbowPosition + offset - Main.screenPosition + (flipped ? Vector2.UnitX * 10 : -Vector2.UnitX * 10) + (top ? -Vector2.UnitY * 70 : -Vector2.UnitY * 80),
+                                    elbowFrame, Color.White, elbowAngle, elbowOrigin, Projectile.scale, top ? upElbowFlip : underElbowFlip, 0);//肘部
+            Main.EntitySpriteDraw(top? armUpTex : armDownTex, armPosition + offset - Main.screenPosition, top ? armFrameUp : armFrameDown, Color.White, armAngle, armOrigin, Projectile.scale, armFlip, 0);//大臂
+            Main.EntitySpriteDraw(shoulderTex, shoulderPosition + offset - Main.screenPosition, shoulderFrame, Color.White, shoulderAngle, shoulderOrigin, Projectile.scale, top ?  upElbowFlip : underElbowFlip, 0);;//肩膀
                     
-            Main.EntitySpriteDraw(wristTex, handPosition + offset - Main.screenPosition + (flipped ? -Vector2.UnitX * 70 : Vector2.UnitX * 70) + (top ? Vector2.UnitY * 20 : -Vector2.UnitY * 10),
-                                    null, Color.White, wristAngle, wristOrigin, Projectile.scale, armFlip, 0);//手腕                   
+            Main.EntitySpriteDraw(wristTex, handPosition + offset - Main.screenPosition + (flipped ? -Vector2.UnitX * 0 : Vector2.UnitX * 0) + (top ? -Vector2.UnitY * 5 : -Vector2.UnitY * 15),
+                                    wristFrame, Color.White, wristAngle, wristOrigin, Projectile.scale, armFlip, 0);//手腕                   
             Main.EntitySpriteDraw(handTex, handPosition + offset - Main.screenPosition, handFrame, Color.White, rotation + (flipped ? 0 : MathHelper.Pi), handOrigin, Projectile.scale, flip, 0);//手部                    
-            Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, null, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
+            Main.EntitySpriteDraw(forearmTex, forearmPosition + offset - Main.screenPosition, forearmFrame, Color.White, forearmAngle, forearmOrigin, Projectile.scale, armFlip, 0);
 
 
             float thrusterOpacity1 = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 0.5f, 0, 1)) * 1f + 0.1f;//闪耀光亮效果
@@ -553,24 +589,59 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 
             //MechaLight(forearmPosition + (flipped ? -Vector2.UnitX * 0 : -Vector2.UnitX * 90) + Vector2.UnitY * 20 + offset, forearmTex.Width / 2, forearmTex.Height / 4, 308, 1, 1, 1, Color.LightGoldenrodYellow, 0.3f);           
             Draw(Main.spriteBatch, shoulderTex, shoulderPosition + offset, new Rectangle(0, 0, shoulderTex.Width, shoulderTex.Height), Color.Blue, shoulderAngle, shoulderOrigin, new Vector2(1, 1), SpriteEffects.None);
+
+            //判断是否发射导弹（本来是想写在AI方法里的，但是那里还没有定义肩膀位置，而手部位置的数组乘以小数后无法显示，只好写在这里）
+            if (missileLaunch == true)
+            {
+                if (missileCooldown <= 0f)
+                {
+                    // 发射子弹
+                    if (Projectile.localAI[1] == 0f)
+                    {
+                        Projectile.localAI[1] = 1f;//Projectile.localAI[0] 设置为1，表示已经发射过，以避免连续的发射。
+                        // 发射弹药
+                        for (int j = 0; j < 1; j++) // 你可以根据需要发射多个弹药（这里不是间隔的连射，而是一次性射多少弹药）
+                        {
+                            int newProjectile11 = Projectile.NewProjectile(null, shoulderPosition, Vector2.UnitX * (flipped ? 10 : -10) + Vector2.UnitY * (top ? -10 : 10), ModContent.ProjectileType<AlmightlyMechaMissile>(), (int)(Projectile.damage * 1f), 0, Main.myPlayer);//右下
+
+                            //这里四个机关炮的准心有一定差别
+                            Main.projectile[newProjectile11].timeLeft = 1000;//弹药存活时间
+                            Main.projectile[newProjectile11].netUpdate = true;//是否将投射物的信息同步到其他客户端
+                        }
+
+                        Projectile.localAI[1] = 0f;//为了连射
+
+                        // 重置冷却计时器
+                        missileCooldown = 60f; // 设置为你想要的冷却时间（间隔时间0.5秒）
+                    }
+                }
+                else
+                {
+                    // 更新冷却计时器
+                    missileCooldown--;
+                }
+            }
         }
 
 
         public override void PostDraw(Color lightColor)//用于在绘制后执行额外的逻辑。在这里，它绘制了机械臂的眼睛和头部
         {
             Texture2D eyesTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaEyes").Value;
-
+            Rectangle eyesFrame = eyesTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Vector2 eyesOrigin = new Vector2(eyesTex.Width / 2, 50);
+            SimpleAnimation(15);//数值越高，帧速度越慢
             Vector2 offset1 = Utils.SafeNormalize(Main.MouseWorld - (Projectile.Center - Vector2.UnitY * 10), Vector2.Zero) * MathHelper.Clamp((Projectile.Center - Vector2.UnitY * 10 - Main.MouseWorld).Length(), 0, 1);
             float eyeOpacity = (1 - MathHelper.Clamp((float)Math.Sin(Main.time % MathHelper.Pi) * 2f, 0, 1)) * 1f + 0.5f;//闪耀光亮效果
 
             
 
             Texture2D headTex = ModContent.Request<Texture2D>("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaHead").Value;
-
+            Rectangle headFrame = headTex.Frame(1, 8, 0, Projectile.frame);//一共竖排8帧
+            Vector2 headOrigin = new Vector2(headTex.Width / 2, 50);
             Vector2 offset2 = Utils.SafeNormalize(Main.MouseWorld - (Projectile.Center - Vector2.UnitY * 10), Vector2.Zero) * MathHelper.Clamp((Projectile.Center - Vector2.UnitY * 10 - Main.MouseWorld).Length(), 0, 1);
 
-            Main.EntitySpriteDraw(headTex, Projectile.Center + offset2 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, null, Color.White, 0, headTex.Size() / 2f, Projectile.scale, 0f, 0);
-            Main.EntitySpriteDraw(eyesTex, Projectile.Center + offset1 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, null, Color.White * eyeOpacity, 0, eyesTex.Size() / 2f, Projectile.scale, 0f, 0);
+            Main.EntitySpriteDraw(headTex, Projectile.Center + offset2 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, headFrame, Color.White, 0, headOrigin, Projectile.scale, 0f, 0);
+            Main.EntitySpriteDraw(eyesTex, Projectile.Center + offset1 - Main.screenPosition - Vector2.UnitX * 0 - Vector2.UnitY * 50, eyesFrame, Color.White, 0, eyesOrigin, Projectile.scale, 0f, 0);
         }
 
 
