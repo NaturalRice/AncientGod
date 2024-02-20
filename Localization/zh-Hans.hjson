@@ -36,6 +36,8 @@ Mods: {
 			// AlmightyMechaBody.DisplayName: Almighty Mecha Body
 			// AlmightyMechaBullet.DisplayName: Almighty Mecha Bullet
 			// AlmightlyMechaMissile.DisplayName: Almightly Mecha Missile
+			// AlmightyMechaDigger.DisplayName: Almighty Mecha Digger
+			// AlmightyMechaDetector.DisplayName: Almighty Mecha Detector
 		}
 
 		NPCs: {
@@ -578,6 +580,16 @@ Mods: {
 			AlmightyMechaBuff: {
 				// DisplayName: 大道至简
 				// Description: 包罗万象的产物，这台精密机械的用途远超想象且仍在开发中......
+			}
+
+			AlmightyMechaDiggerBuff: {
+				// DisplayName: Almighty Mecha Digger Buff
+				// Description: Mods.AncientGod.Buffs.AlmightyMechaDiggerBuff.Description
+			}
+
+			AlmightyMechaDetectorBuff: {
+				// DisplayName: Almighty Mecha Detector Buff
+				// Description: Mods.AncientGod.Buffs.AlmightyMechaDetectorBuff.Description
 			}
 		}
 

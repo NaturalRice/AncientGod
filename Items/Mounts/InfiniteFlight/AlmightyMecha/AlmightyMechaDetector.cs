@@ -13,7 +13,7 @@ using AncientGod.Utilities.UI;
 
 namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
 {
-    public class AlmightyMecha : ModMount
+    public class AlmightyMechaDetector : ModMount
     {
         private int horizontalDirection = 1; // 默认为向右
 
@@ -33,7 +33,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             MountData.usesHover = true;//是否使用悬浮（飞行）能力
             MountData.flightTimeMax = int.MaxValue - 1;//坐骑的最大飞行时间
 
-            MountData.buff = ModContent.BuffType<AlmightyMechaBuff>();//坐骑提供的Buff类型
+            MountData.buff = ModContent.BuffType<AlmightyMechaDetectorBuff>();//坐骑提供的Buff类型
             MountData.spawnDust = 33;//使用粒子效果类型33
             MountData.spawnDustNoGravity = true;//粒子效果将不受重力影响，会漂浮在空中
 
@@ -55,7 +55,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
 
             if (!Main.dedServ) // 检查是否在服务器端运行游戏。这段代码块只会在客户端运行时执行
             {
-                Asset<Texture2D> texture = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMecha_Back");
+                Asset<Texture2D> texture = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaDetector_Back");
                 MountData.backTexture = texture;
                 MountData.textureWidth = texture.Width(); // 设置了坐骑的纹理宽度和高度。这些值通常用于确定坐骑的碰撞区域和渲染
                 MountData.textureHeight = texture.Height();
@@ -81,7 +81,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             DrawData data = new DrawData(texture, drawPosition, frame, drawColor * alpha, rotation, drawOrigin, drawScale, effects, 0f);
             playerDrawData.Add(data);
 
-            Texture2D mountTex = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMecha_Back_Glow").Value;
+            Texture2D mountTex = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaDetector_Back_Glow").Value;
 
             // 创建一个新的 Rectangle 来表示光亮纹理的 frame;若使用与坐骑背部纹理相同的 frame 变量，这会导致只显示后半部分的6帧。为了解决这个问题，
             // 你需要为光亮纹理的 frame 变量设置一个适当的值，以便显示光亮部分的所有帧(此问题目前尚未解决）

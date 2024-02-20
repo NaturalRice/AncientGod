@@ -3,12 +3,15 @@ using Terraria.ID;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
-using AncientGod.Items.Mounts.InfiniteFlight.ModernMecha;
+using Terraria.UI;
+using AncientGod.Utilities.UI;
+using AncientGod.Utilities.UI.ExampleCoinsUI;
 
 namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
 {
     public class AlmightyMechaKey : ModItem
     {
+
         public override void SetStaticDefaults() => Item.ResearchUnlockCount = 1;
 
         public override void SetDefaults()
@@ -22,12 +25,60 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             Item.rare = 6;
             Item.UseSound = SoundID.NPCHit56;
             Item.noMelee = true;
-            Item.mountType = ModContent.MountType<AlmightyMecha>();
 
-            Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AlmightyMecha.AlmightyMechaBody>();
-            Item.buffType = ModContent.BuffType<Buffs.Mounts.AlmightyMechaBuff>();
+            base.SetDefaults();
+            HandleSelection(ExampleCoinsUIState.Choose);
+            // 在这里订阅事件
+            ExampleCoinsUIState.ChooseChanged += OnChooseChanged;
         }
 
+        // 增加一个方法来处理选择变化的逻辑
+        private void OnChooseChanged(int newChoose)
+        {
+            HandleSelection(newChoose);
+        }
+
+        public void HandleSelection(int choose)//选择机甲类型
+        {
+            switch (choose)
+            {
+                case 0:
+                    Item.mountType = ModContent.MountType<AlmightyMecha>();
+                    Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AlmightyMecha.AlmightyMechaBody>();
+                    Item.buffType = ModContent.BuffType<Buffs.Mounts.AlmightyMechaBuff>();
+                    break;
+                case 1:
+                    Item.mountType = ModContent.MountType<AlmightyMechaDigger>();
+                    Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AlmightyMecha.AlmightyMechaDigger>();
+                    Item.buffType = ModContent.BuffType<Buffs.Mounts.AlmightyMechaDiggerBuff>();
+                    break;
+                case 2:
+                    Item.mountType = ModContent.MountType<AlmightyMechaDetector>();
+                    Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AlmightyMecha.AlmightyMechaDetector>();
+                    Item.buffType = ModContent.BuffType<Buffs.Mounts.AlmightyMechaDetectorBuff>();
+                    break;
+                case 3:
+                    Item.mountType = ModContent.MountType<AlmightyMechaDetector>();
+                    Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AlmightyMecha.AlmightyMechaDetector>();
+                    Item.buffType = ModContent.BuffType<Buffs.Mounts.AlmightyMechaDetectorBuff>();
+                    break;
+                case 4:
+                    Item.mountType = ModContent.MountType<AlmightyMechaDetector>();
+                    Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AlmightyMecha.AlmightyMechaDetector>();
+                    Item.buffType = ModContent.BuffType<Buffs.Mounts.AlmightyMechaDetectorBuff>();
+                    break;
+                case 5:
+                    Item.mountType = ModContent.MountType<AlmightyMechaDetector>();
+                    Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AlmightyMecha.AlmightyMechaDetector>();
+                    Item.buffType = ModContent.BuffType<Buffs.Mounts.AlmightyMechaDetectorBuff>();
+                    break;
+                case 6:
+                    Item.mountType = ModContent.MountType<AlmightyMechaDetector>();
+                    Item.shoot = ModContent.ProjectileType<Projectiles.Mounts.InfiniteFlight.AlmightyMecha.AlmightyMechaDetector>();
+                    Item.buffType = ModContent.BuffType<Buffs.Mounts.AlmightyMechaDetectorBuff>();
+                    break;
+            }
+        }
         public override void UseStyle(Player player, Rectangle heldItemFrame)
         {
             if (player.whoAmI == Main.myPlayer && player.itemTime == 0)
@@ -65,3 +116,4 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
         }
     }
 }
+

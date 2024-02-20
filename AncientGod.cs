@@ -4,6 +4,12 @@ using Terraria;
 using Terraria.ModLoader;
 using Microsoft.Xna.Framework.Graphics;
 using log4net;
+using AncientGod.Utilities.UI;
+using Terraria.UI;
+using Terraria.GameContent.UI.Elements;
+using Microsoft.Xna.Framework;
+using Iced.Intel;
+using System.Collections.Generic;
 
 namespace AncientGod
 {
@@ -17,7 +23,7 @@ namespace AncientGod
             SyncSCalHits
         }
 
-        public static AncientGod instance;
+        public static AncientGod instance;// 用于获取 mod 实例的静态字段
         public Mod herosmod;
         public Mod ortho;
         public Mod bossChecklist;
@@ -37,6 +43,7 @@ namespace AncientGod
         public static int day;
         public static int month;
         public static Texture2D AstralSky;
+
 
         public static ILog getlog()
         {
@@ -72,7 +79,6 @@ namespace AncientGod
             //if (wikithis != null)
             //wikithis.Call("AddModURL", this, "terrariamods.fandom.com$Calamity%27s_Vanities");
         }
-
         public override void Unload()
         {
             instance = null;

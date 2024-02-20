@@ -24,6 +24,7 @@ using Terraria.GameContent.Creative;
 using Terraria.Graphics.Effects;
 using Terraria.GameContent;
 using AncientGod.Projectiles.Ammo.AlmightyMechaBullet;
+using rail;
 
 namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
 {
@@ -35,7 +36,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
         private int target = -1; // 记录当前目标敌人的索引
         private float fireCooldown = 60f; // 机关炮冷却时间
         private float missileCooldown = 120f; // 导弹冷却时间
-        bool missileLaunch = false;//是否发射导弹
+        bool missileLaunch = false;//是否发射导弹        
 
         bool isInfernumActive;//用于标记Infernum模式是否激活
         Mod infern;//Mod类型的变量，用于引用Infernum模组
@@ -75,7 +76,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
         //一个浮点数引用，用于初始化机械臂
 
         public Player Owner => Main.player[Projectile.owner];
-        //一个引用，表示拥有这个机械臂的玩家
+        //一个引用，表示拥有这个机械臂的玩家        
 
         public override void SetStaticDefaults()//用于设置静态默认值，包括指定该投射物作为玩家的宠物
         {
@@ -139,8 +140,6 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
             if (modPlayer.AlmightyMecha && Owner.mount.Active)//当然，还要再在这里强调一遍才能达到效果
             {
                 Projectile.timeLeft = 2;
-
-
             }
 
 
