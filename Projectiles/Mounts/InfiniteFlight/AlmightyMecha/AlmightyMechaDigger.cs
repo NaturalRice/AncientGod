@@ -34,7 +34,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
         public override WormPetVisualSegment BodySegment() => new WormPetVisualSegment("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightlyMechaDiggerBody", true, 2, 5);
         public override WormPetVisualSegment TailSegment() => new WormPetVisualSegment("AncientGod/Projectiles/Mounts/InfiniteFlight/AlmightyMecha/AlmightlyMechaDiggerTail", true, 1, 5);
 
-        public override int SegmentSize() => 40;
+        public override int SegmentSize() => 56;
 
         public override int SegmentCount() => 20;//有一个点子，或许可以搞个通过刷怪数上升来增加体节数这种机制？(☆▽☆)
 
@@ -83,13 +83,33 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                         segment.visual.FrameCounter = 0;
                     }
                 }
-                else if (Owner.statLife / (float)Owner.statLifeMax <= 0.75f && Owner.statLife / (float)Owner.statLifeMax > 0.5f && segment.visual.Frame != 1)
+                else if (Owner.statLife / (float)Owner.statLifeMax <= 0.75f && Owner.statLife / (float)Owner.statLifeMax > 0.6f && segment.visual.Frame != 1)
+                {
+                    // 当玩家生命值百分比在0.5到0.75时，虫子帧设置为2（第三帧）
+                    segment.visual.FrameCounter++;
+                    if (segment.visual.FrameCounter < segment.visual.FrameDuration)
+                    {
+                        segment.visual.Frame = 1;
+                        segment.visual.FrameCounter = 0;
+                    }
+                }
+                else if (Owner.statLife / (float)Owner.statLifeMax <= 0.6f && Owner.statLife / (float)Owner.statLifeMax > 0.45f && segment.visual.Frame != 2)
                 {
                     // 当玩家生命值百分比在0.5到0.75时，虫子帧设置为2（第三帧）
                     segment.visual.FrameCounter++;
                     if (segment.visual.FrameCounter < segment.visual.FrameDuration)
                     {
                         segment.visual.Frame = 2;
+                        segment.visual.FrameCounter = 0;
+                    }
+                }
+                else if (Owner.statLife / (float)Owner.statLifeMax <= 0.45f && Owner.statLife / (float)Owner.statLifeMax > 0.3f && segment.visual.Frame != 3)
+                {
+                    // 当玩家生命值百分比在0.5到0.75时，虫子帧设置为2（第三帧）
+                    segment.visual.FrameCounter++;
+                    if (segment.visual.FrameCounter < segment.visual.FrameDuration)
+                    {
+                        segment.visual.Frame = 3;
                         segment.visual.FrameCounter = 0;
                     }
                 }

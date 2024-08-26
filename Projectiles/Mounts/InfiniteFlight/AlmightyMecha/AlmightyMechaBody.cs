@@ -238,7 +238,7 @@ namespace AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha
                                     direction = Main.MouseWorld - new Vector2(ArmPositions[i].X, ArmPositions[i].Y);
                                     shootAngle = direction.ToRotation();
                                     Vector2 shotVelocity = Vector2.UnitX.RotatedBy(shootAngle) * 16f; // 这里示例为向右发射(底下是发射源的定义），瞄准方向
-                                    int newProjectile11 = Projectile.NewProjectile(null, new Vector2(ArmPositions[i].X, ArmPositions[i].Y), shotVelocity, ModContent.ProjectileType<AlmightyMechaBullet>(), (int)(Projectile.damage * 1f), 0, Main.myPlayer);//右下
+                                    int newProjectile11 = Projectile.NewProjectile(null, new Vector2(ArmPositions[i].X, ArmPositions[i].Y), shotVelocity, ModContent.ProjectileType<AlmightyMechaBullet>(), (int)(Projectile.damage * 1f), 0, Main.myPlayer);
 
                                     //这里四个机关炮的准心有一定差别
                                     Main.projectile[newProjectile11].timeLeft = 1000;//弹药存活时间

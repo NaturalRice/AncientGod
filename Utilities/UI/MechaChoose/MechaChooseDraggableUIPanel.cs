@@ -5,21 +5,21 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace AncientGod.Utilities.UI.ExampleCoinsUI
+namespace AncientGod.Utilities.UI.MechaChoose
 {
     // 这个 DraggableUIPanel 类继承自 UIPanel
     // 继承是 UI 设计的一个很好的工具。通过继承，我们可以从 UIPanel 中免费获得背景绘制
     // 我们添加了一些代码，以使面板可以被拖动
     // 我们还添加了一些代码，以确保面板在被拖出界或屏幕大小改变时会弹回边界
     // UIPanel 不会阻止玩家在点击鼠标时使用物品，因此我们也添加了该功能
-    public class ExampleDraggableUIPanel : UIPanel
+    public class MechaChooseDraggableUIPanel : UIPanel
     {
         // 存储从 UIPanel 的左上角开始拖动的偏移量
         private Vector2 offset;
         // 一个标志，用于检查面板当前是否正在被拖动
         private bool dragging;
 
-        public ExampleDraggableUIPanel(Asset<Texture2D> texture1, Asset<Texture2D> texture2) : base(texture1, texture2, 4)
+        public MechaChooseDraggableUIPanel(Asset<Texture2D> texture1, Asset<Texture2D> texture2) : base(texture1, texture2, 4)
         {
         }
 

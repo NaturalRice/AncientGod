@@ -3,18 +3,18 @@ using ReLogic.Content;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 
-namespace AncientGod.Utilities.UI.ExampleCoinsUI
+namespace AncientGod.Utilities.UI.MechaChoose
 {
     // 这个 ExampleUIHoverImageButton 类继承自 UIImageButton。
     // 继承是 UI 设计的一个很好的工具。
     // 通过继承，我们可以从 UIImageButton 中免费获得图像绘制、鼠标悬停声音和淡入淡出效果。
     // 我们添加了一些代码，允许按钮在悬停时显示文本提示。
-    internal class ExampleUIHoverImageButton : UIImageButton
+    internal class MechaChooseUIHoverImageButton : UIImageButton
     {
         // 悬停时显示的提示文本
         internal string hoverText;
 
-        public ExampleUIHoverImageButton(Asset<Texture2D> texture, string hoverText) : base(texture)
+        public MechaChooseUIHoverImageButton(Asset<Texture2D> texture, string hoverText) : base(texture)
         {
             this.hoverText = hoverText;
         }

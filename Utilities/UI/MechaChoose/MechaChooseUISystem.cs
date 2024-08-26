@@ -1,6 +1,5 @@
 ﻿using AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha;
 using AncientGod.Projectiles.Mounts.InfiniteFlight.AlmightyMecha;
-using AncientGod.Utilities.UI.ExampleCoinsUI;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Xna.Framework;
 using System.Collections.Generic;
@@ -9,13 +8,13 @@ using Terraria;
 using Terraria.ModLoader;
 using Terraria.UI;
 
-namespace AncientGod.Utilities.UI.ExampleCoinsUI
+namespace AncientGod.Utilities.UI.MechaChoose
 {
     [Autoload(Side = ModSide.Client)] // This attribute makes this class only load on a particular side. Naturally this makes sense here since UI should only be a thing clientside. Be wary though that accessing this class serverside will error
-    public class ExampleCoinsUISystem : ModSystem
+    public class MechaChooseUISystem : ModSystem
     {
         private UserInterface exampleCoinUserInterface;
-        internal ExampleCoinsUIState exampleCoinsUI;
+        internal MechaChooseUIState exampleCoinsUI;
         private AlmightyMechaBody mechaBody;
         private AlmightyMechaKey mechaKey;
 
@@ -37,7 +36,7 @@ namespace AncientGod.Utilities.UI.ExampleCoinsUI
             // Create custom interface which can swap between different UIStates
             exampleCoinUserInterface = new UserInterface();
             // Creating custom UIState
-            exampleCoinsUI = new ExampleCoinsUIState();
+            exampleCoinsUI = new MechaChooseUIState();
 
             // Activate calls Initialize() on the UIState if not initialized, then calls OnActivate and then calls Activate on every child element
             exampleCoinsUI.Activate();

@@ -78,7 +78,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             float alpha = 1f; // 设置透明度为不透明（1.0）
 
             // 创建绘制数据并添加到列表中
-            DrawData data = new DrawData(texture, drawPosition, frame, drawColor * alpha, rotation, drawOrigin, drawScale, effects, 0f);
+            DrawData data = new DrawData(texture, drawPosition, frame, drawColor * alpha, drawPlayer.velocity.ToRotation(), drawOrigin, drawScale, effects, 0f);
             playerDrawData.Add(data);
 
             Texture2D mountTex = ModContent.Request<Texture2D>("AncientGod/Items/Mounts/InfiniteFlight/AlmightyMecha/AlmightyMechaDetector_Back_Glow").Value;
@@ -88,7 +88,7 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             //Rectangle glowFrame = frame;
 
             // 在原有的绘制数据之前，添加光亮纹理的绘制数据，并使用新的 glowFrame
-            DrawData glowData = new DrawData(mountTex, drawPosition, frame, Color.White * alpha, rotation, drawOrigin, drawScale, effects, 0f);
+            DrawData glowData = new DrawData(mountTex, drawPosition, frame, Color.White * alpha, drawPlayer.velocity.ToRotation(), drawOrigin, drawScale, effects, 0f);
             playerDrawData.Add(glowData);
 
 
@@ -119,15 +119,15 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             {
                 player.velocity.X = -17f;
                 player.runAcceleration = 20f;
-                horizontalDirection = -1; // 设置坐骑的水平朝向为左
-                player.direction = horizontalDirection;//玩家朝向与坐骑同步
+                //horizontalDirection = -1; // 设置坐骑的水平朝向为左
+                //player.direction = horizontalDirection;//玩家朝向与坐骑同步
             }
             else if (player.controlRight)//水平向右
             {
                 player.velocity.X = 17f;
                 player.runAcceleration = 20f;
-                horizontalDirection = 1; // 设置坐骑的水平朝向为右
-                player.direction = horizontalDirection;
+                //horizontalDirection = 1; // 设置坐骑的水平朝向为右
+                //player.direction = horizontalDirection;
             }
             else
             {
@@ -136,6 +136,8 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             // 检查左右移动键和上下移动键
             CheckHorizontalMovement1(player);
             CheckHorizontalMovement2(player);
+
+            //player.bodyRotation = player.velocity.ToRotation();
         }
         private void CheckHorizontalMovement1(Player player)
         {
@@ -172,8 +174,8 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
                 }
 
                 player.runAcceleration = 20f;
-                horizontalDirection = direction;
-                player.direction = horizontalDirection;
+                //horizontalDirection = direction;
+                //player.direction = horizontalDirection;
 
                 // 记录当前按键的时间戳
                 lastMoveKeyPressed = Environment.TickCount;
@@ -235,8 +237,8 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
                 }
 
                 player.runAcceleration = 20f;
-                horizontalDirection = direction;
-                player.direction = horizontalDirection;
+                //horizontalDirection = direction;
+                //player.direction = horizontalDirection;
 
                 // 记录当前按键的时间戳
                 lastMoveKeyPressed = Environment.TickCount;

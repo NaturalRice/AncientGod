@@ -5,7 +5,7 @@ using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using Terraria.UI;
 using AncientGod.Utilities.UI;
-using AncientGod.Utilities.UI.ExampleCoinsUI;
+using AncientGod.Utilities.UI.MechaChoose;
 
 namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
 {
@@ -27,9 +27,9 @@ namespace AncientGod.Items.Mounts.InfiniteFlight.AlmightyMecha
             Item.noMelee = true;
 
             base.SetDefaults();
-            HandleSelection(ExampleCoinsUIState.Choose);
+            HandleSelection(MechaChooseUIState.Choose);
             // 在这里订阅事件
-            ExampleCoinsUIState.ChooseChanged += OnChooseChanged;
+            MechaChooseUIState.ChooseChanged += OnChooseChanged;
         }
 
         // 增加一个方法来处理选择变化的逻辑
