@@ -10,3 +10,6 @@ https://github.com/PotatoPersonThing/AncientGod/blob/master （无协议）
 
 无协议只说不许抄代码和不许用，没说不许参考然后自己写罢？（心虚）
 
+
+
+![泰拉瑞亚自制模组成品展示_01](https://github.com/user-attachments/assets/c76f7af0-b154-41c7-8025-9dedb83f5d57)
